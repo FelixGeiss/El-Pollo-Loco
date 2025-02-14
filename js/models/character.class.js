@@ -1,10 +1,24 @@
 class Character extends MovableObject {
   height = 280;
   y = 150;
-  x = 100 ; 
+  x = 100;
   currentImage = 0;
   speed = 10;
+  longIdle = false;
+  timeoutLongIdle = null;
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -41,28 +55,55 @@ class Character extends MovableObject {
     "img/2_character_pepe/4_hurt/H-42.png",
     "img/2_character_pepe/4_hurt/H-43.png",
   ];
+  IMAGES_LONG_IDLE = [
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
 
   world;
 
   constructor() {
-    super().loadImage(this.IMAGES_WALKING[0]);
+    super().loadImage(this.IMAGES_IDLE[0]);
+    this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_LONG_IDLE);
     this.applyGravity();
     this.animate();
   }
 
+  startTimer() {
+    if (this.timeoutLongIdle) return;
+
+    this.longIdle = false;
+
+    this.timeoutLongIdle = setTimeout(() => {
+      this.longIdle = true;
+    }, 15000);
+  }
+
+  stopTimer() {
+    if (this.timeoutLongIdle) {
+      clearTimeout(this.timeoutLongIdle);
+      this.timeoutLongIdle = null;
+      this.longIdle = false;
+    }
+  }
+
   animate() {
-    /*****************************************
-     * 1) Bewegung + Kollisionsabfrage (60 FPS)
-     *****************************************/
     setInterval(() => {
-      // Alte Position merken
       let oldX = this.x;
 
-      // Bewegen (falls Tasten gedrückt)
       if (this.world.keyborad.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirektion = false;
@@ -72,7 +113,6 @@ class Character extends MovableObject {
         this.otherDirektion = true;
       }
 
-      // Springen
       if (
         (this.world.keyborad.UP && !this.isAboveGround()) ||
         (this.world.keyborad.SPACE && !this.isAboveGround())
@@ -81,8 +121,6 @@ class Character extends MovableObject {
       }
 
       this.world.level.enemies.forEach((enemy) => {
-        // 1) Enemy muss noch leben UND
-        // 2) Charakter kollidiert mit enemy
         if (!enemy.enemyIsDead && this.isColliding(enemy)) {
           this.x = oldX;
         }
@@ -92,29 +130,32 @@ class Character extends MovableObject {
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
-    /*****************************************
-     * 2) Animations-Interval
-     *****************************************/
     let frameIndex = 0;
-    let deadInterval = setInterval(() => {
+    let characterInterval = setInterval(() => {
       if (this.isDead()) {
         this.playAnimation([this.IMAGES_DEAD[frameIndex]]);
         frameIndex++;
         if (frameIndex >= this.IMAGES_DEAD.length) {
-          clearInterval(deadInterval);
+          clearInterval(characterInterval);
+          this.stopTimer();
         }
       } else if (this.isHurt()) {
-        // HURT hat hohe Priorität, sonst wird es von Jumping/Walking überschrieben
         this.playAnimation(this.IMAGES_HURT);
+        this.stopTimer();
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
+        this.stopTimer();
       } else {
-        // Boden-Animationen
         if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
           this.playAnimation(this.IMAGES_WALKING);
+          this.stopTimer();
+        } else if (this.longIdle) {
+          this.playAnimation(this.IMAGES_LONG_IDLE);
+        } else {
+          this.playAnimation(this.IMAGES_IDLE);
+          this.startTimer();
         }
-        // Sonst kein else: wenn keine Taste gedrückt wird, bleib beim letzten Frame
       }
-    }, 50);
+    }, 150);
   }
 }

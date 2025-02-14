@@ -5,7 +5,7 @@ let keyborad = new Keyborad();
 
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas,keyborad);
+  world = new World(canvas, keyborad);
 }
 
 document.addEventListener("keydown", (event) => {
@@ -20,15 +20,14 @@ document.addEventListener("keydown", (event) => {
   }
   if (event.keyCode == 38) {
     keyborad.UP = true;
+    startIdleTimer = false;
   }
   if (event.keyCode == 32) {
     keyborad.SPACE = true;
   }
 });
 
-
 document.addEventListener("keyup", (event) => {
-
   if (event.keyCode == 68) {
     keyborad.D = false;
   }
@@ -47,7 +46,6 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-
 /* Alternative (quick and dirty), um alle Intervalle zu beenden. */
 // clearAllIntervals() {
 //   for (let i = 1; i < 9999; i++) window.clearInterval(i);
@@ -58,7 +56,6 @@ document.addEventListener("keyup", (event) => {
 // document.getElementById("meinDiv").addEventListener("click", function() {
 //   toggleFullscreen(this);
 // });
-
 
 // function toggleFullscreen(element) {
 //   if (!document.fullscreenElement) {
