@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html translate="no" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="js/models/drawable-object.class.js"></script>
+    <script src="js/models/movable-object.class.js"></script>
+    <script src="js/models/character.class.js"></script>
+    <script src="js/models/chicken.class.js"></script>
+    <script src="js/models/chicken-small.class.js"></script>
+    <script src="js/models/cloud.class.js"></script>
+    <script src="js/models/status-bar.class.js"></script>
+    <script src="js/models/world.class.js"></script>
+    <script src="js/models/background.class.js"></script>
+    <script src="js/models/keyboard.class.js"></script>
+    <script src="js/models/level.class.js"></script>
+    <script src="js/models/endboss.class.js"></script>
+    <script src="js/models/throwable-object.class.js"></script>
+
+    <script src="js/levels/level1.js"></script>
+    <script src="js/game.js"></script>
+
+    <title>El Pollo Loco</title>
+  </head>
+  <body onload="init()">
+    <div id="background">
+     <!-- <h1>El pollo loco</h1> -->
+     <img src="img/background/Controller_Links.svg" alt=""> 
+     <div id="fullscreen">
+        
+        <canvas id="canvas" width="720" height="480"> </canvas>
+      </div>
+      <img src="img/background/Controller_Rechts.svg" alt="">
+    </div>
+    <div class="controlerBotton">
+      <img src="img/background/Controller_Links.svg" alt=""> 
+      <img src="img/background/Controller_Rechts.svg" alt="">
+    </div>
+  </body>
+</html>

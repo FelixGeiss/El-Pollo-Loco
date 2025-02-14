@@ -1,0 +1,52 @@
+
+body{
+    display: flex;
+ 
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 100vh;
+    box-sizing: border-box;
+    
+}
+.controlerBotton{
+    display: none;
+}
+
+#background{
+    display: flex;
+ 
+    justify-content: center;
+    align-items: center;
+}
+ img{
+    height: 485px;
+    margin-bottom: 2px;
+
+}
+#fullscreen{
+    display: flex;
+ 
+    justify-content: center;
+    align-items: center;
+
+}
+canvas{
+    background-color: black;
+}
+
+
+@media (max-width: 1060px) {
+    .controlerBotton{
+        display: flex;
+    }
+    #background img{
+        display: none;
+    }
+    body{
+        flex-direction: column;
+    }
+}
+
+
+
