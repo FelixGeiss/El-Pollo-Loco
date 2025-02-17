@@ -38,7 +38,7 @@ class Throwableobject extends MovableObject {
 
     this.throwInterval = setInterval(() => {
       
-      if (this.y < 355) {
+      if (this.y < 370) {
         if (otherDirektion) {
           this.x -= 5;
         } else {
@@ -62,7 +62,7 @@ class Throwableobject extends MovableObject {
 
     this.animateInterval = setInterval(() => {
     
-      if (this.y >= 355) {
+      if (this.y >= 370) {
         clearInterval(this.animateInterval);
         this.animateInterval = null; 
         this.animateSplash();
