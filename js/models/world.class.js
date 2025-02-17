@@ -32,11 +32,20 @@ class World {
 
   checkThrowobjekt() {
     if (this.keyborad.D) {
+      let xPosition;
+      if (this.character.otherDirektion) {
+        xPosition = this.character.x - 50;
+      } else {
+        xPosition = this.character.x + 100;
+      }
+
       let bottle = new Throwableobject(
-        this.character.x + 100,
+        xPosition,
         this.character.y + 100,
+        this.character.otherDirektion,
         this.character.stopTimer()
       );
+
       this.throwableObjects.push(bottle);
     }
   }

@@ -6,6 +6,7 @@ class Character extends MovableObject {
   speed = 10;
   longIdle = false;
   timeoutLongIdle = null;
+  otherDirektion = false; 
 
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
@@ -80,6 +81,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_LONG_IDLE);
     this.applyGravity();
     this.animate();
+    
   }
 
   startTimer() {

@@ -2,7 +2,7 @@ class MovableObject extends DrawableObject {
   enemyIsDead = false;
   currentImage = 0;
   speed = 0.15;
-  otherDirektion = false; 
+  
   speedY = 0;
   offsetY = 0;
   acceleration = 2.5;
