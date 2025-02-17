@@ -27,6 +27,7 @@ class World {
       this.checkThrowobjekt();
       this.checkCollisionBottle();
       this.checkCollisionEndbos();
+      this.checkbottleIsBroken();
     }, 200);
   }
 
@@ -64,6 +65,7 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy)) {
           enemy.hit();
+          bottle.bottleIsBroken = true;
         }
       });
     });
@@ -79,6 +81,19 @@ class World {
         endboss.isAttack = false;
       }
     }
+  }
+
+  checkbottleIsBroken(){
+    this.throwableObjects.forEach(bottle => {
+      if (bottle.bottleIsBroken ) {
+        
+        const index = this.throwableObjects.indexOf(bottle);
+        if (index !== -1) {
+          this.throwableObjects.splice(index, 1);
+        }
+      }
+      
+    });
   }
 
   draw() {

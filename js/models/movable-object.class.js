@@ -2,7 +2,6 @@ class MovableObject extends DrawableObject {
   enemyIsDead = false;
   currentImage = 0;
   speed = 0.15;
-  
   speedY = 0;
   offsetY = 0;
   acceleration = 2.5;
@@ -21,8 +20,11 @@ class MovableObject extends DrawableObject {
 
   isAboveGround() {
     if (this instanceof Throwableobject) {
-      return true;
-    }else if (this instanceof ChickenSmall) {
+      return this.y < 350; 
+      
+    }else 
+    
+    if (this instanceof ChickenSmall) {
       return this.y < 350;
     }else{
       return this.y < 150;
