@@ -8,6 +8,7 @@ class World {
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
   throwableObjects = [];
+  bottleCount = 0;
 
   constructor(canvas, keyborad) {
     this.ctx = canvas.getContext("2d");
@@ -29,11 +30,12 @@ class World {
       this.checkCollisionBottle();
       this.checkCollisionEndbos();
       this.checkbottleIsBroken();
+      this.checkCollisionBottleCollectib();
     }, 200);
   }
 
   checkThrowobjekt() {
-    if (this.keyborad.D) {
+    if (this.keyborad.D && this.bottleCount > 0) {
       let xPosition;
       if (this.character.otherDirektion) {
         xPosition = this.character.x - 50;
@@ -44,9 +46,12 @@ class World {
       let bottle = new Throwableobject(
         xPosition,
         this.character.y + 100,
-        this.character.otherDirektion,
-        this.character.stopTimer()
+        this.character.otherDirektion
       );
+
+      this.bottleCount--;
+
+      this.statusBarBottle.setPercentage(this.bottleCount);
 
       this.throwableObjects.push(bottle);
     }
@@ -84,16 +89,27 @@ class World {
     }
   }
 
-  checkbottleIsBroken(){
-    this.throwableObjects.forEach(bottle => {
-      if (bottle.bottleIsBroken ) {
-        
+  checkbottleIsBroken() {
+    this.throwableObjects.forEach((bottle) => {
+      if (bottle.bottleIsBroken) {
         const index = this.throwableObjects.indexOf(bottle);
         if (index !== -1) {
           this.throwableObjects.splice(index, 1);
         }
       }
-      
+    });
+  }
+
+  checkCollisionBottleCollectib() {
+    this.level.collectiblBottel.forEach((collectiblBottl) => {
+      if (this.character.isColliding(collectiblBottl)) {
+        this.bottleCount++;
+        this.statusBarBottle.setPercentage(this.bottleCount);
+        const index = this.level.collectiblBottel.indexOf(collectiblBottl);
+        if (index !== -1) {
+          this.level.collectiblBottel.splice(index, 1);
+        }
+      }
     });
   }
 
@@ -102,6 +118,7 @@ class World {
 
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backroundObjeckt);
+    this.addObjectsToMap(this.level.collectiblBottel);
 
     // ------------Space for fixed object-------------
 
