@@ -2,16 +2,19 @@ class Level {
   enemies;
   clouds;
   backroundObjeckt;
-  collectiblBottel; 
+  collectiblBottel;
+  collectiblCoin; 
   level_end_x = 13590;
 
-  constructor(enemies, clouds, backroundObjeckt, collectiblBottel ) {
+  constructor(enemies, clouds, backroundObjeckt, collectiblBottel,collectiblCoin ) {
     this.enemies = enemies;
     this.clouds = clouds;
     
     this.backroundObjeckt = backroundObjeckt;
     this.collectiblBottel = collectiblBottel;
-    console.log(collectiblBottel);
+    this.collectiblCoin = collectiblCoin;
+  console.log(collectiblCoin);
+  
     
     
     this.repetBackround()

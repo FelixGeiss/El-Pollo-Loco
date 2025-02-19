@@ -7,8 +7,11 @@ class World {
   camera_x = 0;
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
+  statusBarCoin = new StatusBarCoin();
   throwableObjects = [];
   bottleCount = 0;
+  CoinCount = 0;
+  throwTimeout = false;
 
   constructor(canvas, keyborad) {
     this.ctx = canvas.getContext("2d");
@@ -31,29 +34,37 @@ class World {
       this.checkCollisionEndbos();
       this.checkbottleIsBroken();
       this.checkCollisionBottleCollectib();
+      this.checkCollisionCoinCollectib();
     }, 100);
   }
 
   checkThrowobjekt() {
-    if (this.keyborad.D && this.bottleCount > 0) {
+
+    if (this.keyborad.D && this.bottleCount > 0 && !this.throwTimeout) {
+
       let xPosition;
       if (this.character.otherDirektion) {
         xPosition = this.character.x - 50;
       } else {
         xPosition = this.character.x + 100;
       }
-
+  
       let bottle = new Throwableobject(
         xPosition,
         this.character.y + 100,
         this.character.otherDirektion
       );
-
+  
       this.bottleCount--;
-
       this.statusBarBottle.setPercentage(this.bottleCount);
-
       this.throwableObjects.push(bottle);
+  
+     
+      this.throwTimeout = true;
+      setTimeout(() => {
+    
+        this.throwTimeout = false;
+      }, 500);
     }
   }
 
@@ -112,13 +123,25 @@ class World {
       }
     });
   }
-
+  checkCollisionCoinCollectib() {
+    this.level.collectiblCoin.forEach((collectiblCoin) => {
+      if (this.character.isColliding(collectiblCoin) && this.CoinCount < 5 ) {
+        this.CoinCount++;
+        this.statusBarCoin.setPercentage(this.CoinCount);
+        const index = this.level.collectiblCoin.indexOf(collectiblCoin);
+        if (index !== -1) {
+          this.level.collectiblCoin.splice(index, 1);
+        }
+      }
+    });
+  }
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backroundObjeckt);
     this.addObjectsToMap(this.level.collectiblBottel);
+    this.addObjectsToMap(this.level.collectiblCoin);
 
     // ------------Space for fixed object-------------
 
@@ -129,6 +152,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
     this.addToMap(this.statusBarBottle);
+    this.addToMap(this.statusBarCoin);
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
 
