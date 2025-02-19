@@ -25,12 +25,37 @@ class DrawableObject {
       }
 
       drawBorder(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Throwableobject || this instanceof Endboss) {
+        if (
+          this instanceof Character ||
+          this instanceof Chicken ||
+          this instanceof Throwableobject ||
+          this instanceof Endboss ||
+          this instanceof ChickenSmall ||
+          this instanceof CollectiblBottel
+        ) {
+          // 1) Blaue Umrandung (gesamte Bounding Box)
           ctx.beginPath();
           ctx.lineWidth = 5;
           ctx.strokeStyle = "blue";
           ctx.rect(this.x, this.y, this.width, this.height);
           ctx.stroke();
+      
+          // 2) Rote Umrandung (um das Objekt herum, verkleinert oder vergrößert)
+          ctx.beginPath();
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = "red";
+      
+          // Wichtig: x/ y um offset verschieben
+          // und width/ height um die addierten offsets verkleinern
+          ctx.rect(
+            this.x + this.offset.left,                   // links weiter rein
+            this.y + this.offset.top,                    // oben weiter rein
+            this.width - this.offset.left - this.offset.right,  // insgesamt schmaler
+            this.height - this.offset.top - this.offset.bottom   // insgesamt niedriger
+          );
+      
+          ctx.stroke();
         }
       }
+      
 }

@@ -7,6 +7,8 @@ class Character extends MovableObject {
   longIdle = false;
   timeoutLongIdle = null;
   otherDirektion = false; 
+  
+  
 
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
@@ -73,6 +75,11 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
+    this.offset.top = 115;
+    this.offset.bottom = 10;
+    this.offset.left = 19;
+    this.offset.right = 20;
+
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);

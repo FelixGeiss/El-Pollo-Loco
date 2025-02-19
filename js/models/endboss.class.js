@@ -55,7 +55,8 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
-
+    this.offset.top = 60;
+    this.offset.bottom = 10;
     this.x = 10150;
     this.animate();
   
@@ -64,32 +65,28 @@ class Endboss extends MovableObject {
 
 
   animate() {
-    /*****************************************
-     * 1) BEWEGUNGS-INTERVAL: 60 FPS
-     *****************************************/
+
     let movementInterval = setInterval(() => {
         if (this.isDead()) {
-            // Wenn Figur stirbt, Bewegung beenden
+   
             clearInterval(movementInterval);
             this.applyGravity();
             this.speedY = 30;
             return;
         }
 
-        // Nicht bewegen, wenn Attack
+    
         if (!this.isAttack) {
             if (this.energy < 1000) {
                 this.moveLeft();
             }
         }
-    }, 1000 / 60); // 60 FPS
+    }, 1000 / 60); 
 
-    /*****************************************
-     * 2) ANIMATIONS-INTERVAL
-     *****************************************/
+
     let frameIndexDead = 0;
     let animationInterval = setInterval(() => {
-        // -- Prüfe zuerst, ob Charakter tot ist --
+ 
         if (this.isDead()) {
             this.playAnimation([this.IMAGES_DEAD[frameIndexDead]]);
             frameIndexDead++;
@@ -97,16 +94,16 @@ class Endboss extends MovableObject {
                 clearInterval(animationInterval);
             }
         }
-        // -- Sonst, wenn verletzt --
+  
         else if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
             this.x = this.x + 20;
         }
-        // -- Sonst, wenn Angriff --
+    
         else if (this.isAttack) {
             this.playAnimation(this.IMAGES_ATTACK);
         }
-        // -- Wenn nichts davon, gehe zu Walking/Alert --
+  
         else {
             if (this.energy < 1000) {
                 this.playAnimation(this.IMAGES_WALKING);

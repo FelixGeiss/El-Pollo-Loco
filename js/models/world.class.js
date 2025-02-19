@@ -31,7 +31,7 @@ class World {
       this.checkCollisionEndbos();
       this.checkbottleIsBroken();
       this.checkCollisionBottleCollectib();
-    }, 200);
+    }, 100);
   }
 
   checkThrowobjekt() {
@@ -102,7 +102,7 @@ class World {
 
   checkCollisionBottleCollectib() {
     this.level.collectiblBottel.forEach((collectiblBottl) => {
-      if (this.character.isColliding(collectiblBottl)) {
+      if (this.character.isColliding(collectiblBottl) && this.bottleCount < 5 ) {
         this.bottleCount++;
         this.statusBarBottle.setPercentage(this.bottleCount);
         const index = this.level.collectiblBottel.indexOf(collectiblBottl);

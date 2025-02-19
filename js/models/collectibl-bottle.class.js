@@ -5,6 +5,10 @@ class CollectiblBottel extends MovableObject {
 
   constructor() {
     super().loadImage("img/6_salsa_bottle/1_salsa_bottle_on_ground.png");
-    this.x = 500 + Math.random() * 13890;
+    this.offset.top = 10;
+    this.offset.bottom = 5;
+    this.offset.left = 25;
+    this.offset.right = 10;
+    this.x = 500 + Math.random() * 10050;
   }
 }
