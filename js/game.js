@@ -20,10 +20,13 @@ document.addEventListener("keydown", (event) => {
   }
   if (event.keyCode == 38) {
     keyborad.UP = true;
-    startIdleTimer = false;
   }
   if (event.keyCode == 32) {
     keyborad.SPACE = true;
+  }
+
+  if (event.keyCode === 40) {
+    keyborad.DOWN = true;
   }
 });
 
@@ -43,6 +46,10 @@ document.addEventListener("keyup", (event) => {
   }
   if (event.keyCode == 32) {
     keyborad.SPACE = false;
+  }
+
+  if (event.keyCode === 40) {
+    keyborad.DOWN = false;
   }
 });
 
