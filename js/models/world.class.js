@@ -38,7 +38,7 @@ class World {
       this.checkCollisionBottleCollectib();
       this.checkCollisionCoinCollectib();
       this.checkCollisionSalsaStore()
-    }, 100);
+    }, 50);
   }
 
   checkThrowobjekt() {
@@ -70,11 +70,19 @@ class World {
   checkCollision() {
     this.level.enemies.forEach((enemy) => {
       if (!enemy.enemyIsDead && this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+        if (
+          this.character.y + this.character.height - this.character.offset.bottom <
+          enemy.y + enemy.offset.top + enemy.height / 4
+        ) {
+          enemy.hit();
+        } else {
+          this.character.hit();
+          this.statusBar.setPercentage(this.character.energy);
+        }
       }
     });
   }
+  
 
   checkCollisionBottle() {
     this.throwableObjects.forEach((bottle) => {

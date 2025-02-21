@@ -3,7 +3,6 @@ class MovableObject extends DrawableObject {
   currentImage = 0;
   speed = 0.15;
   speedY = 0;
-  offsetY = 0;
   acceleration = 2.5;
   energy = 100;
   lastHit = 0;
