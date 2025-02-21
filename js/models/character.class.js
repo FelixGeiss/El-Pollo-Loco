@@ -89,6 +89,7 @@ class Character extends MovableObject {
     this.applyGravity();
     this.animate();
     
+    
   }
 
   startTimer() {
@@ -127,6 +128,7 @@ class Character extends MovableObject {
         (this.world.keyborad.SPACE && !this.isAboveGround())
       ) {
         this.jump();
+        this.world.jumpSound.play();
       }
 
       this.world.level.enemies.forEach((enemy) => {
@@ -147,22 +149,29 @@ class Character extends MovableObject {
         if (frameIndex >= this.IMAGES_DEAD.length) {
           clearInterval(characterInterval);
           this.stopTimer();
+          this.world.snoreSound.stop()
         }
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
         this.stopTimer();
+        this.world.snoreSound.stop()
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
         this.stopTimer();
+        this.world.snoreSound.stop()
       } else {
         if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
           this.playAnimation(this.IMAGES_WALKING);
           this.stopTimer();
+          this.world.snoreSound.stop()
         } else if (this.longIdle) {
           this.playAnimation(this.IMAGES_LONG_IDLE);
+          this.world.snoreSound.play();
         } else {
           this.playAnimation(this.IMAGES_IDLE);
           this.startTimer();
+          this.world.snoreSound.stop()
+          
         }
       }
     }, 150);
