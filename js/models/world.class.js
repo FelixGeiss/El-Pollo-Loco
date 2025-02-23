@@ -11,15 +11,20 @@ class World {
   statusBarCoin = new StatusBarCoin();
   salsaStore = new SalsaStore();
   // Audio
-  jumpSound = new PlayAudio("audio/jumppp11.ogg");
-  coinSound = new PlayAudio("audio/coin.mp3");
-  snoreSound = new PlayAudio("audio/big-snore.mp3");
-  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3");
-  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3");
-  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3");
-  characterHitSound = new PlayAudio("audio/hit.mp3");
-  buySound = new PlayAudio("audio/buy.mp3");
-  bottleSign  = new BottleSign ;
+  jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
+  coinSound = new PlayAudio("audio/coin.mp3", false, 1 );
+  snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1 );
+  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false,1);
+  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3", false, 1);
+  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1);
+  characterHitSound = new PlayAudio("audio/hit.mp3", false, 1);
+  buySound = new PlayAudio("audio/buy.mp3", false, 1);
+  throwSound = new PlayAudio("audio/throw.mp3", false, 1);
+  backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8);
+  SoundsMuteIcon = new SoundsMuteIcon();
+  musicMuteIcon = new MusicsMuteIcon();
+  
+  bottleSign = new BottleSign();
   throwableObjects = [];
   bottleCount = 0;
   CoinCount = 0;
@@ -32,10 +37,13 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    
   }
 
   setWorld() {
     this.character.world = this;
+    this.SoundsMuteIcon.world = this;
+    this.musicMuteIcon.world = this;
   }
 
   run() {
@@ -47,7 +55,8 @@ class World {
       this.checkbottleIsBroken();
       this.checkCollisionBottleCollectib();
       this.checkCollisionCoinCollectib();
-      this.checkCollisionSalsaStore()
+      this.checkCollisionSalsaStore();
+      this.backgroundSound.play();
     }, 50);
   }
 
@@ -75,6 +84,7 @@ class World {
       this.throwTimeout = true;
       setTimeout(() => {
         this.throwTimeout = false;
+        this.throwSound.play();
       }, 500);
     }
   }
@@ -83,7 +93,9 @@ class World {
     this.level.enemies.forEach((enemy) => {
       if (!enemy.enemyIsDead && this.character.isColliding(enemy)) {
         if (
-          this.character.y + this.character.height - this.character.offset.bottom <
+          this.character.y +
+            this.character.height -
+            this.character.offset.bottom <
           enemy.y + enemy.offset.top + enemy.height / 4
         ) {
           enemy.hit();
@@ -96,7 +108,6 @@ class World {
       }
     });
   }
-  
 
   checkCollisionBottle() {
     this.throwableObjects.forEach((bottle) => {
@@ -105,6 +116,7 @@ class World {
           enemy.hit();
           this.chickenHitSound.play();
           bottle.bottleIsBroken = true;
+          this.throwSound.stop();
         }
       });
     });
@@ -125,7 +137,9 @@ class World {
   checkbottleIsBroken() {
     this.throwableObjects.forEach((bottle) => {
       if (bottle.bottleIsBroken) {
-       this.bottleBrokenSound.play();
+        this.throwSound.stop();
+        this.bottleBrokenSound.play();
+
         const index = this.throwableObjects.indexOf(bottle);
         if (index !== -1) {
           this.throwableObjects.splice(index, 1);
@@ -161,25 +175,29 @@ class World {
     });
   }
 
-
   checkCollisionSalsaStore() {
-
-   
+    const now = Date.now();
+    // Überspringe den Kauf, wenn seit dem letzten Kauf weniger als 500ms vergangen sind
+    if (this.lastPurchaseTime && now - this.lastPurchaseTime < 500) {
+      return;
+    }
     
     if (
-        this.keyborad.DOWN  && 
-        this.CoinCount > 0 &&
-        this.bottleCount < 5 &&
-        this.character.isColliding(this.salsaStore)
+      this.keyborad.DOWN &&
+      this.CoinCount > 0 &&
+      this.bottleCount < 5 &&
+      this.character.isColliding(this.salsaStore)
     ) {
-        this.bottleCount++;
-        this.statusBarBottle.setPercentage(this.bottleCount);
-        this.CoinCount--;
-        this.statusBarCoin.setPercentage(this.CoinCount);
-        this.buySound.play();
+      // Zeitpunkt des Kaufs aktualisieren
+      this.lastPurchaseTime = now;
+      this.bottleCount++;
+      this.statusBarBottle.setPercentage(this.bottleCount);
+      this.CoinCount--;
+      this.statusBarCoin.setPercentage(this.CoinCount);
+      this.buySound.play();
     }
-}
-
+  }
+  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -191,16 +209,19 @@ class World {
     this.addObjectsToMap(this.level.collectiblCoin);
     this.addToMap(this.salsaStore);
     this.addToMap(this.bottleSign);
-    // ------------Space for fixed object-------------
+
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.throwableObjects);
+        // ------------Space for fixed object-------------
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBar);
     this.addToMap(this.statusBarBottle);
     this.addToMap(this.statusBarCoin);
+    this.addToMap(this.SoundsMuteIcon);
+    this.addToMap(this.musicMuteIcon);
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
 
