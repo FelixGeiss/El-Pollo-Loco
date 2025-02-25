@@ -3,11 +3,52 @@ let world;
 let character;
 let keyborad = new Keyborad();
 
+
+
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyborad);
+  setupButtonListeners();
 }
 
+
+
+
+function setupButtonListeners() {
+  const arrowTop = document.getElementById('arrowTop');
+  const arrowRight = document.getElementById('arrowRaight');
+  const arrowBottom = document.getElementById('arrowBottom');
+  const arrowLeft = document.getElementById('arrowLeft');
+  const bButton = document.getElementById('bButton');
+  const aButton = document.getElementById('aButton');
+  const yButton = document.getElementById('yButton');
+  const xButton = document.getElementById('xButton');
+
+  function handleButtonPress(button, key, value) {
+    button.addEventListener('mousedown', () => {
+      keyborad[key] = value;
+    });
+
+    button.addEventListener('mouseup', () => {
+      keyborad[key] = !value;
+    });
+
+    button.addEventListener('mouseleave', () => {
+      if (keyborad[key] === value) {
+        keyborad[key] = !value;
+      }
+    });
+  }
+
+  if (arrowTop) handleButtonPress(arrowTop, 'UP', true);
+  if (arrowRight) handleButtonPress(arrowRight, 'RIGHT', true);
+  if (arrowBottom) handleButtonPress(arrowBottom, 'DOWN', true);
+  if (arrowLeft) handleButtonPress(arrowLeft, 'LEFT', true);
+  if (bButton) {handleButtonPress(bButton,'UP', true)};
+  if (aButton) {handleButtonPress(aButton,'D',true)};
+  if (yButton) {handleButtonPress(yButton,'D',true)};
+  if (xButton) {handleButtonPress(xButton, 'DOWN', true)};
+}
 document.addEventListener("keydown", (event) => {
   if (event.keyCode == 68) {
     keyborad.D = true;

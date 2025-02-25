@@ -1,52 +1,99 @@
+body {
+  display: flex;
 
-body{
-    display: flex;
- 
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    height: 100vh;
-    box-sizing: border-box;
-    
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  box-sizing: border-box;
 }
-.controlerBotton{
-    display: none;
+.containerControlerL , .containerControlerR{
+  position: relative;
 }
-
-#background{
-    display: flex;
- 
-    justify-content: center;
-    align-items: center;
-}
- img{
-    height: 485px;
-    margin-bottom: 2px;
+.arrow , .button {
+  position: absolute;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  z-index: 10;
+  cursor: pointer;
 
 }
-#fullscreen{
-    display: flex;
- 
-    justify-content: center;
-    align-items: center;
 
-}
-canvas{
-    background-color: black;
+#arrowTop {
+  top: 206px;
+  left: 68px;
 }
 
+#arrowRaight {
+  top: 244px;
+  left: 105px;
+}
+
+#arrowBottom {
+  top: 278px;
+  left: 70px;
+}
+
+#arrowLeft {
+  top: 242px;
+  left: 34px;
+}
+
+.controlerBotton {
+  display: none;
+}
+
+
+#xButton{
+    top: 74px;
+    left: 55px;
+}
+
+#aButton{
+    top: 110px;
+    left: 92px;
+}
+
+#bButton{
+    top: 146px;
+    left: 57px;
+}
+#yButton{
+    top: 110px;
+    left: 21px;
+}
+
+
+
+#background {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+img {
+  height: 485px;
+  margin-top: 2px;
+}
+#fullscreen {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+canvas {
+  background-color: black;
+}
 
 @media (max-width: 1060px) {
-    .controlerBotton{
-        display: flex;
-    }
-    #background img{
-        display: none;
-    }
-    body{
-        flex-direction: column;
-    }
+  .controlerBotton {
+    display: flex;
+  }
+  #background img {
+    display: none;
+  }
+  body {
+    flex-direction: column;
+  }
 }
-
-
-

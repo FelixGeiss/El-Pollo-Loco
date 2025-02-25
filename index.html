@@ -34,17 +34,29 @@
   </head>
   <body onload="init()">
     <div id="background">
-     <!-- <h1>El pollo loco</h1> -->
-     <img src="img/background/Controller_Links.svg" alt=""> 
-     <div id="fullscreen">
-        
+      <!-- <h1>El pollo loco</h1> -->
+
+      <div class="containerControlerL">
+        <img src="img/background/Controller_Links.svg" alt="" />
+        <div class="arrow" id="arrowTop"></div>
+        <div class="arrow" id="arrowRaight"></div>
+        <div class="arrow" id="arrowBottom"></div>
+        <div class="arrow" id="arrowLeft"></div>
+      </div>
+
+      <div id="fullscreen">
         <canvas id="canvas" width="720" height="480"> </canvas>
       </div>
-      <img src="img/background/Controller_Rechts.svg" alt="">
+      <div class="containerControlerR"><img src="img/background/Controller_Rechts.svg" alt="" />
+        <div class="button" id="xButton"></div>
+        <div class="button" id="aButton"></div>
+        <div class="button" id="bButton"></div>
+        <div class="button" id="yButton"></div>
+      </div>
     </div>
     <div class="controlerBotton">
-      <img src="img/background/Controller_Links.svg" alt=""> 
-      <img src="img/background/Controller_Rechts.svg" alt="">
+      <img src="img/background/Controller_Links.svg" alt="" />
+      <img src="img/background/Controller_Rechts.svg" alt="" />
     </div>
   </body>
 </html>
