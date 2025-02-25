@@ -8,23 +8,38 @@ class SoundsMuteIcon extends MovableObject {
     super();
 
     this.loadImage(this.nonMute);
-
     this.x = 650;
     this.y = 20;
     this.width = 50;
     this.height = 50;
 
+   
+    const storedSoundStatus = localStorage.getItem("soundMuted");
+    if (storedSoundStatus === "true") {
+      this.isMuted = true;
+      this.loadImage(this.mute);
+      
+    
+      if (this.world) {
+        this.world.jumpSound.setMute(true);
+        this.world.coinSound.setMute(true);
+        this.world.snoreSound.setMute(true);
+        this.world.bottleBrokenSound.setMute(true);
+        this.world.bottleCollectSound.setMute(true);
+        this.world.chickenHitSound.setMute(true);
+        this.world.characterHitSound.setMute(true);
+        this.world.buySound.setMute(true);
+        this.world.throwSound.setMute(true);
+      }
+    }
 
     canvas.addEventListener('click', this.onClick.bind(this));
   }
 
   onClick(event) {
-
     const rect = canvas.getBoundingClientRect();
-
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
-
 
     if (
       mouseX >= this.x && mouseX <= this.x + this.width &&
@@ -35,22 +50,24 @@ class SoundsMuteIcon extends MovableObject {
   }
 
   toggleSound() {
-   
     this.isMuted = !this.isMuted;
     const newImage = this.isMuted ? this.mute : this.nonMute;
     this.loadImage(newImage);
+
    
-    this.world.jumpSound.muted = this.isMuted ? true : false;
-    this.world.coinSound.muted       = this.isMuted ? true : false;
-    this.world.snoreSound.muted      = this.isMuted ? true : false;
-    this.world.bottleBrokenSound.muted  = this.isMuted ? true : false;
-    this.world.bottleCollectSound.muted = this.isMuted ? true : false;
-    this.world.chickenHitSound.muted    = this.isMuted ? true : false;
-    this.world.characterHitSound.muted  = this.isMuted ? true : false;
-    this.world.buySound.muted        = this.isMuted ? true : false;
-    this.world.throwSound.muted      = this.isMuted ? true : false;
-    
+    localStorage.setItem("soundMuted", this.isMuted.toString());
 
-
+    if (this.world) {
+      this.world.jumpSound.setMute(this.isMuted);
+      this.world.coinSound.setMute(this.isMuted);
+      this.world.snoreSound.setMute(this.isMuted);
+      this.world.bottleBrokenSound.setMute(this.isMuted);
+      this.world.bottleCollectSound.setMute(this.isMuted);
+      this.world.chickenHitSound.setMute(this.isMuted);
+      this.world.characterHitSound.setMute(this.isMuted);
+      this.world.buySound.setMute(this.isMuted);
+      this.world.throwSound.setMute(this.isMuted);
+    }
   }
 }
+

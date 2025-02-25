@@ -14,13 +14,13 @@ class World {
   jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
   coinSound = new PlayAudio("audio/coin.mp3", false, 1 );
   snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1 );
-  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false,1);
-  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3", false, 1);
-  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1);
-  characterHitSound = new PlayAudio("audio/hit.mp3", false, 1);
-  buySound = new PlayAudio("audio/buy.mp3", false, 1);
-  throwSound = new PlayAudio("audio/throw.mp3", false, 1);
-  backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8);
+  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false,1,false);
+  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3", false, 1,false);
+  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1,false);
+  characterHitSound = new PlayAudio("audio/hit.mp3", false, 1,false);
+  buySound = new PlayAudio("audio/buy.mp3", false, 1 ,false);
+  throwSound = new PlayAudio("audio/throw.mp3", false, 1, false);
+  backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8, true);
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
   
@@ -37,6 +37,7 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    
     
   }
 
@@ -56,7 +57,6 @@ class World {
       this.checkCollisionBottleCollectib();
       this.checkCollisionCoinCollectib();
       this.checkCollisionSalsaStore();
-      this.backgroundSound.play();
     }, 50);
   }
 
@@ -177,7 +177,6 @@ class World {
 
   checkCollisionSalsaStore() {
     const now = Date.now();
-    // Überspringe den Kauf, wenn seit dem letzten Kauf weniger als 500ms vergangen sind
     if (this.lastPurchaseTime && now - this.lastPurchaseTime < 500) {
       return;
     }
@@ -229,6 +228,7 @@ class World {
     requestAnimationFrame(function () {
       self.draw();
     });
+  this.startBackroundsound()
   }
 
   addObjectsToMap(objects) {
@@ -257,4 +257,25 @@ class World {
     this.ctx.scale(-1, 1);
     mo.x = mo.x * -1;
   }
+
+
+  startBackroundsound() {
+    
+    let storedMuteStatus = localStorage.getItem("MusikMute");
+    
+    
+    if (storedMuteStatus === null) {
+      localStorage.setItem("MusikMute", "false");
+      storedMuteStatus = "false";
+    }
+    
+    
+    if (storedMuteStatus === "false") {
+      this.backgroundSound.play();
+    }
+  }
+  
+
+
 }
+
