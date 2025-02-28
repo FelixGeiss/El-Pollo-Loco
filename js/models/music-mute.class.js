@@ -9,7 +9,7 @@ class MusicsMuteIcon extends MovableObject {
 
     this.loadImage(this.nonMute);
 
-    this.x = 590;
+    this.x = 580;
     this.y = 20;
     this.width = 50;
     this.height = 50;

@@ -21,9 +21,7 @@ class ChickenSmall extends MovableObject {
   }
 
   animate() {
-    let moveInterval = setInterval(() => {
-      this.moveLeft();
-    }, 1000 / 60);
+    this.moveEnemie();
 
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
@@ -37,9 +35,28 @@ class ChickenSmall extends MovableObject {
         this.playAnimation(this.IMAGES_DEAD);
         this.enemyIsDead = true;
         setTimeout(() => {
-          clearInterval(moveInterval);
+          clearInterval(this.moveInterval);
         });
       }
     }, 50);
   }
+
+
+  moveEnemie() {
+    if (!this.enemyIsDead) {
+      this.moveInterval = setInterval(() => {
+        this.moveLeft();
+      }, 1000 / 60);
+    }
+  }
+
+  resetEnemy() {
+    this.x = 2040 + Math.random() * 4080;
+  
+    this.energy = 20; 
+    this.enemyIsDead = false; 
+    this.speed = 0.3 + Math.random() * 0.5;
+  }
+
+
 }

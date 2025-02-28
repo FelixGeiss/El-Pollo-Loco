@@ -4,7 +4,7 @@ class Endboss extends MovableObject {
   speed = 1;
   isAttack = false;
   y = 55;
-  energy = 1000;
+  energy = 100;
 
   IMGES_ALERT = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -65,7 +65,10 @@ class Endboss extends MovableObject {
 
 
   animate() {
-
+    if (this.isAttack) {
+      this.moveEnemie()
+    }
+    
     let movementInterval = setInterval(() => {
         if (this.isDead()) {
    
@@ -114,6 +117,16 @@ class Endboss extends MovableObject {
     }, 150);
 }
 
-
-
+resetEnemy() {
+  this.isAttack = false;
+  this.y = 55;
+  this.energy = 100;
+}
+moveEnemie() {
+  if (!this.enemyIsDead && this.isAttack) {
+    this.moveInterval = setInterval(() => {
+      this.moveLeft();
+    }, 1000 / 60);
+  }
+}
 }

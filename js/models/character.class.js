@@ -6,9 +6,8 @@ class Character extends MovableObject {
   speed = 10;
   longIdle = false;
   timeoutLongIdle = null;
-  otherDirektion = false; 
-  
-  
+  otherDirektion = false;
+  characterInterval;
 
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
@@ -88,8 +87,6 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_LONG_IDLE);
     this.applyGravity();
     this.animate();
-    
-    
   }
 
   startTimer() {
@@ -114,66 +111,77 @@ class Character extends MovableObject {
     setInterval(() => {
       let oldX = this.x;
 
-      if (this.world.keyborad.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight();
-        this.otherDirektion = false;
-      }
-      if (this.world.keyborad.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirektion = true;
-      }
-
-      if (
-        (this.world.keyborad.UP && !this.isAboveGround()) ||
-        (this.world.keyborad.SPACE && !this.isAboveGround())
-      ) {
-        this.jump();
-        this.world.jumpSound.play();
-      }
-
-      this.world.level.enemies.forEach((enemy) => {
-        if (!enemy.enemyIsDead && this.isColliding(enemy)) {
-          this.x = oldX;
+      if (this.world.startGame) {
+        if (
+          this.world.keyborad.RIGHT &&
+          this.x < this.world.level.level_end_x
+        ) {
+          this.moveRight();
+          this.otherDirektion = false;
         }
-      });
+        if (this.world.keyborad.LEFT && this.x > 0) {
+          this.moveLeft();
+          this.otherDirektion = true;
+        }
 
-      // Kamera updaten
+        if (
+          (this.world.keyborad.UP && !this.isAboveGround()) ||
+          (this.world.keyborad.SPACE && !this.isAboveGround())
+        ) {
+          this.jump();
+          this.world.jumpSound.play();
+        }
+
+        this.world.level.enemies.forEach((enemy) => {
+          if (!enemy.enemyIsDead && this.isColliding(enemy)) {
+            this.x = oldX;
+          }
+        });
+
+        // Kamera updaten
+      }
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     let frameIndex = 0;
-    let characterInterval = setInterval(() => {
+     this.characterInterval = setInterval(() => {
       if (this.isDead()) {
         this.playAnimation([this.IMAGES_DEAD[frameIndex]]);
         frameIndex++;
         if (frameIndex >= this.IMAGES_DEAD.length) {
-          clearInterval(characterInterval);
+          clearInterval(this.characterInterval);
           this.stopTimer();
-          this.world.snoreSound.stop()
+          this.world.snoreSound.stop();
         }
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
         this.stopTimer();
-        this.world.snoreSound.stop()
+        this.world.snoreSound.stop();
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
         this.stopTimer();
-        this.world.snoreSound.stop()
+        this.world.snoreSound.stop();
       } else {
         if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
           this.playAnimation(this.IMAGES_WALKING);
           this.stopTimer();
-          this.world.snoreSound.stop()
+          this.world.snoreSound.stop();
         } else if (this.longIdle) {
           this.playAnimation(this.IMAGES_LONG_IDLE);
           this.world.snoreSound.play();
         } else {
           this.playAnimation(this.IMAGES_IDLE);
           this.startTimer();
-          this.world.snoreSound.stop()
-          
+          this.world.snoreSound.stop();
         }
       }
     }, 150);
+  }
+  resetCharacter() {
+    this.x = 100; 
+    this.energy = 100; 
+    this.enemyIsDead = false; 
+    this.otherDirektion = false; 
+    this.animate()
   }
 }

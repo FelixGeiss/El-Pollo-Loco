@@ -5,26 +5,35 @@ class World {
   ctx;
   keyborad;
   camera_x = 0;
+  startGame = false;
+  Intervals = [];
   // Statusbar
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
   statusBarCoin = new StatusBarCoin();
-  salsaStore = new SalsaStore();
+
   // Audio
   jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
-  coinSound = new PlayAudio("audio/coin.mp3", false, 1 );
-  snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1 );
-  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false,1,false);
-  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3", false, 1,false);
-  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1,false);
-  characterHitSound = new PlayAudio("audio/hit.mp3", false, 1,false);
-  buySound = new PlayAudio("audio/buy.mp3", false, 1 ,false);
+  coinSound = new PlayAudio("audio/coin.mp3", false, 1);
+  snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1);
+  bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false, 1, false);
+  bottleCollectSound = new PlayAudio(
+    "audio/glass-clinking.mp3",
+    false,
+    1,
+    false
+  );
+  chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1, false);
+  characterHitSound = new PlayAudio("audio/hit.mp3", false, 1, false);
+  buySound = new PlayAudio("audio/buy.mp3", false, 1, false);
   throwSound = new PlayAudio("audio/throw.mp3", false, 1, false);
   backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8, true);
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
-  
+  salsaStore = new SalsaStore();
   bottleSign = new BottleSign();
+  startscreen = new Startscreen();
+  playGame = new PlayGame();
   throwableObjects = [];
   bottleCount = 0;
   CoinCount = 0;
@@ -37,14 +46,15 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    
-    
+    this.pushInterval();
+    this.stopAllIntervals();
   }
 
   setWorld() {
     this.character.world = this;
     this.SoundsMuteIcon.world = this;
     this.musicMuteIcon.world = this;
+    this.playGame.world = this;
   }
 
   run() {
@@ -58,6 +68,34 @@ class World {
       this.checkCollisionCoinCollectib();
       this.checkCollisionSalsaStore();
     }, 50);
+  }
+
+  pushInterval() {
+    this.level.enemies.forEach((enemy) => {
+      if (enemy.moveInterval) {
+        this.Intervals.push(enemy.moveInterval);
+      }
+    });
+
+  }
+
+
+
+  startAllIntervals() {
+    if (this.startGame) {
+      this.level.enemies.forEach((enemy) => {
+        enemy.moveEnemie();
+        this.Intervals.push(enemy.moveInterval);
+      });
+      this.Intervals.push(this.character.characterInterval);
+    }
+  }
+
+  stopAllIntervals() {
+    this.Intervals.forEach((intervalId) => {
+      clearInterval(intervalId);
+    });
+    this.Intervals = [];
   }
 
   checkThrowobjekt() {
@@ -180,7 +218,7 @@ class World {
     if (this.lastPurchaseTime && now - this.lastPurchaseTime < 500) {
       return;
     }
-    
+
     if (
       this.keyborad.DOWN &&
       this.CoinCount > 0 &&
@@ -196,31 +234,28 @@ class World {
       this.buySound.play();
     }
   }
-  
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backroundObjeckt);
+    if (!this.startGame) {
+      this.drawStartObject();
+    }
 
-    this.addObjectsToMap(this.level.collectiblBottel);
-    this.addObjectsToMap(this.level.collectiblCoin);
-    this.addToMap(this.salsaStore);
-    this.addToMap(this.bottleSign);
+    if (this.startGame) {
+      this.drawLevel();
+    }
 
+    // ------------Space for fixed object-------------
 
-    this.addToMap(this.character);
-    this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.throwableObjects);
-        // ------------Space for fixed object-------------
-    this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.statusBarBottle);
-    this.addToMap(this.statusBarCoin);
+    if (this.startGame) {
+      this.ctx.translate(-this.camera_x, 0);
+      this.drawStatusbar();
+    }
+
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
+
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
 
@@ -228,7 +263,38 @@ class World {
     requestAnimationFrame(function () {
       self.draw();
     });
-  this.startBackroundsound()
+
+    if (this.startGame) {
+      this.startBackroundsound();
+    }
+  }
+
+  drawLevel() {
+    return (
+      this.ctx.translate(this.camera_x, 0),
+      this.addObjectsToMap(this.level.backroundObjeckt),
+      this.addObjectsToMap(this.level.collectiblBottel),
+      this.addObjectsToMap(this.level.collectiblCoin),
+      this.addToMap(this.salsaStore),
+      this.addToMap(this.bottleSign),
+      this.addToMap(this.character),
+      this.addObjectsToMap(this.level.clouds),
+      this.addObjectsToMap(this.level.enemies),
+      this.addObjectsToMap(this.throwableObjects)
+    );
+  }
+
+  drawStatusbar() {
+    return (
+      this.addToMap(this.statusBar),
+      this.addToMap(this.statusBarBottle),
+      this.addToMap(this.statusBarCoin)
+    );
+  }
+
+  drawStartObject() {
+    this.addToMap(this.startscreen);
+    this.addToMap(this.playGame);
   }
 
   addObjectsToMap(objects) {
@@ -258,24 +324,40 @@ class World {
     mo.x = mo.x * -1;
   }
 
-
   startBackroundsound() {
-    
     let storedMuteStatus = localStorage.getItem("MusikMute");
-    
-    
+
     if (storedMuteStatus === null) {
       localStorage.setItem("MusikMute", "false");
       storedMuteStatus = "false";
     }
-    
-    
+
     if (storedMuteStatus === "false") {
       this.backgroundSound.play();
     }
   }
-  
 
+  resetGame() {
+    // 1. Stoppe alle Intervalle
+    this.stopAllIntervals();
 
+    // 2. Setze den Charakter zurück
+    this.character.resetCharacter();
+
+    // 3. Setze die Gegner zurück
+    this.level.enemies.forEach((enemy) => {
+      enemy.resetEnemy();
+    });
+
+    // 5. Setze die Statusleisten zurück
+    this.statusBar.setPercentage(100); // Volle Energie
+    this.statusBarBottle.setPercentage(0); // Keine Flaschen
+    this.statusBarCoin.setPercentage(0); // Keine Münzen
+
+    this.throwableObjects = [];
+    this.bottleCount = 0;
+    this.CoinCount = 0;
+
+    this.startGame = false;
+  }
 }
-
