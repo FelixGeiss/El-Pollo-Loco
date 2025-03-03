@@ -34,10 +34,7 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
+
 
   isColliding(obj) {
     return (
@@ -79,11 +76,11 @@ class MovableObject extends DrawableObject {
   jump() {
     this.speedY = 30;
   }
-
   playAnimation(images) {
     const i = this.currentImage % images.length;
     const path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;
   }
+ 
 }

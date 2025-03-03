@@ -1,4 +1,4 @@
-class BottleSign extends MovableObject {
+class BottleSign extends DrawableObject {
 
     width = 150;
     height = 150;

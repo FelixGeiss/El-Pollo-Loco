@@ -1,14 +1,14 @@
 class Character extends MovableObject {
   height = 280;
   y = 150;
-  x = 100;
+  x = 10000;
   currentImage = 0;
   speed = 10;
   longIdle = false;
   timeoutLongIdle = null;
   otherDirektion = false;
   characterInterval;
-
+  moveIntervall;
   IMAGES_IDLE = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
     "img/2_character_pepe/1_idle/idle/I-2.png",
@@ -108,10 +108,10 @@ class Character extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
+    this.moveIntervall = setInterval(() => {
       let oldX = this.x;
 
-      if (this.world.startGame) {
+      if (this.world.startGame && this.energy > 0) {
         if (
           this.world.keyborad.RIGHT &&
           this.x < this.world.level.level_end_x
@@ -144,7 +144,7 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     let frameIndex = 0;
-     this.characterInterval = setInterval(() => {
+    this.characterInterval = setInterval(() => {
       if (this.isDead()) {
         this.playAnimation([this.IMAGES_DEAD[frameIndex]]);
         frameIndex++;
@@ -177,11 +177,16 @@ class Character extends MovableObject {
       }
     }, 150);
   }
+
+  moveIntervall() {}
+
   resetCharacter() {
-    this.x = 100; 
-    this.energy = 100; 
-    this.enemyIsDead = false; 
-    this.otherDirektion = false; 
-    this.animate()
+    this.x = 10000;
+    this.energy = 100;
+    this.enemyIsDead = false;
+    this.otherDirektion = false;
+    this.timeoutLongIdle = null;
+    this.longIdle = false;
+    this.animate();
   }
 }

@@ -1,4 +1,4 @@
-class SoundsMuteIcon extends MovableObject {
+class SoundsMuteIcon extends DrawableObject {
   mute = "img/Mute/2.png";
   nonMute = "img/Mute/1.png";
   isMuted = false;

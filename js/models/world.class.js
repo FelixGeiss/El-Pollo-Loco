@@ -33,7 +33,10 @@ class World {
   salsaStore = new SalsaStore();
   bottleSign = new BottleSign();
   startscreen = new Startscreen();
+  gameOver = new GameOver();
   playGame = new PlayGame();
+  buttonHome = new ButtonHome();
+
   throwableObjects = [];
   bottleCount = 0;
   CoinCount = 0;
@@ -48,6 +51,8 @@ class World {
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
+    console.log(this.level);
+    
   }
 
   setWorld() {
@@ -55,6 +60,7 @@ class World {
     this.SoundsMuteIcon.world = this;
     this.musicMuteIcon.world = this;
     this.playGame.world = this;
+    this.buttonHome.world = this;
   }
 
   run() {
@@ -76,20 +82,36 @@ class World {
         this.Intervals.push(enemy.moveInterval);
       }
     });
-
   }
-
-
 
   startAllIntervals() {
     if (this.startGame) {
       this.level.enemies.forEach((enemy) => {
         enemy.moveEnemie();
         this.Intervals.push(enemy.moveInterval);
+        this.Intervals.push(enemy.animationInterval);
+        
+
+      
       });
+  
+      if (this.startGame) {
+        this.level.clouds.forEach((cloud) => {
+          this.Intervals.push(cloud.animationInterval);
+        });
+      }
+      if (this.startGame) {
+        this.level.collectiblCoin.forEach((coin) => {
+          this.Intervals.push(coin.animationInterval);
+        });
+      }
+  
+      this.Intervals.push(this.character.moveIntervall);
       this.Intervals.push(this.character.characterInterval);
     }
+    console.log(this.Intervals,"intervale");
   }
+
 
   stopAllIntervals() {
     this.Intervals.forEach((intervalId) => {
@@ -246,13 +268,17 @@ class World {
       this.drawLevel();
     }
 
+
+
     // ------------Space for fixed object-------------
 
     if (this.startGame) {
       this.ctx.translate(-this.camera_x, 0);
       this.drawStatusbar();
     }
-
+    if (this.character.energy <= 0 && this.startGame) {
+      this.drawGameOver();
+    }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
 
@@ -295,6 +321,11 @@ class World {
   drawStartObject() {
     this.addToMap(this.startscreen);
     this.addToMap(this.playGame);
+  }
+
+  drawGameOver() {
+    this.addToMap(this.gameOver);
+    this.addToMap(this.buttonHome);
   }
 
   addObjectsToMap(objects) {
@@ -348,7 +379,17 @@ class World {
     this.level.enemies.forEach((enemy) => {
       enemy.resetEnemy();
     });
+    this.level.clouds.forEach((clouds) => {
+      clouds.reset();
+    });
 
+    this.level.collectiblCoin.forEach((coin) => {
+      coin.reset();
+    });
+
+    this.level.collectiblBottel.forEach((bottle) => {
+      bottle.reset();
+    });
     // 5. Setze die Statusleisten zurück
     this.statusBar.setPercentage(100); // Volle Energie
     this.statusBarBottle.setPercentage(0); // Keine Flaschen

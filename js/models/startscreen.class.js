@@ -1,4 +1,4 @@
-class Startscreen extends MovableObject {
+class Startscreen extends DrawableObject {
 
     width = 720;
     height = 480;

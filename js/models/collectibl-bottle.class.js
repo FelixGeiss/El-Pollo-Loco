@@ -9,6 +9,11 @@ class CollectiblBottel extends MovableObject {
     this.offset.bottom = 5;
     this.offset.left = 25;
     this.offset.right = 10;
+     this.x = 500 + Math.random() * (10050 - 500);
+  }
+
+  reset(){
     this.x = 500 + Math.random() * (10050 - 500);
+   
   }
 }

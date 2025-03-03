@@ -1,7 +1,7 @@
 class CollectiblCoin extends MovableObject {
   width = 150;
   height = 150;
-
+  animationInterval;
   IMAGES = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
 
   constructor() {
@@ -17,8 +17,16 @@ class CollectiblCoin extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
+  this.animationInterval =  setInterval(() => {
       this.playAnimation(this.IMAGES);
     }, 300);
+  }
+
+
+  reset(){
+    this.animate()
+    this.x = 500 + Math.random() * (10050 - 500);
+    this.y = 50 + Math.random() * (300 - 50);
+
   }
 }
