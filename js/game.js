@@ -22,7 +22,7 @@ function setupButtonListeners() {
 
   function handleButtonPress(button, key, value) {
     button.addEventListener("mousedown", () => {
-      if (button == homeButton) {
+      if (button == homeButton && world.startGame) {
         world.startGame = false;
        world.stopAllIntervals();
      world.resetGame();

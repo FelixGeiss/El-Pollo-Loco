@@ -1,5 +1,6 @@
 class Throwableobject extends MovableObject {
  bottleIsBroken = false; 
+ world;
  
  
  

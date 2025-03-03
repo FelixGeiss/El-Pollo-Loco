@@ -1,14 +1,15 @@
-class PlayGame extends DrawableObject {
-  world;
+class ButtonHome extends DrawableObject {
   constructor() {
     super();
 
-    this.loadImage("img/play.png");
+    this.loadImage("img/home.png");
 
     this.x = 510;
     this.y = 20;
     this.width = 50;
     this.height = 50;
+
+
     canvas.addEventListener("click", this.onClick.bind(this));
   }
 
@@ -21,14 +22,13 @@ class PlayGame extends DrawableObject {
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
-      mouseY <= this.y + this.height 
+      mouseY <= this.y + this.height &&
+      this.world.character.energy <= 0 
     ) {
-      this.toggleGame();
+      this.world.startGame = false;
+      this.world.resetGame()
+      console.log("wurde gecklickt");
+      
     }
-  }
-  toggleGame() {
-    this.world.startGame = true;
-    this.world.startAllIntervals();
-   
   }
 }

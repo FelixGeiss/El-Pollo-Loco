@@ -13,13 +13,11 @@ class SoundsMuteIcon extends DrawableObject {
     this.width = 50;
     this.height = 50;
 
-   
     const storedSoundStatus = localStorage.getItem("soundMuted");
     if (storedSoundStatus === "true") {
       this.isMuted = true;
       this.loadImage(this.mute);
-      
-    
+
       if (this.world) {
         this.world.jumpSound.setMute(true);
         this.world.coinSound.setMute(true);
@@ -34,6 +32,24 @@ class SoundsMuteIcon extends DrawableObject {
     }
 
     canvas.addEventListener('click', this.onClick.bind(this));
+    canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+  }
+
+  onMouseMove(event) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    if (
+      mouseX >= this.x &&
+      mouseX <= this.x + this.width &&
+      mouseY >= this.y &&
+      mouseY <= this.y + this.height
+    ) {
+      canvas.style.cursor = "pointer";
+    } else {
+      canvas.style.cursor = "default";
+    }
   }
 
   onClick(event) {
@@ -54,7 +70,6 @@ class SoundsMuteIcon extends DrawableObject {
     const newImage = this.isMuted ? this.mute : this.nonMute;
     this.loadImage(newImage);
 
-   
     localStorage.setItem("soundMuted", this.isMuted.toString());
 
     if (this.world) {

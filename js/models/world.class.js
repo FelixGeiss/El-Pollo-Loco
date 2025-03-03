@@ -89,10 +89,6 @@ class World {
       this.level.enemies.forEach((enemy) => {
         enemy.moveEnemie();
         this.Intervals.push(enemy.moveInterval);
-        this.Intervals.push(enemy.animationInterval);
-        
-
-      
       });
   
       if (this.startGame) {
@@ -118,6 +114,8 @@ class World {
       clearInterval(intervalId);
     });
     this.Intervals = [];
+    console.log(this.Intervals , "home wurde geklickt " );
+    
   }
 
   checkThrowobjekt() {

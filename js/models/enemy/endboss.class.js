@@ -5,8 +5,9 @@ class Endboss extends MovableObject {
   isAttack = false;
   y = 55;
   energy = 100;
-  movementInterval;
-  animationInterval;
+  movementInterval = null;
+  animationInterval = null;
+  moveInterval = null;
 
   IMGES_ALERT = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -50,7 +51,8 @@ class Endboss extends MovableObject {
   ];
 
   constructor() {
-    super().loadImage(this.IMGES_ALERT[0]);
+    super();
+    this.loadImage(this.IMGES_ALERT[0]);
     this.loadImages(this.IMGES_ALERT);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_WALKING);
@@ -59,18 +61,23 @@ class Endboss extends MovableObject {
     this.offset.top = 60;
     this.offset.bottom = 10;
     this.x = 10150;
+    this.movementInterval = null;
+    this.animationInterval = null;
+    this.moveInterval = null;
     this.animate();
   }
 
   animate() {
+ 
+    if (this.movementInterval) clearInterval(this.movementInterval);
+    if (this.animationInterval) clearInterval(this.animationInterval);
 
+   
+    this.movementInterval = setInterval(() => {
+      if (this.isAttack) {
+        this.moveEnemie();
+      }
 
-     this.movementInterval = setInterval(() => {
-     
-         if (this.isAttack) {
-      this.moveEnemie();
-    }
-     
       if (this.isDead()) {
         clearInterval(this.movementInterval);
         this.applyGravity();
@@ -78,10 +85,8 @@ class Endboss extends MovableObject {
         return;
       }
 
-      if (!this.isAttack) {
-        if (this.energy < 100) {
-          this.moveLeft();
-        }
+      if (!this.isAttack && this.energy < 100) {
+        this.moveLeft();
       }
     }, 1000 / 60);
 
@@ -98,25 +103,33 @@ class Endboss extends MovableObject {
         this.x = this.x + 20;
       } else if (this.isAttack) {
         this.playAnimation(this.IMAGES_ATTACK);
+        
+      } else if (this.energy < 100) {
+        this.playAnimation(this.IMAGES_WALKING);
       } else {
-        if (this.energy < 100) {
-          this.playAnimation(this.IMAGES_WALKING);
-        } else {
-          this.playAnimation(this.IMGES_ALERT);
-        }
+        this.playAnimation(this.IMGES_ALERT);
       }
     }, 150);
   }
 
   resetEnemy() {
+    
+    if (this.movementInterval) clearInterval(this.movementInterval);
+    if (this.animationInterval) clearInterval(this.animationInterval);
+    if (this.moveInterval) clearInterval(this.moveInterval);
+
+    
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
     this.energy = 100;
+
+    
     this.animate();
   }
+
   moveEnemie() {
-    if (!this.enemyIsDead && this.isAttack) {
+    if (!this.enemyIsDead && this.isAttack && !this.moveInterval) {
       this.moveInterval = setInterval(() => {
         this.moveLeft();
       }, 1000 / 60);
