@@ -100,14 +100,16 @@ canvas {
    position: relative;
   }
   .containerControlerL{
-     top: 487px;
+     top: 477px;
      left: 240px;
     position: absolute;
+    padding: 10px 0;
   }
   .containerControlerR{
-    top: 487px;
+    top: 477px;
     right: 159px;
    position: absolute;
+   padding: 10px 0;
   }
 
 }

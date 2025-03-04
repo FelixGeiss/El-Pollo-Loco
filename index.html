@@ -19,7 +19,6 @@
     <script src="js/models/salsaStore/salsa_store.class.js"></script>
     <script src="js/models/salsaStore/bottle-sign.class.js"></script>
 
-    
     <script src="js/models/world.class.js"></script>
     <script src="js/models/background.class.js"></script>
     <script src="js/models/keyboard.class.js"></script>
@@ -36,32 +35,36 @@
     <script src="js/models/icons/button-home.class.js"></script>
     <script src="js/models/icons/play-game.class.js"></script>
 
+    <link rel="icon" type="image/png" href="img/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="img/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="img/favicon/site.webmanifest" />
 
     <title>El Pollo Loco</title>
   </head>
   <body onload="init()">
     <div id="background">
-        <div class="containerControlerL">
-            <img src="img/background/Controller-Left.png" alt="Left Controller" />
-            <div class="arrow" id="arrowTop"></div>
-            <div class="arrow" id="arrowRaight"></div>
-            <div class="arrow" id="arrowBottom"></div>
-            <div class="arrow" id="arrowLeft"></div>
-        </div>
+      <div class="containerControlerL">
+        <img src="img/background/Controller-Left.png" alt="Left Controller" />
+        <div class="arrow" id="arrowTop"></div>
+        <div class="arrow" id="arrowRaight"></div>
+        <div class="arrow" id="arrowBottom"></div>
+        <div class="arrow" id="arrowLeft"></div>
+      </div>
 
-        <div id="fullscreen">
-            <canvas id="canvas" width="720" height="480"></canvas>
-        </div>
+      <div id="fullscreen">
+        <canvas id="canvas" width="720" height="480"></canvas>
+      </div>
 
-        <div class="containerControlerR">
-            <img src="img/background/Controller-Right.png" alt="Right Controller" />
-            <div class="button" id="xButton"></div>
-            <div class="button" id="aButton"></div>
-            <div class="button" id="bButton"></div>
-            <div class="button" id="yButton"></div>
-            <div class="button" id="home"></div>
-        </div>
-        
+      <div class="containerControlerR">
+        <img src="img/background/Controller-Right.png" alt="Right Controller" />
+        <div class="button" id="xButton"></div>
+        <div class="button" id="aButton"></div>
+        <div class="button" id="bButton"></div>
+        <div class="button" id="yButton"></div>
+        <div class="button" id="home"></div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

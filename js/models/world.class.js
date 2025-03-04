@@ -47,7 +47,7 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    this.pushInterval();
+    this.pushInterval()
     this.stopAllIntervals();
    
   
@@ -88,6 +88,7 @@ class World {
     if (this.startGame) {
       this.level.enemies.forEach((enemy) => {
         enemy.moveEnemie();
+        
         this.Intervals.push(enemy.moveInterval);
       });
   
