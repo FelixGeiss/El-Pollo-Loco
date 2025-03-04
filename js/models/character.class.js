@@ -1,7 +1,7 @@
 class Character extends MovableObject {
   height = 280;
   y = 150;
-  x = 10000;
+  x = 100;
   currentImage = 0;
   speed = 10;
   longIdle = false;
@@ -108,80 +108,100 @@ class Character extends MovableObject {
   }
 
   animate() {
-    this.moveIntervall = setInterval(() => {
-      let oldX = this.x;
-
-      if (this.world.startGame && this.energy > 0) {
-        if (
-          this.world.keyborad.RIGHT &&
-          this.x < this.world.level.level_end_x
-        ) {
-          this.moveRight();
-          this.otherDirektion = false;
-        }
-        if (this.world.keyborad.LEFT && this.x > 0) {
-          this.moveLeft();
-          this.otherDirektion = true;
-        }
-
-        if (
-          (this.world.keyborad.UP && !this.isAboveGround()) ||
-          (this.world.keyborad.SPACE && !this.isAboveGround())
-        ) {
-          this.jump();
-          this.world.jumpSound.play();
-        }
-
-        this.world.level.enemies.forEach((enemy) => {
-          if (!enemy.enemyIsDead && this.isColliding(enemy)) {
-            this.x = oldX;
-          }
-        });
-
-        // Kamera updaten
+    this.moveIntervall = setInterval(() => this.handleMovement(), 1000 / 60);
+    this.characterInterval = setInterval(() => this.handleAnimation(), 150);
+  }
+  
+  handleMovement() {
+    let oldX = this.x;
+  
+    if (this.world.startGame && this.energy > 0) {
+      this.handleDirection();
+      this.handleJump();
+      this.handleCollision(oldX);
+    }
+  
+    this.world.camera_x = -this.x + 100;
+  }
+  
+  handleDirection() {
+    if (this.world.keyborad.RIGHT && this.x < this.world.level.level_end_x) {
+      this.moveRight();
+      this.otherDirektion = false;
+    }
+    if (this.world.keyborad.LEFT && this.x > 0) {
+      this.moveLeft();
+      this.otherDirektion = true;
+    }
+  }
+  
+  handleJump() {
+    if ((this.world.keyborad.UP && !this.isAboveGround()) || (this.world.keyborad.SPACE && !this.isAboveGround())) {
+      this.jump();
+      this.world.jumpSound.play();
+    }
+  }
+  
+  handleCollision(oldX) {
+    this.world.level.enemies.forEach((enemy) => {
+      if (!enemy.enemyIsDead && this.isColliding(enemy)) {
+        this.x = oldX;
       }
-      this.world.camera_x = -this.x + 100;
-    }, 1000 / 60);
-
+    });
+  }
+  
+  handleAnimation() {
     let frameIndex = 0;
-    this.characterInterval = setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation([this.IMAGES_DEAD[frameIndex]]);
-        frameIndex++;
-        if (frameIndex >= this.IMAGES_DEAD.length) {
-          clearInterval(this.characterInterval);
-          this.stopTimer();
-          this.world.snoreSound.stop();
-        }
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-        this.stopTimer();
-        this.world.snoreSound.stop();
-      } else if (this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_JUMPING);
-        this.stopTimer();
-        this.world.snoreSound.stop();
-      } else {
-        if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
-          this.playAnimation(this.IMAGES_WALKING);
-          this.stopTimer();
-          this.world.snoreSound.stop();
-        } else if (this.longIdle) {
-          this.playAnimation(this.IMAGES_LONG_IDLE);
-          this.world.snoreSound.play();
-        } else {
-          this.playAnimation(this.IMAGES_IDLE);
-          this.startTimer();
-          this.world.snoreSound.stop();
-        }
-      }
-    }, 150);
+    if (this.isDead()) {
+      this.handleDeadAnimation(frameIndex);
+    } else if (this.isHurt()) {
+      this.handleHurtAnimation();
+    } else if (this.isAboveGround()) {
+      this.handleJumpingAnimation();
+    } else {
+      this.handleIdleAnimation();
+    }
+  }
+  
+  handleDeadAnimation(frameIndex) {
+    this.playAnimation([this.IMAGES_DEAD[frameIndex]]);
+    frameIndex++;
+    if (frameIndex >= this.IMAGES_DEAD.length) {
+      clearInterval(this.characterInterval);
+      this.stopTimer();
+      this.world.snoreSound.stop();
+    }
+  }
+  
+  handleHurtAnimation() {
+    this.playAnimation(this.IMAGES_HURT);
+    this.stopTimer();
+    this.world.snoreSound.stop();
+  }
+  
+  handleJumpingAnimation() {
+    this.playAnimation(this.IMAGES_JUMPING);
+    this.stopTimer();
+    this.world.snoreSound.stop();
+  }
+  
+  handleIdleAnimation() {
+    if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
+      this.playAnimation(this.IMAGES_WALKING);
+      this.stopTimer();
+      this.world.snoreSound.stop();
+    } else if (this.longIdle) {
+      this.playAnimation(this.IMAGES_LONG_IDLE);
+      this.world.snoreSound.play();
+    } else {
+      this.playAnimation(this.IMAGES_IDLE);
+      this.startTimer();
+      this.world.snoreSound.stop();
+    }
   }
 
-  moveIntervall() {}
-
   resetCharacter() {
-    this.x = 10000;
+    this.x = 100;
     this.energy = 100;
     this.enemyIsDead = false;
     this.otherDirektion = false;

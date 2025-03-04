@@ -6,6 +6,13 @@ class DrawableObject {
   width = 100;
   imageCache = {};
 
+  offset = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  };
+
   loadImages(arr) {
     arr.forEach((path) => {
       const img = new Image();

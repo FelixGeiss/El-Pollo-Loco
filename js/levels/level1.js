@@ -70,6 +70,9 @@ new CollectiblBottel(),
   new CollectiblCoin(),
   new CollectiblCoin(),
   new CollectiblCoin(),  
-  ]
+  ],
+
+
+
 
 );

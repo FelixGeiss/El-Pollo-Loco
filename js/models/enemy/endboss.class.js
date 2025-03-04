@@ -68,48 +68,79 @@ class Endboss extends MovableObject {
   }
 
   animate() {
- 
+    this.clearIntervals();
+    this.startMovementInterval();
+    this.startAnimationInterval();
+  }
+  
+  clearIntervals() {
     if (this.movementInterval) clearInterval(this.movementInterval);
     if (this.animationInterval) clearInterval(this.animationInterval);
-
-   
-    this.movementInterval = setInterval(() => {
-      if (this.isAttack) {
-        this.moveEnemie();
-      }
-
-      if (this.isDead()) {
-        clearInterval(this.movementInterval);
-        this.applyGravity();
-        this.speedY = 30;
-        return;
-      }
-
-      if (!this.isAttack && this.energy < 100) {
-        this.moveLeft();
-      }
-    }, 1000 / 60);
-
+  }
+  
+  startMovementInterval() {
+    this.movementInterval = setInterval(() => this.handleMovement(), 1000 / 60);
+  }
+  
+  handleMovement() {
+    if (this.isAttack) {
+      this.moveEnemie();
+    }
+  
+    if (this.isDead()) {
+      clearInterval(this.movementInterval);
+      this.applyGravity();
+      this.speedY = 30;
+      return;
+    }
+  
+    if (!this.isAttack && this.energy < 100) {
+      this.moveLeft();
+    }
+  }
+  
+  startAnimationInterval() {
     let frameIndexDead = 0;
-    this.animationInterval = setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation([this.IMAGES_DEAD[frameIndexDead]]);
-        frameIndexDead++;
-        if (frameIndexDead >= this.IMAGES_DEAD.length) {
-          clearInterval(this.animationInterval);
-        }
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-        this.x = this.x + 20;
-      } else if (this.isAttack) {
-        this.playAnimation(this.IMAGES_ATTACK);
-        
-      } else if (this.energy < 100) {
-        this.playAnimation(this.IMAGES_WALKING);
-      } else {
-        this.playAnimation(this.IMGES_ALERT);
-      }
-    }, 150);
+    this.animationInterval = setInterval(() => this.handleAnimation(frameIndexDead), 150);
+  }
+  
+  handleAnimation(frameIndexDead) {
+    if (this.isDead()) {
+      this.handleDeadAnimation(frameIndexDead);
+    } else if (this.isHurt()) {
+      this.handleHurtAnimation();
+    } else if (this.isAttack) {
+      this.handleAttackAnimation();
+    } else if (this.energy < 100) {
+      this.handleWalkingAnimation();
+    } else {
+      this.handleAlertAnimation();
+    }
+  }
+  
+  handleDeadAnimation(frameIndexDead) {
+    this.playAnimation([this.IMAGES_DEAD[frameIndexDead]]);
+    frameIndexDead++;
+    if (frameIndexDead >= this.IMAGES_DEAD.length) {
+      clearInterval(this.animationInterval);
+    }
+  }
+  
+  handleHurtAnimation() {
+    this.playAnimation(this.IMAGES_HURT);
+    this.x = this.x + 20;
+  }
+  
+  handleAttackAnimation() {
+    this.playAnimation(this.IMAGES_ATTACK);
+  }
+  
+  handleWalkingAnimation() {
+    this.playAnimation(this.IMAGES_WALKING);
+  }
+  
+  handleAlertAnimation() {
+    this.playAnimation(this.IMGES_ALERT);
   }
 
   resetEnemy() {

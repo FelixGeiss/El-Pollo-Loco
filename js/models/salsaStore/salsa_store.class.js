@@ -1,4 +1,4 @@
-class SalsaStore extends MovableObject {
+class SalsaStore extends DrawableObject {
   width = 250;
   height = 250;
   y = 200;

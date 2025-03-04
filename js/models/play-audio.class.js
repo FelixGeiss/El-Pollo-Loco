@@ -1,14 +1,20 @@
 class PlayAudio {
   muted = false;
 
-  
-  constructor(audioSrc, shouldLoop = false, volume = 1, backroundSound = false) {
+  constructor(
+    audioSrc,
+    shouldLoop = false,
+    volume = 1,
+    backroundSound = false
+  ) {
     this.audio = new Audio(audioSrc);
     this.audio.loop = shouldLoop;
     this.audio.volume = volume;
     this.backroundSound = backroundSound;
-    
+    this.mutedSound();
+  }
 
+  mutedSound() {
     if (this.backroundSound) {
       const storedMusicMute = localStorage.getItem("musicMuted");
       if (storedMusicMute === "true") {
@@ -43,7 +49,6 @@ class PlayAudio {
     this.audio.currentTime = 0;
   }
 
- 
   setMute(isMuted) {
     this.muted = isMuted;
     this.audio.muted = isMuted;

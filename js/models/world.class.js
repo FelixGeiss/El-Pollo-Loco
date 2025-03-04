@@ -12,7 +12,7 @@ class World {
   statusBarBottle = new StatusBarBottle();
   statusBarCoin = new StatusBarCoin();
 
-  // Audio
+  
   jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
   coinSound = new PlayAudio("audio/coin.mp3", false, 1);
   snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1);
@@ -28,6 +28,8 @@ class World {
   buySound = new PlayAudio("audio/buy.mp3", false, 1, false);
   throwSound = new PlayAudio("audio/throw.mp3", false, 1, false);
   backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8, true);
+ 
+ 
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
   salsaStore = new SalsaStore();
@@ -105,7 +107,7 @@ class World {
       this.Intervals.push(this.character.moveIntervall);
       this.Intervals.push(this.character.characterInterval);
     }
-    console.log(this.Intervals,"intervale");
+  
   }
 
 
@@ -114,37 +116,53 @@ class World {
       clearInterval(intervalId);
     });
     this.Intervals = [];
-    console.log(this.Intervals , "home wurde geklickt " );
-    
   }
 
   checkThrowobjekt() {
-    if (this.keyborad.D && this.bottleCount > 0 && !this.throwTimeout) {
-      let xPosition;
-      this.snoreSound.stop();
-      this.character.stopTimer();
-      if (this.character.otherDirektion) {
-        xPosition = this.character.x - 50;
-      } else {
-        xPosition = this.character.x + 100;
-      }
-
-      let bottle = new Throwableobject(
-        xPosition,
-        this.character.y + 100,
-        this.character.otherDirektion
-      );
-
-      this.bottleCount--;
-      this.statusBarBottle.setPercentage(this.bottleCount);
-      this.throwableObjects.push(bottle);
-
-      this.throwTimeout = true;
-      setTimeout(() => {
-        this.throwTimeout = false;
-        this.throwSound.play();
-      }, 500);
+    if (this.canThrowBottle()) {
+      this.prepareThrow();
     }
+  }
+  
+  canThrowBottle() {
+    return this.keyborad.D && this.bottleCount > 0 && !this.throwTimeout;
+  }
+  
+  prepareThrow() {
+    this.snoreSound.stop();
+    this.character.stopTimer();
+    const xPosition = this.calculateXPosition();
+    this.createBottle(xPosition);
+    this.updateBottleCount();
+    this.setThrowTimeout();
+  }
+  
+  calculateXPosition() {
+    return this.character.otherDirektion
+      ? this.character.x - 50
+      : this.character.x + 100;
+  }
+  
+  createBottle(xPosition) {
+    const bottle = new Throwableobject(
+      xPosition,
+      this.character.y + 100,
+      this.character.otherDirektion
+    );
+    this.throwableObjects.push(bottle);
+  }
+  
+  updateBottleCount() {
+    this.bottleCount--;
+    this.statusBarBottle.setPercentage(this.bottleCount);
+  }
+  
+  setThrowTimeout() {
+    this.throwTimeout = true;
+    setTimeout(() => {
+      this.throwTimeout = false;
+      this.throwSound.play();
+    }, 500);
   }
 
   checkCollision() {
@@ -367,36 +385,40 @@ class World {
   }
 
   resetGame() {
-    // 1. Stoppe alle Intervalle
     this.stopAllIntervals();
-
-    // 2. Setze den Charakter zurück
+    this.resetCharacter();
+    this.resetArrayElements(this.level.enemies, "resetEnemy");
+    this.resetArrayElements(this.level.clouds, "reset");
+    this.resetArrayElements(this.level.collectiblCoin, "reset");
+    this.resetArrayElements(this.level.collectiblBottel, "reset");
+    this.resetStatusBars();
+    this.resetCounts();
+    this.startGame = false;
+  }
+  
+  resetCharacter() {
     this.character.resetCharacter();
-
-    // 3. Setze die Gegner zurück
-    this.level.enemies.forEach((enemy) => {
-      enemy.resetEnemy();
-    });
-    this.level.clouds.forEach((clouds) => {
-      clouds.reset();
-    });
-
-    this.level.collectiblCoin.forEach((coin) => {
-      coin.reset();
-    });
-
-    this.level.collectiblBottel.forEach((bottle) => {
-      bottle.reset();
-    });
-    // 5. Setze die Statusleisten zurück
-    this.statusBar.setPercentage(100); // Volle Energie
-    this.statusBarBottle.setPercentage(0); // Keine Flaschen
-    this.statusBarCoin.setPercentage(0); // Keine Münzen
-
+  }
+  
+  resetArrayElements(array, resetMethod) {
+    if (array && array.length > 0) {
+      array.forEach((element) => {
+        if (element[resetMethod]) {
+          element[resetMethod]();
+        }
+      });
+    }
+  }
+  
+  resetStatusBars() {
+    this.statusBar.setPercentage(100);
+    this.statusBarBottle.setPercentage(0);
+    this.statusBarCoin.setPercentage(0);
+  }
+  
+  resetCounts() {
     this.throwableObjects = [];
     this.bottleCount = 0;
     this.CoinCount = 0;
-
-    this.startGame = false;
   }
 }

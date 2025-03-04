@@ -10,57 +10,60 @@ function init() {
 }
 
 function setupButtonListeners() {
-  const arrowTop = document.getElementById("arrowTop");
-  const arrowRight = document.getElementById("arrowRaight");
-  const arrowBottom = document.getElementById("arrowBottom");
-  const arrowLeft = document.getElementById("arrowLeft");
-  const bButton = document.getElementById("bButton");
-  const aButton = document.getElementById("aButton");
-  const yButton = document.getElementById("yButton");
-  const xButton = document.getElementById("xButton");
-  const homeButton = document.getElementById("home");
+  const buttons = getButtons();
+  setupListenersForButtons(buttons);
+}
 
-  function handleButtonPress(button, key, value) {
-    button.addEventListener("mousedown", () => {
-      if (button == homeButton && world.startGame) {
-        world.startGame = false;
-       world.stopAllIntervals();
-     world.resetGame();
-      }
+function getButtons() {
+  return {
+    arrowTop: document.getElementById("arrowTop"),
+    arrowRight: document.getElementById("arrowRaight"),
+    arrowBottom: document.getElementById("arrowBottom"),
+    arrowLeft: document.getElementById("arrowLeft"),
+    bButton: document.getElementById("bButton"),
+    aButton: document.getElementById("aButton"),
+    yButton: document.getElementById("yButton"),
+    xButton: document.getElementById("xButton"),
+    homeButton: document.getElementById("home"),
+  };
+}
 
-      keyborad[key] = value;
-    });
+function setupListenersForButtons(buttons) {
+  if (buttons.arrowTop) handleButtonPress(buttons.arrowTop, "UP", true);
+  if (buttons.arrowRight) handleButtonPress(buttons.arrowRight, "RIGHT", true);
+  if (buttons.arrowBottom) handleButtonPress(buttons.arrowBottom, "DOWN", true);
+  if (buttons.arrowLeft) handleButtonPress(buttons.arrowLeft, "LEFT", true);
+  if (buttons.bButton) handleButtonPress(buttons.bButton, "UP", true);
+  if (buttons.aButton) handleButtonPress(buttons.aButton, "D", true);
+  if (buttons.yButton) handleButtonPress(buttons.yButton, "D", true);
+  if (buttons.xButton) handleButtonPress(buttons.xButton, "DOWN", true);
+  if (buttons.homeButton) handleHomeButtonPress(buttons.homeButton);
+}
 
-    button.addEventListener("mouseup", () => {
+function handleButtonPress(button, key, value) {
+  button.addEventListener("mousedown", () => {
+    keyborad[key] = value;
+  });
+
+  button.addEventListener("mouseup", () => {
+    keyborad[key] = !value;
+  });
+
+  button.addEventListener("mouseleave", () => {
+    if (keyborad[key] === value) {
       keyborad[key] = !value;
-    });
+    }
+  });
+}
 
-    button.addEventListener("mouseleave", () => {
-      if (keyborad[key] === value) {
-        keyborad[key] = !value;
-      }
-    });
-  }
-
-  if (arrowTop) handleButtonPress(arrowTop, "UP", true);
-  if (arrowRight) handleButtonPress(arrowRight, "RIGHT", true);
-  if (arrowBottom) handleButtonPress(arrowBottom, "DOWN", true);
-  if (arrowLeft) handleButtonPress(arrowLeft, "LEFT", true);
-  if (bButton) {
-    handleButtonPress(bButton, "UP", true);
-  }
-  if (aButton) {
-    handleButtonPress(aButton, "D", true);
-  }
-  if (yButton) {
-    handleButtonPress(yButton, "D", true);
-  }
-  if (xButton) {
-    handleButtonPress(xButton, "DOWN", true);
-  }
-  if (homeButton) {
-    handleButtonPress(homeButton);
-  }
+function handleHomeButtonPress(homeButton) {
+  homeButton.addEventListener("mousedown", () => {
+    if (world.startGame) {
+      world.startGame = false;
+      world.stopAllIntervals();
+      world.resetGame();
+    }
+  });
 }
 
 document.addEventListener("keydown", (event) => {
