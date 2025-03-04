@@ -41,6 +41,7 @@ function setupListenersForButtons(buttons) {
 }
 
 function handleButtonPress(button, key, value) {
+  // Mouse events
   button.addEventListener("mousedown", () => {
     keyborad[key] = value;
   });
@@ -54,10 +55,32 @@ function handleButtonPress(button, key, value) {
       keyborad[key] = !value;
     }
   });
+
+  // Touch events
+  button.addEventListener("touchstart", (event) => {
+    event.preventDefault(); // Prevent scrolling on touch devices
+    keyborad[key] = value;
+  });
+
+  button.addEventListener("touchend", (event) => {
+    event.preventDefault(); // Prevent scrolling on touch devices
+    keyborad[key] = !value;
+  });
 }
 
 function handleHomeButtonPress(homeButton) {
+  // Mouse event
   homeButton.addEventListener("mousedown", () => {
+    if (world.startGame) {
+      world.startGame = false;
+      world.stopAllIntervals();
+      world.resetGame();
+    }
+  });
+
+  // Touch event
+  homeButton.addEventListener("touchstart", (event) => {
+    event.preventDefault();
     if (world.startGame) {
       world.startGame = false;
       world.stopAllIntervals();
@@ -66,67 +89,36 @@ function handleHomeButtonPress(homeButton) {
   });
 }
 
+// Keyboard event listeners
 document.addEventListener("keydown", (event) => {
- 
- 
-  if (event.keyCode == 68) {
-    keyborad.D = true;
-  }
-  if (event.keyCode == 39) {
-    keyborad.RIGHT = true;
-  }
-  if (event.keyCode == 37) {
-    keyborad.LEFT = true;
-  }
-  if (event.keyCode == 38) {
-    keyborad.UP = true;
-  }
-  if (event.keyCode == 32) {
-    keyborad.SPACE = true;
-  }
-
-  if (event.keyCode === 40) {
-    keyborad.DOWN = true;
-  }
+  if (event.keyCode == 68) keyborad.D = true; // D key
+  if (event.keyCode == 39) keyborad.RIGHT = true; // Right arrow
+  if (event.keyCode == 37) keyborad.LEFT = true; // Left arrow
+  if (event.keyCode == 38) keyborad.UP = true; // Up arrow
+  if (event.keyCode == 32) keyborad.SPACE = true; // Space bar
+  if (event.keyCode === 40) keyborad.DOWN = true; // Down arrow
 });
 
 document.addEventListener("keyup", (event) => {
-  if (event.keyCode == 68) {
-    keyborad.D = false;
-  }
-
-  if (event.keyCode == 39) {
-    keyborad.RIGHT = false;
-  }
-  if (event.keyCode == 37) {
-    keyborad.LEFT = false;
-  }
-  if (event.keyCode == 38) {
-    keyborad.UP = false;
-  }
-  if (event.keyCode == 32) {
-    keyborad.SPACE = false;
-  }
-
-  if (event.keyCode === 40) {
-    keyborad.DOWN = false;
-  }
+  if (event.keyCode == 68) keyborad.D = false;
+  if (event.keyCode == 39) keyborad.RIGHT = false;
+  if (event.keyCode == 37) keyborad.LEFT = false;
+  if (event.keyCode == 38) keyborad.UP = false;
+  if (event.keyCode == 32) keyborad.SPACE = false;
+  if (event.keyCode === 40) keyborad.DOWN = false;
 });
 
-
-
-// fullscreen
-
-// document.getElementById("meinDiv").addEventListener("click", function() {
+// Fullscreen mode toggle
+// document.getElementById("meinDiv")?.addEventListener("click", function () {
 //   toggleFullscreen(this);
 // });
 
 // function toggleFullscreen(element) {
 //   if (!document.fullscreenElement) {
-//       element.requestFullscreen().catch(err => {
-//           console.error(`Fehler beim Umschalten in den Vollbildmodus: ${err.message}`);
-//       });
+//     element.requestFullscreen().catch((err) => {
+//       console.error(`Error entering fullscreen mode: ${err.message}`);
+//     });
 //   } else {
-//       document.exitFullscreen();
+//     document.exitFullscreen();
 //   }
 // }

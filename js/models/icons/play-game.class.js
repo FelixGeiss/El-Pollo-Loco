@@ -1,5 +1,6 @@
 class PlayGame extends DrawableObject {
   world;
+
   constructor() {
     super();
 
@@ -11,6 +12,7 @@ class PlayGame extends DrawableObject {
     this.height = 50;
 
     canvas.addEventListener("click", this.onClick.bind(this));
+    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
     canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
   }
 
@@ -24,7 +26,7 @@ class PlayGame extends DrawableObject {
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
       mouseY <= this.y + this.height &&
-      !world.startGame
+      !this.world.startGame
     ) {
       canvas.style.cursor = "pointer";
     } else {
@@ -33,9 +35,18 @@ class PlayGame extends DrawableObject {
   }
 
   onClick(event) {
+    event.preventDefault(); 
+
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    let mouseX, mouseY;
+
+    if (event.touches && event.touches.length > 0) { 
+      mouseX = event.touches[0].clientX - rect.left;
+      mouseY = event.touches[0].clientY - rect.top;
+    } else { 
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+    }
 
     if (
       mouseX >= this.x &&

@@ -7,22 +7,18 @@ class World {
   camera_x = 0;
   startGame = false;
   Intervals = [];
+
   // Statusbar
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
   statusBarCoin = new StatusBarCoin();
 
-  
+  // Audio
   jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
   coinSound = new PlayAudio("audio/coin.mp3", false, 1);
   snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1);
   bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false, 1, false);
-  bottleCollectSound = new PlayAudio(
-    "audio/glass-clinking.mp3",
-    false,
-    1,
-    false
-  );
+  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3",false,1,false);
   chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1, false);
   characterHitSound = new PlayAudio("audio/hit.mp3", false, 1, false);
   buySound = new PlayAudio("audio/buy.mp3", false, 1, false);
@@ -44,7 +40,7 @@ class World {
   CoinCount = 0;
   throwTimeout = false;
 
-  constructor(canvas, keyborad) {
+  constructor(canvas, keyborad,) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyborad = keyborad;
@@ -53,7 +49,9 @@ class World {
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
-    console.log(this.level);
+   
+  
+    
     
   }
 
@@ -172,11 +170,11 @@ class World {
           this.character.y +
             this.character.height -
             this.character.offset.bottom <
-          enemy.y + enemy.offset.top + enemy.height / 4
+          enemy.y + enemy.offset.top + enemy.height / 3
         ) {
           enemy.hit();
           this.chickenHitSound.play();
-        } else {
+        } else if (this.character.energy > 0) {
           this.characterHitSound.play();
           this.character.hit();
           this.statusBar.setPercentage(this.character.energy);
@@ -263,7 +261,6 @@ class World {
       this.bottleCount < 5 &&
       this.character.isColliding(this.salsaStore)
     ) {
-      // Zeitpunkt des Kaufs aktualisieren
       this.lastPurchaseTime = now;
       this.bottleCount++;
       this.statusBarBottle.setPercentage(this.bottleCount);
@@ -398,6 +395,7 @@ class World {
   
   resetCharacter() {
     this.character.resetCharacter();
+    this.snoreSound.stop()
   }
   
   resetArrayElements(array, resetMethod) {

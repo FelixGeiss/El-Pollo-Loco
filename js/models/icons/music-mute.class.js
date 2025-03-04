@@ -14,26 +14,36 @@ class MusicsMuteIcon extends DrawableObject {
     this.width = 50;
     this.height = 50;
 
-   
+    // Lade gespeicherten Mute-Status
     const storedMuteStatus = localStorage.getItem("MusikMute");
     if (storedMuteStatus === "true") {
       this.isMuted = true;
       this.loadImage(this.mute);
 
-     
       if (this.world && this.world.backgroundSound) {
         this.world.backgroundSound.muted = true;
         this.world.backgroundSound.pause();
       }
     }
 
-    canvas.addEventListener('click', this.onClick.bind(this));
+    // Event-Listener für Maus & Touch
+    canvas.addEventListener("click", this.onClick.bind(this));
+    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
   }
 
   onClick(event) {
+    event.preventDefault(); 
+
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    let mouseX, mouseY;
+
+    if (event.touches && event.touches.length > 0) { 
+      mouseX = event.touches[0].clientX - rect.left;
+      mouseY = event.touches[0].clientY - rect.top;
+    } else { 
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+    }
 
     if (
       mouseX >= this.x && mouseX <= this.x + this.width &&
@@ -50,7 +60,6 @@ class MusicsMuteIcon extends DrawableObject {
 
     localStorage.setItem("MusikMute", this.isMuted.toString());
 
-    
     if (this.world && this.world.backgroundSound) {
       this.world.backgroundSound.muted = this.isMuted;
 
@@ -58,8 +67,6 @@ class MusicsMuteIcon extends DrawableObject {
         this.world.backgroundSound.pause();
       } else {
         this.world.backgroundSound.play();
-
-        
       }
     }
   }

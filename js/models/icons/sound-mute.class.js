@@ -13,6 +13,7 @@ class SoundsMuteIcon extends DrawableObject {
     this.width = 50;
     this.height = 50;
 
+    
     const storedSoundStatus = localStorage.getItem("soundMuted");
     if (storedSoundStatus === "true") {
       this.isMuted = true;
@@ -21,20 +22,23 @@ class SoundsMuteIcon extends DrawableObject {
 
     this.muteSound();
 
+  
     canvas.addEventListener("click", this.onClick.bind(this));
+    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
     canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
   }
+
   muteSound() {
     if (this.world) {
-      this.world.jumpSound.setMute(true);
-      this.world.coinSound.setMute(true);
-      this.world.snoreSound.setMute(true);
-      this.world.bottleBrokenSound.setMute(true);
-      this.world.bottleCollectSound.setMute(true);
-      this.world.chickenHitSound.setMute(true);
-      this.world.characterHitSound.setMute(true);
-      this.world.buySound.setMute(true);
-      this.world.throwSound.setMute(true);
+      this.world.jumpSound.setMute(this.isMuted);
+      this.world.coinSound.setMute(this.isMuted);
+      this.world.snoreSound.setMute(this.isMuted);
+      this.world.bottleBrokenSound.setMute(this.isMuted);
+      this.world.bottleCollectSound.setMute(this.isMuted);
+      this.world.chickenHitSound.setMute(this.isMuted);
+      this.world.characterHitSound.setMute(this.isMuted);
+      this.world.buySound.setMute(this.isMuted);
+      this.world.throwSound.setMute(this.isMuted);
     }
   }
 
@@ -56,9 +60,18 @@ class SoundsMuteIcon extends DrawableObject {
   }
 
   onClick(event) {
+    event.preventDefault(); 
+
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    let mouseX, mouseY;
+
+    if (event.touches && event.touches.length > 0) { 
+      mouseX = event.touches[0].clientX - rect.left;
+      mouseY = event.touches[0].clientY - rect.top;
+    } else { 
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+    }
 
     if (
       mouseX >= this.x &&
@@ -77,16 +90,6 @@ class SoundsMuteIcon extends DrawableObject {
 
     localStorage.setItem("soundMuted", this.isMuted.toString());
 
-    if (this.world) {
-      this.world.jumpSound.setMute(this.isMuted);
-      this.world.coinSound.setMute(this.isMuted);
-      this.world.snoreSound.setMute(this.isMuted);
-      this.world.bottleBrokenSound.setMute(this.isMuted);
-      this.world.bottleCollectSound.setMute(this.isMuted);
-      this.world.chickenHitSound.setMute(this.isMuted);
-      this.world.characterHitSound.setMute(this.isMuted);
-      this.world.buySound.setMute(this.isMuted);
-      this.world.throwSound.setMute(this.isMuted);
-    }
+    this.muteSound(); 
   }
 }

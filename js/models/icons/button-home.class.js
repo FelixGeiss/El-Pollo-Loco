@@ -9,14 +9,23 @@ class ButtonHome extends DrawableObject {
     this.width = 50;
     this.height = 50;
 
-
     canvas.addEventListener("click", this.onClick.bind(this));
+    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
   }
 
   onClick(event) {
+    event.preventDefault(); 
+
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    let mouseX, mouseY;
+
+    if (event.touches && event.touches.length > 0) {
+      mouseX = event.touches[0].clientX - rect.left;
+      mouseY = event.touches[0].clientY - rect.top;
+    } else {
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+    }
 
     if (
       mouseX >= this.x &&
@@ -26,9 +35,8 @@ class ButtonHome extends DrawableObject {
       this.world.character.energy <= 0 
     ) {
       this.world.startGame = false;
-      this.world.resetGame()
-      console.log("wurde gecklickt");
-      
+      this.world.resetGame();
+      console.log("Button wurde geklickt/getippt");
     }
   }
 }
