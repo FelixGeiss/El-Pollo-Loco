@@ -18,14 +18,18 @@ class World {
   coinSound = new PlayAudio("audio/coin.mp3", false, 1);
   snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1);
   bottleBrokenSound = new PlayAudio("audio/bottle-broken.mp3", false, 1, false);
-  bottleCollectSound = new PlayAudio("audio/glass-clinking.mp3",false,1,false);
+  bottleCollectSound = new PlayAudio(
+    "audio/glass-clinking.mp3",
+    false,
+    1,
+    false
+  );
   chickenHitSound = new PlayAudio("audio/chicken-hit.mp3", false, 1, false);
   characterHitSound = new PlayAudio("audio/hit.mp3", false, 1, false);
   buySound = new PlayAudio("audio/buy.mp3", false, 1, false);
   throwSound = new PlayAudio("audio/throw.mp3", false, 1, false);
   backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8, true);
- 
- 
+
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
   salsaStore = new SalsaStore();
@@ -34,25 +38,26 @@ class World {
   gameOver = new GameOver();
   playGame = new PlayGame();
   buttonHome = new ButtonHome();
+  moveRaight = new MoveRaight();
+  moveLeft = new MoveLeft();
+  jump = new Jump();
+  buy = new Buy();
+  attack = new Attack();
 
   throwableObjects = [];
   bottleCount = 0;
   CoinCount = 0;
   throwTimeout = false;
 
-  constructor(canvas, keyborad,) {
+  constructor(canvas, keyborad) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyborad = keyborad;
     this.draw();
     this.setWorld();
     this.run();
-    this.pushInterval()
+    this.pushInterval();
     this.stopAllIntervals();
-   
-  
-    
-    
   }
 
   setWorld() {
@@ -61,6 +66,11 @@ class World {
     this.musicMuteIcon.world = this;
     this.playGame.world = this;
     this.buttonHome.world = this;
+    this.moveRaight.world = this;
+    this.moveLeft.world = this;
+    this.jump.world = this;
+    this.buy.world = this;
+    this.attack.world = this;
   }
 
   run() {
@@ -88,10 +98,10 @@ class World {
     if (this.startGame) {
       this.level.enemies.forEach((enemy) => {
         enemy.moveEnemie();
-        
+
         this.Intervals.push(enemy.moveInterval);
       });
-  
+
       if (this.startGame) {
         this.level.clouds.forEach((cloud) => {
           this.Intervals.push(cloud.animationInterval);
@@ -102,13 +112,11 @@ class World {
           this.Intervals.push(coin.animationInterval);
         });
       }
-  
+
       this.Intervals.push(this.character.moveIntervall);
       this.Intervals.push(this.character.characterInterval);
     }
-  
   }
-
 
   stopAllIntervals() {
     this.Intervals.forEach((intervalId) => {
@@ -122,11 +130,11 @@ class World {
       this.prepareThrow();
     }
   }
-  
+
   canThrowBottle() {
     return this.keyborad.D && this.bottleCount > 0 && !this.throwTimeout;
   }
-  
+
   prepareThrow() {
     this.snoreSound.stop();
     this.character.stopTimer();
@@ -135,13 +143,13 @@ class World {
     this.updateBottleCount();
     this.setThrowTimeout();
   }
-  
+
   calculateXPosition() {
     return this.character.otherDirektion
       ? this.character.x - 50
       : this.character.x + 100;
   }
-  
+
   createBottle(xPosition) {
     const bottle = new Throwableobject(
       xPosition,
@@ -150,12 +158,12 @@ class World {
     );
     this.throwableObjects.push(bottle);
   }
-  
+
   updateBottleCount() {
     this.bottleCount--;
     this.statusBarBottle.setPercentage(this.bottleCount);
   }
-  
+
   setThrowTimeout() {
     this.throwTimeout = true;
     setTimeout(() => {
@@ -282,8 +290,6 @@ class World {
       this.drawLevel();
     }
 
-
-
     // ------------Space for fixed object-------------
 
     if (this.startGame) {
@@ -295,6 +301,8 @@ class World {
     }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
+
+    this.drawMobileMovement();
 
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
@@ -323,7 +331,15 @@ class World {
       this.addObjectsToMap(this.throwableObjects)
     );
   }
-
+  drawMobileMovement() {
+    if (this.startGame && window.innerWidth < 768) {
+      this.addToMap(this.moveRaight);
+      this.addToMap(this.moveLeft);
+      this.addToMap(this.jump);
+      this.addToMap(this.buy);
+      this.addToMap(this.attack);
+    }
+  }
   drawStatusbar() {
     return (
       this.addToMap(this.statusBar),
@@ -393,12 +409,12 @@ class World {
     this.resetCounts();
     this.startGame = false;
   }
-  
+
   resetCharacter() {
     this.character.resetCharacter();
-    this.snoreSound.stop()
+    this.snoreSound.stop();
   }
-  
+
   resetArrayElements(array, resetMethod) {
     if (array && array.length > 0) {
       array.forEach((element) => {
@@ -408,13 +424,13 @@ class World {
       });
     }
   }
-  
+
   resetStatusBars() {
     this.statusBar.setPercentage(100);
     this.statusBarBottle.setPercentage(0);
     this.statusBarCoin.setPercentage(0);
   }
-  
+
   resetCounts() {
     this.throwableObjects = [];
     this.bottleCount = 0;

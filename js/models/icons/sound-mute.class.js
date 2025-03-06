@@ -8,25 +8,32 @@ class SoundsMuteIcon extends DrawableObject {
     super();
 
     this.loadImage(this.nonMute);
-    this.x = 650;
-    this.y = 20;
+    this.updatePosition(); // Initiale Position setzen
     this.width = 50;
     this.height = 50;
 
-    
+    // Lade gespeicherten Mute-Status
     const storedSoundStatus = localStorage.getItem("soundMuted");
     if (storedSoundStatus === "true") {
       this.isMuted = true;
       this.loadImage(this.mute);
     }
 
-    this.muteSound();
+    this.muteSound(); // Mute-Status anwenden
 
-  
+    // Event-Listener für Maus, Touch und Canvas-Größenänderung
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
     canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
+    window.addEventListener("resize", this.updatePosition.bind(this)); // Bei Größenänderung anpassen
   }
+
+
+  updatePosition() {
+    this.x = canvas.width * 0.90; 
+    this.y = canvas.height * 0.05; 
+  }
+
 
   muteSound() {
     if (this.world) {
@@ -42,10 +49,23 @@ class SoundsMuteIcon extends DrawableObject {
     }
   }
 
+
   onMouseMove(event) {
     const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
+    const scaleX = canvas.width / rect.width; 
+    const scaleY = canvas.height / rect.height; 
+
+    let mouseX, mouseY;
+
+    if (event.touches && event.touches.length > 0) {
+      // Touch-Ereignis
+      mouseX = (event.touches[0].clientX - rect.left) * scaleX;
+      mouseY = (event.touches[0].clientY - rect.top) * scaleY;
+    } else {
+      // Mausklick-Ereignis
+      mouseX = (event.clientX - rect.left) * scaleX;
+      mouseY = (event.clientY - rect.top) * scaleY;
+    }
 
     if (
       mouseX >= this.x &&
@@ -53,25 +73,31 @@ class SoundsMuteIcon extends DrawableObject {
       mouseY >= this.y &&
       mouseY <= this.y + this.height
     ) {
-      canvas.style.cursor = "pointer";
+      canvas.style.cursor = "pointer"; 
     } else {
-      canvas.style.cursor = "default";
+      canvas.style.cursor = "default"; 
     }
   }
 
+
   onClick(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width; 
+    const scaleY = canvas.height / rect.height; 
     let mouseX, mouseY;
 
-    if (event.touches && event.touches.length > 0) { 
-      mouseX = event.touches[0].clientX - rect.left;
-      mouseY = event.touches[0].clientY - rect.top;
-    } else { 
-      mouseX = event.clientX - rect.left;
-      mouseY = event.clientY - rect.top;
+    if (event.touches && event.touches.length > 0) {
+      // Touch-Ereignis
+      mouseX = (event.touches[0].clientX - rect.left) * scaleX;
+      mouseY = (event.touches[0].clientY - rect.top) * scaleY;
+    } else {
+      // Mausklick-Ereignis
+      mouseX = (event.clientX - rect.left) * scaleX;
+      mouseY = (event.clientY - rect.top) * scaleY;
     }
+
 
     if (
       mouseX >= this.x &&
@@ -83,6 +109,7 @@ class SoundsMuteIcon extends DrawableObject {
     }
   }
 
+ 
   toggleSound() {
     this.isMuted = !this.isMuted;
     const newImage = this.isMuted ? this.mute : this.nonMute;

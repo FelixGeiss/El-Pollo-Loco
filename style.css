@@ -16,6 +16,7 @@ body {
 .containerControlerL,
 .containerControlerR {
   position: relative;
+  display: flex;
 }
 .arrow,
 .button {
@@ -76,11 +77,10 @@ body {
 
 #background {
   display: flex;
+  position: relative;
 }
 
-.containerControlerL ,.containerControlerR {
-  display: flex;
-}
+
 
 img {
   height: 485px;
@@ -96,20 +96,28 @@ canvas {
 }
 
 @media (max-width: 1060px) {
-  #background{
-   position: relative;
+
+  .containerControlerL,
+  .containerControlerR {
+    display: none;
   }
-  .containerControlerL{
-     top: 477px;
-     left: 240px;
-    position: absolute;
-    padding: 10px 0;
-  }
-  .containerControlerR{
-    top: 477px;
-    right: 159px;
-   position: absolute;
-   padding: 10px 0;
+}
+
+
+@media only screen and (max-width: 720px){
+canvas{
+  width: 100%;
+}
+
+}
+@media only screen and (max-height: 720px){
+  canvas{
+    height: 100vh;
   }
 
+  .containerControlerL,
+  .containerControlerR {
+    display: none;
+  }
+  
 }

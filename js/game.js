@@ -20,7 +20,7 @@ function getButtons() {
     arrowRight: document.getElementById("arrowRaight"),
     arrowBottom: document.getElementById("arrowBottom"),
     arrowLeft: document.getElementById("arrowLeft"),
-    bButton: document.getElementById("bButton"),
+    bButton: document.getElementById("bButton,"),
     aButton: document.getElementById("aButton"),
     yButton: document.getElementById("yButton"),
     xButton: document.getElementById("xButton"),

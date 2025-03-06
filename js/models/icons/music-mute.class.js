@@ -9,8 +9,7 @@ class MusicsMuteIcon extends DrawableObject {
 
     this.loadImage(this.nonMute);
 
-    this.x = 580;
-    this.y = 20;
+    this.updatePosition(); // Initiale Position setzen
     this.width = 50;
     this.height = 50;
 
@@ -29,20 +28,31 @@ class MusicsMuteIcon extends DrawableObject {
     // Event-Listener für Maus & Touch
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
+
+    // Canvas-Größenänderung erkennen
+    window.addEventListener("resize", this.updatePosition.bind(this));
+  }
+
+  updatePosition() {
+    this.x = canvas.width * 0.8; // 90% der Canvas-Breite
+    this.y = canvas.height * 0.05; // 5% der Canvas-Höhe
   }
 
   onClick(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
     let mouseX, mouseY;
 
-    if (event.touches && event.touches.length > 0) { 
-      mouseX = event.touches[0].clientX - rect.left;
-      mouseY = event.touches[0].clientY - rect.top;
-    } else { 
-      mouseX = event.clientX - rect.left;
-      mouseY = event.clientY - rect.top;
+    if (event.touches && event.touches.length > 0) {
+      mouseX = (event.touches[0].clientX - rect.left) * scaleX;
+      mouseY = (event.touches[0].clientY - rect.top) * scaleY;
+    } else {
+      mouseX = (event.clientX - rect.left) * scaleX;
+      mouseY = (event.clientY - rect.top) * scaleY;
     }
 
     if (
