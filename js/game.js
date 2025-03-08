@@ -74,7 +74,7 @@ function handleHomeButtonPress(homeButton) {
     if (world.startGame) {
       world.startGame = false;
       world.stopAllIntervals();
-      world.resetGame();
+      world.resetManager.resetGame()
     }
   });
 
@@ -84,7 +84,7 @@ function handleHomeButtonPress(homeButton) {
     if (world.startGame) {
       world.startGame = false;
       world.stopAllIntervals();
-      world.resetGame();
+      world.resetManager.resetGame()
     }
   });
 }

@@ -37,15 +37,15 @@ class SoundsMuteIcon extends DrawableObject {
 
   muteSound() {
     if (this.world) {
-      this.world.jumpSound.setMute(this.isMuted);
-      this.world.coinSound.setMute(this.isMuted);
-      this.world.snoreSound.setMute(this.isMuted);
-      this.world.bottleBrokenSound.setMute(this.isMuted);
-      this.world.bottleCollectSound.setMute(this.isMuted);
-      this.world.chickenHitSound.setMute(this.isMuted);
-      this.world.characterHitSound.setMute(this.isMuted);
-      this.world.buySound.setMute(this.isMuted);
-      this.world.throwSound.setMute(this.isMuted);
+      this.world.audioManager.jumpSound.setMute(this.isMuted);
+      this.world.audioManager.coinSound.setMute(this.isMuted);
+      this.world.audioManager.snoreSound.setMute(this.isMuted);
+      this.world.audioManager.bottleBrokenSound.setMute(this.isMuted);
+      this.world.audioManager.bottleCollectSound.setMute(this.isMuted);
+      this.world.audioManager.chickenHitSound.setMute(this.isMuted);
+      this.world.audioManager.characterHitSound.setMute(this.isMuted);
+      this.world.audioManager.buySound.setMute(this.isMuted);
+      this.world.audioManager.throwSound.setMute(this.isMuted);
     }
   }
 

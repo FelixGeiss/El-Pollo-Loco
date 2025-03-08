@@ -19,9 +19,9 @@ class MusicsMuteIcon extends DrawableObject {
       this.isMuted = true;
       this.loadImage(this.mute);
 
-      if (this.world && this.world.backgroundSound) {
-        this.world.backgroundSound.muted = true;
-        this.world.backgroundSound.pause();
+      if (this.world && this.world.audioManager.backgroundSound) {
+        this.world.audioManager.backgroundSound.muted = true;
+        this.world.audioManager.backgroundSound.pause();
       }
     }
 
@@ -34,8 +34,8 @@ class MusicsMuteIcon extends DrawableObject {
   }
 
   updatePosition() {
-    this.x = canvas.width * 0.8; // 90% der Canvas-Breite
-    this.y = canvas.height * 0.05; // 5% der Canvas-Höhe
+    this.x = canvas.width * 0.8; 
+    this.y = canvas.height * 0.05; 
   }
 
   onClick(event) {
@@ -70,13 +70,13 @@ class MusicsMuteIcon extends DrawableObject {
 
     localStorage.setItem("MusikMute", this.isMuted.toString());
 
-    if (this.world && this.world.backgroundSound) {
-      this.world.backgroundSound.muted = this.isMuted;
+    if (this.world && this.world.audioManager.backgroundSound) {
+      this.world.audioManager.backgroundSound.muted = this.isMuted;
 
       if (this.isMuted) {
-        this.world.backgroundSound.pause();
+        this.world.audioManager.backgroundSound.pause();
       } else {
-        this.world.backgroundSound.play();
+        this.world.audioManager.backgroundSound.play();
       }
     }
   }

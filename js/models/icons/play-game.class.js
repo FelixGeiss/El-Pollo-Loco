@@ -79,7 +79,8 @@ class PlayGame extends DrawableObject {
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
-      mouseY <= this.y + this.height
+      mouseY <= this.y + this.height &&
+      !this.world.startGame &&  !this.world.showGameOver
     ) {
       this.toggleGame();
     }
@@ -89,5 +90,7 @@ class PlayGame extends DrawableObject {
   toggleGame() {
     this.world.startGame = true;
     this.world.startAllIntervals();
+    console.log("toggle wurde ausgelöst ");
+    
   }
 }

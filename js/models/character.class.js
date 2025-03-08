@@ -138,7 +138,7 @@ class Character extends MovableObject {
   handleJump() {
     if ((this.world.keyborad.UP && !this.isAboveGround()) || (this.world.keyborad.SPACE && !this.isAboveGround())) {
       this.jump();
-      this.world.jumpSound.play();
+      this.world.audioManager.jumpSound.play();
     }
   }
   
@@ -176,27 +176,29 @@ class Character extends MovableObject {
   handleHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
     this.stopTimer();
-    this.world.snoreSound.stop();
+    this.world.audioManager.snoreSound.stop();
   }
   
   handleJumpingAnimation() {
     this.playAnimation(this.IMAGES_JUMPING);
     this.stopTimer();
-    this.world.snoreSound.stop();
+    this.world.audioManager.snoreSound.stop();
   }
   
   handleIdleAnimation() {
     if (this.world.keyborad.RIGHT || this.world.keyborad.LEFT) {
       this.playAnimation(this.IMAGES_WALKING);
       this.stopTimer();
-      this.world.snoreSound.stop();
-    } else if (this.longIdle) {
+      this.world.audioManager.snoreSound.stop();
+    } else if (this.longIdle && this.world.startGame) {
       this.playAnimation(this.IMAGES_LONG_IDLE);
-      this.world.snoreSound.play();
+      this.world.audioManager.snoreSound.play();
+      
+      
     } else {
       this.playAnimation(this.IMAGES_IDLE);
       this.startTimer();
-      this.world.snoreSound.stop();
+      this.world.audioManager.snoreSound.stop();
     }
   }
 
