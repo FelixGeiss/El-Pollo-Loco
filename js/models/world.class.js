@@ -21,7 +21,7 @@ class World {
   // Icons
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
-
+  instructionIcon = new InstructionIcon();
   buttonHome = new HomeIcon();
   playGame = new PlayGameIcon();
 
@@ -72,6 +72,7 @@ class World {
     this.jump.world = this;
     this.buy.world = this;
     this.attack.world = this;
+    this.instructionIcon.world = this;
   }
 
   run() {
@@ -172,6 +173,7 @@ class World {
 
     if (!this.startGame) {
       this.drawStartObject();
+      this.addToMap(this.instructionIcon);
     }
 
     if (this.startGame) {

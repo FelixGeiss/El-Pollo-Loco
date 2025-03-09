@@ -7,6 +7,7 @@ function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyborad);
   setupButtonListeners();
+  checkOrientation();
 }
 
 function setupButtonListeners() {
@@ -107,6 +108,32 @@ document.addEventListener("keyup", (event) => {
   if (event.keyCode == 32) keyborad.SPACE = false;
   if (event.keyCode === 40) keyborad.DOWN = false;
 });
+
+
+
+function checkOrientation() {
+  const popup = document.getElementById('popup');
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+
+
+  
+  
+
+ 
+  if (screenWidth < screenHeight && screenWidth < 768) { 
+      popup.style.display = 'flex';
+  } else {
+      popup.style.display = 'none';
+  }
+}
+
+
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+
+
+
 
 // Fullscreen mode toggle
 // document.getElementById("meinDiv")?.addEventListener("click", function () {
