@@ -7,53 +7,59 @@ class World {
   camera_x = 0;
   startGame = false;
   Intervals = [];
-  showGameOver = false;
+  showStartscreen = true;
+  throwableObjects = [];
+  bottleCount = 0;
+  CoinCount = 0;
+  throwTimeout = false;
 
+  // Managers
   audioManager = new AudioManager();
   resetManager;
+  collisonManager;
 
+  // Icons
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
-  buttonHome = new ButtonHome();
 
-  salsaStore = new SalsaStore();
-  bottleSign = new BottleSign();
+  buttonHome = new HomeIcon();
+  playGame = new PlayGameIcon();
+
   startscreen = new Startscreen();
   gameOver = new GameOver();
-  playGame = new PlayGame();
 
+  // mobile Icons
   moveRaight = new MoveRaight();
   moveLeft = new MoveLeft();
   jump = new Jump();
   buy = new Buy();
   attack = new Attack();
 
+  // Salsastore
+  salsaStore = new SalsaStore();
+  bottleSign = new BottleSign();
+
   // Statusbar
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
   statusBarCoin = new StatusBarCoin();
 
-  throwableObjects = [];
-  bottleCount = 0;
-  CoinCount = 0;
-  throwTimeout = false;
+
 
   constructor(canvas, keyborad) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyborad = keyborad;
-
     this.draw();
     this.setWorld();
-
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
-
     this.initializeResetManager();
   }
   initializeResetManager() {
     this.resetManager = new GameResetManager(this);
+    this.collisonManager = new CollisonManager(this);
   }
   setWorld() {
     this.character.world = this;
@@ -70,14 +76,14 @@ class World {
 
   run() {
     setInterval(() => {
-      this.checkCollision();
-      this.checkThrowobjekt();
-      this.checkCollisionBottle();
-      this.checkCollisionEndbos();
-      this.checkbottleIsBroken();
-      this.checkCollisionBottleCollectib();
-      this.checkCollisionCoinCollectib();
-      this.checkCollisionSalsaStore();
+      this.collisonManager.checkCollision();
+      this.collisonManager.checkThrowobjekt();
+      this.collisonManager.checkCollisionBottle();
+      this.collisonManager.checkCollisionEndbos();
+      this.collisonManager.checkbottleIsBroken();
+      this.collisonManager.checkCollisionBottleCollectib();
+      this.collisonManager.checkCollisionCoinCollectib();
+      this.collisonManager.checkCollisionSalsaStore();
     }, 50);
   }
 
@@ -118,12 +124,6 @@ class World {
       clearInterval(intervalId);
     });
     this.Intervals = [];
-  }
-
-  checkThrowobjekt() {
-    if (this.canThrowBottle()) {
-      this.prepareThrow();
-    }
   }
 
   canThrowBottle() {
@@ -167,123 +167,7 @@ class World {
     }, 500);
   }
 
-  checkCollision() {
-    this.level.enemies.forEach((enemy) => {
-      if (!enemy.enemyIsDead && this.character.isColliding(enemy)) {
-        if (
-          this.character.y +
-            this.character.height -
-            this.character.offset.bottom <
-          enemy.y + enemy.offset.top + enemy.height / 3
-        ) {
-          enemy.hit();
-          this.audioManager.chickenHitSound.play();
-        } else if (this.character.energy > 0) {
-          this.audioManager.characterHitSound.play();
-          this.character.hit();
-          this.character.x = this.character.x - 40;
-
-          console.log(this.character);
-
-          this.statusBar.setPercentage(this.character.energy);
-        }
-      }
-    });
-  }
-
-  checkCollisionBottle() {
-    this.throwableObjects.forEach((bottle) => {
-      this.level.enemies.forEach((enemy) => {
-        if (!enemy.enemyIsDead && bottle.isColliding(enemy)) {
-          enemy.hit();
-          this.audioManager.chickenHitSound.play();
-          bottle.bottleIsBroken = true;
-          this.audioManager.throwSound.stop();
-        }
-      });
-    });
-  }
-
-  checkCollisionEndbos() {
-    let endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
-
-    if (endboss) {
-      if (this.character.isColliding(endboss)) {
-        endboss.isAttack = true;
-      } else {
-        endboss.isAttack = false;
-      }
-    }
-  }
-
-  checkbottleIsBroken() {
-    this.throwableObjects.forEach((bottle) => {
-      if (bottle.bottleIsBroken) {
-        this.audioManager.throwSound.stop();
-        this.audioManager.bottleBrokenSound.play();
-
-        const index = this.throwableObjects.indexOf(bottle);
-        if (index !== -1) {
-          this.throwableObjects.splice(index, 1);
-        }
-      }
-    });
-  }
-
-  checkCollisionBottleCollectib() {
-    this.level.collectiblBottel.forEach((collectiblBottl) => {
-      if (this.character.isColliding(collectiblBottl) && this.bottleCount < 5) {
-        this.bottleCount++;
-        this.audioManager.bottleCollectSound.play();
-        this.statusBarBottle.setPercentage(this.bottleCount);
-        const index = this.level.collectiblBottel.indexOf(collectiblBottl);
-        if (index !== -1) {
-          this.level.collectiblBottel.splice(index, 1);
-        }
-      }
-    });
-  }
-  checkCollisionCoinCollectib() {
-    this.level.collectiblCoin.forEach((collectiblCoin) => {
-      if (this.character.isColliding(collectiblCoin) && this.CoinCount < 5) {
-        this.CoinCount++;
-        this.audioManager.coinSound.play();
-        this.statusBarCoin.setPercentage(this.CoinCount);
-        const index = this.level.collectiblCoin.indexOf(collectiblCoin);
-        if (index !== -1) {
-          this.level.collectiblCoin.splice(index, 1);
-        }
-      }
-    });
-  }
-
-  checkCollisionSalsaStore() {
-    const now = Date.now();
-    if (this.lastPurchaseTime && now - this.lastPurchaseTime < 500) {
-      return;
-    }
-
-    if (
-      this.keyborad.DOWN &&
-      this.CoinCount > 0 &&
-      this.bottleCount < 5 &&
-      this.character.isColliding(this.salsaStore)
-    ) {
-      this.lastPurchaseTime = now;
-      this.bottleCount++;
-      this.statusBarBottle.setPercentage(this.bottleCount);
-      this.CoinCount--;
-      this.statusBarCoin.setPercentage(this.CoinCount);
-      this.audioManager.buySound.play();
-    }
-  }
- 
   draw() {
-     
-
-    console.log(this.startGame);
-    
-
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (!this.startGame) {
@@ -302,7 +186,6 @@ class World {
     }
     if (this.character.energy <= 0 && this.startGame) {
       this.drawGameOver();
-      this.showGameOver = true;
     }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
@@ -319,6 +202,7 @@ class World {
 
     if (this.startGame) {
       this.startBackroundsound();
+      this.addToMap(this.buttonHome);
     }
   }
 
@@ -356,12 +240,11 @@ class World {
   drawStartObject() {
     this.addToMap(this.startscreen);
     this.addToMap(this.playGame);
-    this.showGameOver = false;
+    this.showStartscreen = true;
   }
 
   drawGameOver() {
     this.addToMap(this.gameOver);
-    this.addToMap(this.buttonHome);
   }
 
   addObjectsToMap(objects) {

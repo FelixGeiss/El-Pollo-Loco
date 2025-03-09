@@ -1,4 +1,4 @@
-class PlayGame extends DrawableObject {
+class PlayGameIcon extends DrawableObject {
   world;
 
   constructor() {
@@ -80,7 +80,7 @@ class PlayGame extends DrawableObject {
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
       mouseY <= this.y + this.height &&
-      !this.world.startGame &&  !this.world.showGameOver
+      !this.world.startGame && this.world.showStartscreen
     ) {
       this.toggleGame();
     }
@@ -90,7 +90,6 @@ class PlayGame extends DrawableObject {
   toggleGame() {
     this.world.startGame = true;
     this.world.startAllIntervals();
-    console.log("toggle wurde ausgelöst ");
-    
+    this.world.showStartscreen = false;
   }
 }

@@ -1,11 +1,15 @@
-body {
-  display: flex;
+/* Global Styles & Reset */
+* {
+  box-sizing: border-box;
+}
 
+/* Body Layout & Background */
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0;
-  height: 100vh;
-  box-sizing: border-box;
   height: 100vh;
   background-image: url("img/desert-background.png");
   background-size: cover;
@@ -13,21 +17,26 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+/* Container for Controllers */
 .containerControlerL,
 .containerControlerR {
   position: relative;
   display: flex;
 }
+
+/* General settings for arrows and buttons */
 .arrow,
 .button {
   position: absolute;
-  border-radius: 50%;
   width: 35px;
   height: 35px;
+  border-radius: 50%;
   z-index: 10;
   cursor: pointer;
 }
 
+/* Positioning of the arrows */
 #arrowTop {
   top: 206px;
   left: 68px;
@@ -48,10 +57,8 @@ body {
   left: 34px;
 }
 
-.controlerBotton {
-  display: none;
-}
 
+/* Positioning of the gamepad buttons */
 #xButton {
   top: 74px;
   left: 55px;
@@ -66,58 +73,67 @@ body {
   top: 146px;
   left: 57px;
 }
+
 #yButton {
   top: 110px;
   left: 21px;
 }
+
 #home {
   top: 336px;
   left: 31px;
 }
 
-#background {
+/* Controller container & image */
+#controllerContainer {
   display: flex;
   position: relative;
 }
 
-
-
-img {
+#controllerContainer img {
   height: 485px;
+  margin-bottom: 2px;
 }
+
+/* Fullscreen container */
 #fullscreen {
   display: flex;
-
   justify-content: center;
   align-items: center;
 }
+
+/* Canvas element */
 canvas {
-  background-color: black;
+  display: block;
 }
 
+/* Responsive adjustments */
 @media (max-width: 1060px) {
-
   .containerControlerL,
   .containerControlerR {
     display: none;
   }
+  h1{
+    display: none;
+  }
 }
 
-
-@media only screen and (max-width: 720px){
-canvas{
-  width: 100%;
+@media only screen and (max-width: 900px) {
+  canvas {
+    width: 100%;
+  }
 }
 
-}
-@media only screen and (max-height: 720px){
-  canvas{
+@media only screen and (max-height: 720px) {
+  canvas {
     height: 100vh;
   }
-
+  
   .containerControlerL,
   .containerControlerR {
     display: none;
   }
-  
+  h1{
+    display: none;
+  }
 }

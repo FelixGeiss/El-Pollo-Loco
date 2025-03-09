@@ -1,4 +1,4 @@
-class ButtonHome extends DrawableObject {
+class HomeIcon extends DrawableObject {
   
  
   
@@ -47,13 +47,11 @@ class ButtonHome extends DrawableObject {
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
       mouseY <= this.y + this.height &&
-      this.world.character.energy <= 0 && world.showGameOver
+      !this.world.showStartscreen
     ) {
       this.world.startGame = false;
       this.world.stopAllIntervals();
-      this.world.resetManager.resetGame()
-      
-      console.log("home wurde ausgelöst ");
+      this.world.resetManager.resetGame()  
     }
   }
 }
