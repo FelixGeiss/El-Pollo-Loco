@@ -14,7 +14,7 @@ class ChickenSmall extends MovableObject {
     super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
-    this.x = 2040 + Math.random() * 4080;
+    this.x = 1000 + Math.random() * (10150 - 1000);
     this.speed = 0.3 + Math.random() * 0.5;
     this.applyGravity();
     this.animate();
@@ -51,8 +51,7 @@ class ChickenSmall extends MovableObject {
   }
 
   resetEnemy() {
-    this.x = 2040 + Math.random() * 4080;
-  
+    this.x = 1000 + Math.random() * (10150 - 1000);
     this.energy = 20; 
     this.enemyIsDead = false; 
     this.speed = 0.3 + Math.random() * 0.5;

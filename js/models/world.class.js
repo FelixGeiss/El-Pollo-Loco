@@ -9,9 +9,10 @@ class World {
   Intervals = [];
   showStartscreen = true;
   throwableObjects = [];
-  bottleCount = 0;
+  bottleCount = 1000;
   CoinCount = 0;
   throwTimeout = false;
+  
 
   // Managers
   audioManager = new AudioManager();
@@ -28,6 +29,10 @@ class World {
   startscreen = new Startscreen();
   gameOver = new GameOver();
 
+ 
+  
+
+
   // mobile Icons
   moveRaight = new MoveRaight();
   moveLeft = new MoveLeft();
@@ -37,7 +42,7 @@ class World {
 
   // Salsastore
   salsaStore = new SalsaStore();
-  bottleSign = new BottleSign();
+ 
 
   // Statusbar
   statusBar = new StatusBar();
@@ -50,12 +55,19 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyborad = keyborad;
+    this.imprint = new Imprint(this.canvas);
+    
     this.draw();
     this.setWorld();
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
     this.initializeResetManager();
+    
+    
+    
+    
+    
   }
   initializeResetManager() {
     this.resetManager = new GameResetManager(this);
@@ -73,6 +85,7 @@ class World {
     this.buy.world = this;
     this.attack.world = this;
     this.instructionIcon.world = this;
+  
   }
 
   run() {
@@ -174,6 +187,7 @@ class World {
     if (!this.startGame) {
       this.drawStartObject();
       this.addToMap(this.instructionIcon);
+     
     }
 
     if (this.startGame) {
@@ -196,7 +210,11 @@ class World {
 
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
-
+   
+   if (!this.startGame) {
+    this.imprint.draw();
+   }
+    
     let self = this;
     requestAnimationFrame(function () {
       self.draw();
@@ -215,7 +233,6 @@ class World {
       this.addObjectsToMap(this.level.collectiblBottel),
       this.addObjectsToMap(this.level.collectiblCoin),
       this.addToMap(this.salsaStore),
-      this.addToMap(this.bottleSign),
       this.addToMap(this.character),
       this.addObjectsToMap(this.level.clouds),
       this.addObjectsToMap(this.level.enemies),
@@ -254,6 +271,7 @@ class World {
       this.addToMap(o);
     });
   }
+
 
   addToMap(mo) {
     if (mo.otherDirektion) {

@@ -53,6 +53,7 @@ class CollisonManager {
         endboss.isAttack = false;
       }
     }
+
   }
 
   checkbottleIsBroken() {

@@ -18,11 +18,15 @@ class GameResetManager {
       this.resetArrayElements(this.world.level.collectiblBottel, "reset");
       this.resetStatusBars();
       this.resetCounts();
-      
+      this.resetStore();
      
       
     
     }
+    resetStore(){
+      this.world.salsaStore.reset();
+    }
+
   
     resetCharacter() {
       this.world.character.resetCharacter();

@@ -89,8 +89,6 @@ class Endboss extends MovableObject {
   
     if (this.isDead()) {
       clearInterval(this.movementInterval);
-      this.applyGravity();
-      this.speedY = 30;
       return;
     }
   
