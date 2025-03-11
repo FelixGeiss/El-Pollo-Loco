@@ -10,51 +10,17 @@ class PlayGameIcon extends DrawableObject {
     this.width = 50;
     this.height = 50;
 
-   
+    // Event-Listener für Klick, Touch und Canvas-Größenänderung
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
-    canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
     window.addEventListener("resize", this.updatePosition.bind(this)); 
   }
-
 
   updatePosition() {
     this.x = canvas.width * 0.7; 
     this.y = canvas.height * 0.05; 
   }
 
-
-  onMouseMove(event) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width; 
-    const scaleY = canvas.height / rect.height; 
-
-    let mouseX, mouseY;
-
-    if (event.touches && event.touches.length > 0) {
-      // Touch-Ereignis
-      mouseX = (event.touches[0].clientX - rect.left) * scaleX;
-      mouseY = (event.touches[0].clientY - rect.top) * scaleY;
-    } else {
-      // Mausklick-Ereignis
-      mouseX = (event.clientX - rect.left) * scaleX;
-      mouseY = (event.clientY - rect.top) * scaleY;
-    }
-
-    if (
-      mouseX >= this.x &&
-      mouseX <= this.x + this.width &&
-      mouseY >= this.y &&
-      mouseY <= this.y + this.height &&
-      !this.world.startGame
-    ) {
-      canvas.style.cursor = "pointer"; 
-    } else {
-      canvas.style.cursor = "default"; 
-    }
-  }
-
-  
   onClick(event) {
     event.preventDefault();
 
@@ -74,7 +40,7 @@ class PlayGameIcon extends DrawableObject {
       mouseY = (event.clientY - rect.top) * scaleY;
     }
 
-  
+    // Überprüfen, ob der Klick/Touch innerhalb des Icons liegt
     if (
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
@@ -86,7 +52,6 @@ class PlayGameIcon extends DrawableObject {
     }
   }
 
- 
   toggleGame() {
     this.world.startGame = true;
     this.world.startAllIntervals();

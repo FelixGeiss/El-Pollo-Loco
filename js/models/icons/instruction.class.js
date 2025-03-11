@@ -17,6 +17,7 @@ class InstructionIcon extends DrawableObject{
     canvas.addEventListener("touchend", this.onRelease.bind(this));
 
     window.addEventListener("resize", this.updatePosition.bind(this));
+    
   }
 
   updatePosition() {
@@ -34,11 +35,11 @@ class InstructionIcon extends DrawableObject{
     let mouseX, mouseY;
 
     if (event.touches && event.touches.length > 0) {
-      // Touch-Ereignis
+    
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
     } else {
-      // Mausklick-Ereignis
+    
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }
@@ -57,4 +58,6 @@ class InstructionIcon extends DrawableObject{
   onRelease(event) {
     event.preventDefault();
   }
+
+  
 }

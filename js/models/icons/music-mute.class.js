@@ -9,11 +9,11 @@ class MusicsMuteIcon extends DrawableObject {
 
     this.loadImage(this.nonMute);
 
-    this.updatePosition(); // Initiale Position setzen
+    this.updatePosition(); 
     this.width = 50;
     this.height = 50;
 
-    // Lade gespeicherten Mute-Status
+  
     const storedMuteStatus = localStorage.getItem("MusikMute");
     if (storedMuteStatus === "true") {
       this.isMuted = true;
@@ -25,11 +25,8 @@ class MusicsMuteIcon extends DrawableObject {
       }
     }
 
-    // Event-Listener für Maus & Touch
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
-
-    // Canvas-Größenänderung erkennen
     window.addEventListener("resize", this.updatePosition.bind(this));
   }
 

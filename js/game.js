@@ -8,6 +8,7 @@ function init() {
   world = new World(canvas, keyboard);
   setupButtonListeners();
   checkOrientation();
+  
 }
 
 function setupButtonListeners() {
@@ -131,5 +132,4 @@ function checkOrientation() {
 
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
-
 
