@@ -71,13 +71,18 @@ class CollisonManager {
     let endboss = this.world.level.enemies.find((enemy) => enemy instanceof Endboss);
 
     if (endboss) {
-      if (this.world.character.isColliding(endboss)) {
-        endboss.isAttack = true;
-      } else {
-        endboss.isAttack = false;
-      }
+        if (this.world.character.isColliding(endboss)) {
+            endboss.isAttack = true;
+        } else {
+            endboss.isAttack = false;
+        }
+
+        if (endboss.energy <= 0) { // Korrektur: Vergleichsoperator muss <= sein
+            this.world.enbossIsDead = true;
+        }
     }
-  }
+}
+
 
   /**
    * Checks if thrown bottles are broken, plays a sound if they are,

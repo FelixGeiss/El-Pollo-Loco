@@ -15,6 +15,7 @@ class World {
   bottleCount = 0;
   CoinCount = 0;
   throwTimeout = false;
+  enbossIsDead = false;
 
   /**
    * Handles all game audio, including sound effects and background music.
@@ -30,6 +31,7 @@ class World {
   playGame = new PlayGameIcon();
   startscreen = new Startscreen();
   gameOver = new GameOver();
+  youWon = new YouWon();
 
   moveRaight = new MoveRaight();
   moveLeft = new MoveLeft();
@@ -206,6 +208,11 @@ class World {
     }
     if (this.character.energy <= 0 && this.startGame) {
       this.drawGameOver();
+    }
+
+    if (this.enbossIsDead) {
+      
+      this.addToMap(this.youWon);
     }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);

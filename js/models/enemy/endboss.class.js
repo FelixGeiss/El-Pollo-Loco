@@ -4,22 +4,9 @@
  * attacking, hurt, and dead, as well as its movement and animation intervals.
  */
 class Endboss extends MovableObject {
-  /**
-   * The height of the Endboss.
-   * @type {number}
-   */
+
   height = 400;
-
-  /**
-   * The width of the Endboss.
-   * @type {number}
-   */
   width = 250;
-
-  /**
-   * The movement speed of the Endboss.
-   * @type {number}
-   */
   speed = 1;
 
   /**
@@ -27,23 +14,8 @@ class Endboss extends MovableObject {
    * @type {boolean}
    */
   isAttack = false;
-
-  /**
-   * The vertical position of the Endboss.
-   * @type {number}
-   */
   y = 55;
-
-  /**
-   * The energy level of the Endboss.
-   * @type {number}
-   */
   energy = 100;
-
-  /**
-   * Reference to the setInterval used for movement.
-   * @type {number|null}
-   */
   movementInterval = null;
 
   /**

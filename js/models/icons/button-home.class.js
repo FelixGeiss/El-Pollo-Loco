@@ -61,6 +61,7 @@ class HomeIcon extends DrawableObject {
       !this.world.showStartscreen
     ) {
       this.world.startGame = false;
+      this.world.enbossIsDead = false;
       this.world.stopAllIntervals();
       this.world.resetManager.resetGame();
     }

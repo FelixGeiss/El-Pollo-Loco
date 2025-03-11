@@ -95,6 +95,7 @@ function handleHomeButtonPress(homeButton) {
   homeButton.addEventListener("mousedown", () => {
     if (world.startGame) {
       world.startGame = false;
+      this.world.enbossIsDead = false;
       world.stopAllIntervals();
       world.resetManager.resetGame();
     }
