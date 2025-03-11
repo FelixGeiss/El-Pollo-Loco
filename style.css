@@ -2,6 +2,21 @@
 * {
   box-sizing: border-box;
 }
+@font-face {
+  font-family: 'zabras'; 
+  src: url('fonts/Zabars.ttf') format('truetype'); 
+  font-style: normal;
+}
+
+h1 {
+  font-family: "zabras";
+  font-size: 5rem;
+  color: #ffd000;
+  text-shadow: 
+    3px 3px 0px #000, 
+    6px 6px 5px rgba(0, 0, 0, 0.5); 
+}
+
 
 /* Body Layout & Background */
 body {
@@ -151,6 +166,9 @@ canvas {
   padding: 20px;
   border-radius: 8px;
 }
+
+
+
 
 /* Responsive adjustments */
 @media (max-width: 1060px) {
