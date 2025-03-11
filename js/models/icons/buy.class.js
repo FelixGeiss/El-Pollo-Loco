@@ -52,7 +52,7 @@ class Buy extends DrawableObject {
             mouseY >= this.y && mouseY <= this.y + this.height
         ) {
             
-            this.world.keyborad.DOWN = true;
+            this.world.keyboard.DOWN = true;
         }
     }
     
@@ -60,6 +60,6 @@ class Buy extends DrawableObject {
         event.preventDefault();
     
     
-        this.world.keyborad.DOWN = false;
+        this.world.keyboard.DOWN = false;
     }
   }

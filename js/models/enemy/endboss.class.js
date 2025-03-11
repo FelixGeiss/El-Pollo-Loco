@@ -64,6 +64,7 @@ class Endboss extends MovableObject {
     this.movementInterval = null;
     this.animationInterval = null;
     this.moveInterval = null;
+    this.frameIndexDead = 0; 
     this.animate();
   }
 
@@ -98,13 +99,13 @@ class Endboss extends MovableObject {
   }
   
   startAnimationInterval() {
-    let frameIndexDead = 0;
-    this.animationInterval = setInterval(() => this.handleAnimation(frameIndexDead), 150);
+    
+    this.animationInterval = setInterval(() => this.handleAnimation(), 150);
   }
   
-  handleAnimation(frameIndexDead) {
+  handleAnimation() {
     if (this.isDead()) {
-      this.handleDeadAnimation(frameIndexDead);
+      this.handleDeadAnimation();
     } else if (this.isHurt()) {
       this.handleHurtAnimation();
     } else if (this.isAttack) {
@@ -116,11 +117,11 @@ class Endboss extends MovableObject {
     }
   }
   
-  handleDeadAnimation(frameIndexDead) {
-    this.playAnimation([this.IMAGES_DEAD[frameIndexDead]]);
-    frameIndexDead++;
-    if (frameIndexDead >= this.IMAGES_DEAD.length) {
-      clearInterval(this.animationInterval);
+  handleDeadAnimation() {
+    this.playAnimation([this.IMAGES_DEAD[this.frameIndexDead]]);
+    this.frameIndexDead++; 
+    if (this.frameIndexDead >= this.IMAGES_DEAD.length) {
+      clearInterval(this.animationInterval); 
     }
   }
   
@@ -142,18 +143,16 @@ class Endboss extends MovableObject {
   }
 
   resetEnemy() {
-    
     if (this.movementInterval) clearInterval(this.movementInterval);
     if (this.animationInterval) clearInterval(this.animationInterval);
     if (this.moveInterval) clearInterval(this.moveInterval);
 
-    
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
     this.energy = 100;
+    this.frameIndexDead = 0; 
 
-    
     this.animate();
   }
 

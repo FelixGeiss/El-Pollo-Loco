@@ -3,7 +3,7 @@ class World {
   level = level1;
   canvas;
   ctx;
-  keyborad;
+  keyboard;
   camera_x = 0;
   startGame = false;
   Intervals = [];
@@ -51,10 +51,10 @@ class World {
 
 
 
-  constructor(canvas, keyborad) {
+  constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
-    this.keyborad = keyborad;
+    this.keyboard = keyboard;
     this.imprint = new Imprint(this.canvas);
     
     this.draw();
@@ -98,7 +98,7 @@ class World {
       this.collisonManager.checkCollisionBottleCollectib();
       this.collisonManager.checkCollisionCoinCollectib();
       this.collisonManager.checkCollisionSalsaStore();
-    }, 50);
+    }, 1000 / 60);
   }
 
   pushInterval() {
@@ -141,7 +141,7 @@ class World {
   }
 
   canThrowBottle() {
-    return this.keyborad.D && this.bottleCount > 0 && !this.throwTimeout;
+    return this.keyboard.D && this.bottleCount > 0 && !this.throwTimeout;
   }
 
   prepareThrow() {

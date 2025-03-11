@@ -104,7 +104,7 @@ class CollisonManager {
     }
 
     if (
-      this.world.keyborad.DOWN &&
+      this.world.keyboard.DOWN &&
       this.world.CoinCount > 0 &&
       this.world.bottleCount < 5 &&
       this.world.character.isColliding(this.world.salsaStore)

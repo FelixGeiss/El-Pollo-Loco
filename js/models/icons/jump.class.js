@@ -52,7 +52,7 @@ class Jump extends DrawableObject {
             mouseY >= this.y && mouseY <= this.y + this.height
         ) {
             
-            this.world.keyborad.UP = true;
+            this.world.keyboard.UP = true;
         }
     }
     
@@ -60,6 +60,6 @@ class Jump extends DrawableObject {
         event.preventDefault();
     
     
-        this.world.keyborad.UP = false;
+        this.world.keyboard.UP = false;
     }
   }

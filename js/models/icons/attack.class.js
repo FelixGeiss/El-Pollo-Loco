@@ -52,7 +52,7 @@ class Attack extends DrawableObject {
             mouseY >= this.y && mouseY <= this.y + this.height
         ) {
             
-            this.world.keyborad.D = true;
+            this.world.keyboard.D = true;
         }
     }
     
@@ -60,6 +60,6 @@ class Attack extends DrawableObject {
         event.preventDefault();
     
     
-        this.world.keyborad.D = false;
+        this.world.keyboard.D = false;
     }
   }

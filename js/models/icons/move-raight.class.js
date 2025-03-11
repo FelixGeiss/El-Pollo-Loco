@@ -52,7 +52,7 @@ class MoveRaight extends DrawableObject {
             mouseY >= this.y && mouseY <= this.y + this.height
         ) {
             
-            this.world.keyborad.RIGHT = true;
+            this.world.keyboard.RIGHT = true;
         }
     }
     
@@ -60,6 +60,6 @@ class MoveRaight extends DrawableObject {
         event.preventDefault();
     
     
-        this.world.keyborad.RIGHT = false;
+        this.world.keyboard.RIGHT = false;
     }
   }
