@@ -1,13 +1,29 @@
+/**
+ * Manages collision detection within the game world, including collisions
+ * between the character and enemies, bottles, coins, and the end boss.
+ * Also handles the logic for collecting bottles, coins, buying salsa, and
+ * throwing bottles.
+ */
 class CollisonManager {
-    constructor(world) {
-      this.world = world;
-      
-      
-    }
+  /**
+   * A reference to the game world containing all entities and audio.
+   * @type {Object}
+   */
   world;
-  
 
+  /**
+   * Constructs a new CollisionManager.
+   * @param {Object} world - The game world instance containing the character, enemies, and other entities.
+   */
+  constructor(world) {
+    this.world = world;
+  }
 
+  /**
+   * Checks for collisions between the character and enemies.
+   * If the character lands on top of an enemy, the enemy is hit and a hit sound is played.
+   * Otherwise, if the character is hit, the character's energy is reduced and a sound is played.
+   */
   checkCollision() {
     this.world.level.enemies.forEach((enemy) => {
       if (!enemy.enemyIsDead && this.world.character.isColliding(enemy)) {
@@ -30,6 +46,10 @@ class CollisonManager {
     });
   }
 
+  /**
+   * Checks for collisions between thrown bottles and enemies.
+   * If a bottle hits an enemy, the enemy is hit, a sound is played, and the bottle is marked as broken.
+   */
   checkCollisionBottle() {
     this.world.throwableObjects.forEach((bottle) => {
       this.world.level.enemies.forEach((enemy) => {
@@ -43,6 +63,10 @@ class CollisonManager {
     });
   }
 
+  /**
+   * Checks if the end boss exists, and if the character is colliding with it.
+   * Sets the end boss to attack mode if a collision is detected, or stops the attack otherwise.
+   */
   checkCollisionEndbos() {
     let endboss = this.world.level.enemies.find((enemy) => enemy instanceof Endboss);
 
@@ -53,9 +77,12 @@ class CollisonManager {
         endboss.isAttack = false;
       }
     }
-
   }
 
+  /**
+   * Checks if thrown bottles are broken, plays a sound if they are,
+   * and removes them from the world.
+   */
   checkbottleIsBroken() {
     this.world.throwableObjects.forEach((bottle) => {
       if (bottle.bottleIsBroken) {
@@ -70,6 +97,11 @@ class CollisonManager {
     });
   }
 
+  /**
+   * Checks for collisions between the character and collectible bottles.
+   * If a collision occurs and the player has fewer than 5 bottles, it increases the bottle count,
+   * updates the status bar, and removes the collected bottle from the world.
+   */
   checkCollisionBottleCollectib() {
     this.world.level.collectiblBottel.forEach((collectiblBottl) => {
       if (this.world.character.isColliding(collectiblBottl) && this.world.bottleCount < 5) {
@@ -83,6 +115,12 @@ class CollisonManager {
       }
     });
   }
+
+  /**
+   * Checks for collisions between the character and collectible coins.
+   * If a collision occurs and the player has fewer than 5 coins, it increases the coin count,
+   * updates the status bar, and removes the collected coin from the world.
+   */
   checkCollisionCoinCollectib() {
     this.world.level.collectiblCoin.forEach((collectiblCoin) => {
       if (this.world.character.isColliding(collectiblCoin) && this.world.CoinCount < 5) {
@@ -97,6 +135,12 @@ class CollisonManager {
     });
   }
 
+  /**
+   * Checks if the character is pressing the DOWN key near the salsa store with at least one coin,
+   * and fewer than 5 bottles in the inventory.
+   * If so, buys a bottle, updates the status bars, and plays the buy sound.
+   * Also enforces a brief cooldown to prevent repeated rapid purchases.
+   */
   checkCollisionSalsaStore() {
     const now = Date.now();
     if (this.world.lastPurchaseTime && now - this.world.lastPurchaseTime < 500) {
@@ -118,10 +162,13 @@ class CollisonManager {
     }
   }
 
+  /**
+   * Checks if the player can throw a bottle (e.g., has at least one bottle in inventory),
+   * and if so, prepares a throw action in the game world.
+   */
   checkThrowobjekt() {
     if (this.world.canThrowBottle()) {
       this.world.prepareThrow();
     }
   }
-
 }

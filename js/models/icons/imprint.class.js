@@ -1,4 +1,18 @@
+/**
+ * Represents an Imprint link/button in the game, extending the DrawableObject class.
+ * This class creates an <h2> element, positions it, and navigates to the imprint page when clicked or touched.
+ */
 class Imprint extends DrawableObject {
+  /**
+   * The reference to the game's world object.
+   * @type {World}
+   */
+  world;
+
+  /**
+   * Initializes the Imprint object, creating an <h2> element in the DOM and binding event listeners.
+   * @param {World} world - The game world instance this imprint belongs to.
+   */
   constructor(world) {
     super();
     this.world = world;
@@ -6,8 +20,7 @@ class Imprint extends DrawableObject {
     this.element = document.createElement("h2");
     this.element.textContent = "Imprint";
     this.element.style.position = "absolute";
- 
-    
+
     if (this.world.startGame) {
       this.element.style.display = "none";
       console.log("wurde auf non gesetzt ");
@@ -28,13 +41,19 @@ class Imprint extends DrawableObject {
     window.addEventListener("resize", this.updatePosition.bind(this));
   }
 
-  world;
-
+  /**
+   * Updates the absolute position of the <h2> element according to the canvas size.
+   */
   updatePosition() {
     this.element.style.left = `${canvas.width * 0.05}px`;
     this.element.style.top = `${canvas.height * 0.05}px`;
   }
 
+  /**
+   * Handles click and touchstart events. If the game hasn't started yet,
+   * it navigates to the imprint.html page.
+   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   */
   onClick(event) {
     event.preventDefault();
 
@@ -43,6 +62,10 @@ class Imprint extends DrawableObject {
     }
   }
 
+  /**
+   * Handles mouseup and touchend events, preventing any default behavior.
+   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   */
   onRelease(event) {
     event.preventDefault();
   }

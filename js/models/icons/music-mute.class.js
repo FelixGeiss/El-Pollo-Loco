@@ -1,19 +1,45 @@
+/**
+ * Represents an icon that toggles the background music between mute and unmute.
+ * Extends the DrawableObject class.
+ */
 class MusicsMuteIcon extends DrawableObject {
+  /**
+   * The image path for the muted icon.
+   * @type {string}
+   */
   mute = "img/Mute/3.png";
+
+  /**
+   * The image path for the unmuted icon.
+   * @type {string}
+   */
   nonMute = "img/Mute/4.png";
+
+  /**
+   * Indicates whether the music is currently muted.
+   * @type {boolean}
+   */
   isMuted = false;
+
+  /**
+   * A reference to the game world, if available.
+   * @type {object}
+   */
   world;
 
+  /**
+   * Constructs a new MusicsMuteIcon, loading the correct icon based on the
+   * stored mute status in localStorage. Also attaches click and touch event listeners.
+   */
   constructor() {
     super();
 
     this.loadImage(this.nonMute);
 
-    this.updatePosition(); 
+    this.updatePosition();
     this.width = 50;
     this.height = 50;
 
-  
     const storedMuteStatus = localStorage.getItem("MusikMute");
     if (storedMuteStatus === "true") {
       this.isMuted = true;
@@ -30,11 +56,19 @@ class MusicsMuteIcon extends DrawableObject {
     window.addEventListener("resize", this.updatePosition.bind(this));
   }
 
+  /**
+   * Updates the position of the mute icon based on the current canvas size.
+   */
   updatePosition() {
-    this.x = canvas.width * 0.8; 
-    this.y = canvas.height * 0.05; 
+    this.x = canvas.width * 0.8;
+    this.y = canvas.height * 0.05;
   }
 
+  /**
+   * Handles the click or touch event. Checks if the click/touch is within the icon's bounds.
+   * If it is, toggles the sound.
+   * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   */
   onClick(event) {
     event.preventDefault();
 
@@ -60,6 +94,11 @@ class MusicsMuteIcon extends DrawableObject {
     }
   }
 
+  /**
+   * Toggles the background sound between mute and unmute.
+   * Updates the icon image, stores the new mute status in localStorage,
+   * and pauses/plays the background sound accordingly.
+   */
   toggleSound() {
     this.isMuted = !this.isMuted;
     const newImage = this.isMuted ? this.mute : this.nonMute;

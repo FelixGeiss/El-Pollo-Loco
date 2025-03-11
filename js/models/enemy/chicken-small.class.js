@@ -1,15 +1,52 @@
+/**
+ * Represents a small chicken enemy in the game, extending the MovableObject class.
+ * The chicken can walk, jump, and die, and is subject to gravity.
+ */
 class ChickenSmall extends MovableObject {
+  /**
+   * The vertical position of the chicken.
+   * @type {number}
+   */
   y = 360;
+
+  /**
+   * The height of the chicken.
+   * @type {number}
+   */
   height = 60;
+
+  /**
+   * The width of the chicken.
+   * @type {number}
+   */
   width = 80;
+
+  /**
+   * The energy level of the chicken, used to determine if it's alive or dead.
+   * @type {number}
+   */
   energy = 20;
 
+  /**
+   * An array of image paths for the chicken's walking animation.
+   * @type {string[]}
+   */
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
     "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
+
+  /**
+   * An array of image paths for the chicken's death animation.
+   * @type {string[]}
+   */
   IMAGES_DEAD = ["img/3_enemies_chicken/chicken_small/2_dead/dead.png"];
+
+  /**
+   * Constructs a new ChickenSmall, loads images, initializes position,
+   * sets its speed, applies gravity, and starts animation.
+   */
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_normal/1_walk/1_w.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -20,6 +57,11 @@ class ChickenSmall extends MovableObject {
     this.animate();
   }
 
+  /**
+   * Manages the chicken's movement and animation intervals.
+   * The chicken will walk, play walking animation, jump if on the ground,
+   * and switch to the death animation when it dies.
+   */
   animate() {
     this.moveEnemie();
 
@@ -41,7 +83,9 @@ class ChickenSmall extends MovableObject {
     }, 50);
   }
 
-
+  /**
+   * Sets an interval for the chicken to move left, as long as it is not dead.
+   */
   moveEnemie() {
     if (!this.enemyIsDead) {
       this.moveInterval = setInterval(() => {
@@ -50,12 +94,14 @@ class ChickenSmall extends MovableObject {
     }
   }
 
+  /**
+   * Resets the chicken to a new position, restores energy, revives it, and
+   * assigns a random speed within the specified range.
+   */
   resetEnemy() {
     this.x = 1000 + Math.random() * (10150 - 1000);
-    this.energy = 20; 
-    this.enemyIsDead = false; 
+    this.energy = 20;
+    this.enemyIsDead = false;
     this.speed = 0.3 + Math.random() * 0.5;
   }
-
-
 }

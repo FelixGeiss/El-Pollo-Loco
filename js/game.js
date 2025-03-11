@@ -1,21 +1,33 @@
+/**
+ * Global canvas and game world variables.
+ */
 let canvas;
 let world;
 let character;
 let keyboard = new Keyboard();
 
+/**
+ * Initializes the game, setting up the canvas, world, button listeners, and orientation checks.
+ */
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   setupButtonListeners();
   checkOrientation();
-  
 }
 
+/**
+ * Collects references to HTML buttons and passes them to a handler for event listeners.
+ */
 function setupButtonListeners() {
   const buttons = getButtons();
   setupListenersForButtons(buttons);
 }
 
+/**
+ * Gathers HTML button elements by their IDs.
+ * @returns {Object} An object containing button references.
+ */
 function getButtons() {
   return {
     arrowTop: document.getElementById("arrowTop"),
@@ -30,6 +42,10 @@ function getButtons() {
   };
 }
 
+/**
+ * Sets up mouse and touch listeners for each button, linking them to the keyboard object.
+ * @param {Object} buttons - An object containing all button references.
+ */
 function setupListenersForButtons(buttons) {
   if (buttons.arrowTop) handleButtonPress(buttons.arrowTop, "UP", true);
   if (buttons.arrowRight) handleButtonPress(buttons.arrowRight, "RIGHT", true);
@@ -42,63 +58,64 @@ function setupListenersForButtons(buttons) {
   if (buttons.homeButton) handleHomeButtonPress(buttons.homeButton);
 }
 
+/**
+ * Binds mousedown, mouseup, touchstart, and touchend events to a button,
+ * updating the corresponding keyboard key.
+ * @param {HTMLElement} button - The button element.
+ * @param {string} key - The key in the keyboard object to update.
+ * @param {boolean} value - The value to assign to the keyboard key when pressed.
+ */
 function handleButtonPress(button, key, value) {
-  // Mouse events
   button.addEventListener("mousedown", () => {
     keyboard[key] = value;
   });
-
   button.addEventListener("mouseup", () => {
     keyboard[key] = !value;
   });
-
   button.addEventListener("mouseleave", () => {
     if (keyboard[key] === value) {
       keyboard[key] = !value;
     }
   });
-
-  // Touch events
   button.addEventListener("touchstart", (event) => {
-    event.preventDefault(); // Prevent scrolling on touch devices
+    event.preventDefault();
     keyboard[key] = value;
   });
-
   button.addEventListener("touchend", (event) => {
-    event.preventDefault(); // Prevent scrolling on touch devices
+    event.preventDefault();
     keyboard[key] = !value;
   });
 }
 
+/**
+ * Handles presses of the home button, stopping and resetting the game if active.
+ * @param {HTMLElement} homeButton - The home button element.
+ */
 function handleHomeButtonPress(homeButton) {
-  // Mouse event
   homeButton.addEventListener("mousedown", () => {
     if (world.startGame) {
       world.startGame = false;
       world.stopAllIntervals();
-      world.resetManager.resetGame()
+      world.resetManager.resetGame();
     }
   });
-
-  // Touch event
   homeButton.addEventListener("touchstart", (event) => {
     event.preventDefault();
     if (world.startGame) {
       world.startGame = false;
       world.stopAllIntervals();
-      world.resetManager.resetGame()
+      world.resetManager.resetGame();
     }
   });
 }
 
-// Keyboard event listeners
 document.addEventListener("keydown", (event) => {
-  if (event.keyCode == 68) keyboard.D = true; // D key
-  if (event.keyCode == 39) keyboard.RIGHT = true; // Right arrow
-  if (event.keyCode == 37) keyboard.LEFT = true; // Left arrow
-  if (event.keyCode == 38) keyboard.UP = true; // Up arrow
-  if (event.keyCode == 32) keyboard.SPACE = true; // Space bar
-  if (event.keyCode === 40) keyboard.DOWN = true; // Down arrow
+  if (event.keyCode == 68) keyboard.D = true;
+  if (event.keyCode == 39) keyboard.RIGHT = true;
+  if (event.keyCode == 37) keyboard.LEFT = true;
+  if (event.keyCode == 38) keyboard.UP = true;
+  if (event.keyCode == 32) keyboard.SPACE = true;
+  if (event.keyCode === 40) keyboard.DOWN = true;
 });
 
 document.addEventListener("keyup", (event) => {
@@ -110,26 +127,19 @@ document.addEventListener("keyup", (event) => {
   if (event.keyCode === 40) keyboard.DOWN = false;
 });
 
-
-
+/**
+ * Checks if the device is in portrait mode on mobile (with a narrow screen), displaying a popup if needed.
+ */
 function checkOrientation() {
   const popup = document.getElementById('popup');
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-
-
-  
-  
-
- 
-  if (screenWidth < screenHeight && screenWidth < 768) { 
-      popup.style.display = 'flex';
+  if (screenWidth < screenHeight && screenWidth < 768) {
+    popup.style.display = 'flex';
   } else {
-      popup.style.display = 'none';
+    popup.style.display = 'none';
   }
 }
 
-
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
-
