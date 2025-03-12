@@ -4,7 +4,7 @@
 }
 @font-face {
   font-family: 'zabras'; 
-  src: url('fonts/Zabars.ttf') format('truetype'); 
+  src: url('../fonts/Zabars.ttf') format('truetype'); 
   font-style: normal;
 }
 
