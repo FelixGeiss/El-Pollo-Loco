@@ -3,28 +3,9 @@
  * The chicken can walk, die, and move left at a specified speed.
  */
 class Chicken extends MovableObject {
-  /**
-   * The vertical position of the chicken.
-   * @type {number}
-   */
   y = 360;
-
-  /**
-   * The height of the chicken.
-   * @type {number}
-   */
   height = 60;
-
-  /**
-   * The width of the chicken.
-   * @type {number}
-   */
   width = 80;
-
-  /**
-   * The energy level of the chicken.
-   * @type {number}
-   */
   energy = 20;
 
   /**

@@ -1,25 +1,11 @@
 /**
  * Represents a collectible coin in the game, extending the MovableObject class.
- * It handles the loading of coin images, setting collision offsets,
- * randomizing its position, and managing coin animation.
+ * It handles loading coin images, setting collision offsets, randomizing its
+ * position, and managing the coin's animation.
  */
 class CollectiblCoin extends MovableObject {
-  /**
-   * The width of the collectible coin.
-   * @type {number}
-   */
   width = 150;
-  
-  /**
-   * The height of the collectible coin.
-   * @type {number}
-   */
   height = 150;
-
-  /**
-   * Reference to the setInterval used for animation.
-   * @type {number|undefined}
-   */
   animationInterval;
 
   /**
@@ -27,6 +13,7 @@ class CollectiblCoin extends MovableObject {
    * @type {string[]}
    */
   IMAGES = ["img/8_coin/coin_1.png", "img/8_coin/coin_2.png"];
+  active;
 
   /**
    * Constructs a new collectible coin, loads its images, sets collision offsets,
@@ -42,10 +29,12 @@ class CollectiblCoin extends MovableObject {
     this.x = 500 + Math.random() * (10050 - 500);
     this.y = 50 + Math.random() * (300 - 50);
     this.animate();
+    this.active = true;
   }
 
   /**
    * Starts or restarts the animation interval that cycles through the coin images.
+   * Uses the playAnimation method to move through the IMAGES array.
    */
   animate() {
     this.animationInterval = setInterval(() => {
@@ -54,12 +43,17 @@ class CollectiblCoin extends MovableObject {
   }
 
   /**
-   * Resets the coin's position to a random location within the specified range
-   * and restarts its animation.
+   * Resets the coin's position to a random location within a specified range
+   * and restarts its animation. Clears any existing animation interval before restarting.
    */
   reset() {
+    if (this.animationInterval) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = undefined;
+    }
     this.animate();
     this.x = 500 + Math.random() * (10050 - 500);
     this.y = 50 + Math.random() * (300 - 50);
+    this.active = true;
   }
 }

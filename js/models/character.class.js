@@ -3,46 +3,12 @@
  * Manages animations, movement, collisions, and idle states (including a long idle with snoring).
  */
 class Character extends MovableObject {
-  /**
-   * The height of the character.
-   * @type {number}
-   */
   height = 280;
-
-  /**
-   * The vertical position of the character.
-   * @type {number}
-   */
   y = 150;
-
-  /**
-   * The horizontal position of the character.
-   * @type {number}
-   */
   x = 100;
-
-  /**
-   * The index of the current image in an animation sequence.
-   * @type {number}
-   */
   currentImage = 0;
-
-  /**
-   * The base movement speed of the character.
-   * @type {number}
-   */
   speed = 10;
-
-  /**
-   * Indicates whether the character is in a long idle state.
-   * @type {boolean}
-   */
   longIdle = false;
-
-  /**
-   * Stores a reference to the timeout that triggers the long idle state.
-   * @type {number|null}
-   */
   timeoutLongIdle = null;
 
   /**
@@ -50,17 +16,7 @@ class Character extends MovableObject {
    * @type {boolean}
    */
   otherDirektion = false;
-
-  /**
-   * Reference to the setInterval controlling character animation frames.
-   * @type {number|undefined}
-   */
   characterInterval;
-
-  /**
-   * Reference to the setInterval controlling movement checks.
-   * @type {number|undefined}
-   */
   moveIntervall;
 
   /**

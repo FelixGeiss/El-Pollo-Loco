@@ -8,11 +8,6 @@ class MusicsMuteIcon extends DrawableObject {
    * @type {string}
    */
   mute = "img/Mute/3.png";
-
-  /**
-   * The image path for the unmuted icon.
-   * @type {string}
-   */
   nonMute = "img/Mute/4.png";
 
   /**
@@ -20,11 +15,6 @@ class MusicsMuteIcon extends DrawableObject {
    * @type {boolean}
    */
   isMuted = false;
-
-  /**
-   * A reference to the game world, if available.
-   * @type {object}
-   */
   world;
 
   /**

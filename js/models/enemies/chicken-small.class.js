@@ -3,28 +3,9 @@
  * The chicken can walk, jump, and die, and is subject to gravity.
  */
 class ChickenSmall extends MovableObject {
-  /**
-   * The vertical position of the chicken.
-   * @type {number}
-   */
   y = 360;
-
-  /**
-   * The height of the chicken.
-   * @type {number}
-   */
   height = 60;
-
-  /**
-   * The width of the chicken.
-   * @type {number}
-   */
   width = 80;
-
-  /**
-   * The energy level of the chicken, used to determine if it's alive or dead.
-   * @type {number}
-   */
   energy = 20;
 
   /**

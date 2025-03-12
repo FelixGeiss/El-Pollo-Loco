@@ -59,13 +59,14 @@ class World {
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
-    this.initializeResetManager();
+    this.initializeManager();
   }
+
 
   /**
    * Initializes managers for resetting the game and checking collisions.
    */
-  initializeResetManager() {
+  initializeManager() {
     this.resetManager = new GameResetManager(this);
     this.collisonManager = new CollisonManager(this);
   }

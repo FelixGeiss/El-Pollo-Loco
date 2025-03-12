@@ -4,10 +4,6 @@
  * it starts the game.
  */
 class PlayGameIcon extends DrawableObject {
-  /**
-   * A reference to the game world.
-   * @type {World}
-   */
   world;
 
   /**
@@ -78,6 +74,7 @@ class PlayGameIcon extends DrawableObject {
   toggleGame() {
     this.world.startGame = true;
     this.world.startAllIntervals();
-    this.world.showStartscreen = false;
+    this.world.showStartscreen = false; 
+    this.world.level.resetCollectibles();
   }
 }

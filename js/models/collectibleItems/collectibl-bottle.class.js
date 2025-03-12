@@ -4,22 +4,8 @@
  * as well as providing a reset method for repositioning.
  */
 class CollectiblBottel extends MovableObject {
-  /**
-   * The width of the collectible bottle.
-   * @type {number}
-   */
   width = 70;
-  
-  /**
-   * The height of the collectible bottle.
-   * @type {number}
-   */
   height = 80;
-  
-  /**
-   * The vertical position of the collectible bottle.
-   * @type {number}
-   */
   y = 340;
 
   /**
@@ -33,6 +19,7 @@ class CollectiblBottel extends MovableObject {
     this.offset.left = 25;
     this.offset.right = 10;
     this.x = 500 + Math.random() * (10050 - 500);
+    this.active = true;
   }
 
   /**
@@ -41,5 +28,6 @@ class CollectiblBottel extends MovableObject {
    */
   reset(){
     this.x = 500 + Math.random() * (10050 - 500);
+    this.active = true;
   }
 }

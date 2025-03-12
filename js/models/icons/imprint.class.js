@@ -3,21 +3,17 @@
  * This class creates an <h2> element, positions it, and navigates to the imprint page when clicked or touched.
  */
 class Imprint extends DrawableObject {
-  /**
-   * The reference to the game's world object.
-   * @type {World}
-   */
   world;
 
   /**
-   * Initializes the Imprint object, creating an <h2> element in the DOM and binding event listeners.
+   * Initializes the Imprint object, creating an <p> element in the DOM and binding event listeners.
    * @param {World} world - The game world instance this imprint belongs to.
    */
   constructor(world) {
     super();
     this.world = world;
 
-    this.element = document.createElement("h2");
+    this.element = document.createElement("p");
     this.element.textContent = "Imprint";
     this.element.style.position = "absolute";
 

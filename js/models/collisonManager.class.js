@@ -5,16 +5,7 @@
  * throwing bottles.
  */
 class CollisonManager {
-  /**
-   * A reference to the game world containing all entities and audio.
-   * @type {Object}
-   */
   world;
-
-  /**
-   * Constructs a new CollisionManager.
-   * @param {Object} world - The game world instance containing the character, enemies, and other entities.
-   */
   constructor(world) {
     this.world = world;
   }

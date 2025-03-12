@@ -4,16 +4,9 @@
  * as well as clearing certain arrays and counters.
  */
 class GameResetManager {
-  /**
-   * A reference to the game world instance.
-   * @type {object}
-   */
   world;
 
-  /**
-   * Constructs a new GameResetManager.
-   * @param {object} world - The game world instance containing all relevant game data and objects.
-   */
+
   constructor(world) {
     this.world = world;
   }
@@ -32,6 +25,11 @@ class GameResetManager {
     this.resetStatusBars();
     this.resetCounts();
     this.resetStore();
+  
+    
+    
+    console.log(this.world.level);
+    
   }
 
   /**
