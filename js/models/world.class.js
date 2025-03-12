@@ -23,7 +23,7 @@ class World {
   audioManager = new AudioManager();
   resetManager;
   collisonManager;
-
+  imprint = new Imprint();
   SoundsMuteIcon = new SoundsMuteIcon();
   musicMuteIcon = new MusicsMuteIcon();
   instructionIcon = new InstructionIcon();
@@ -53,7 +53,6 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.imprint = new Imprint(this.canvas);
     this.draw();
     this.setWorld();
     this.run();
@@ -86,6 +85,7 @@ class World {
     this.buy.world = this;
     this.attack.world = this;
     this.instructionIcon.world = this;
+    this.imprint.world = this;
   }
 
   /**
@@ -222,7 +222,7 @@ class World {
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
     if (!this.startGame) {
-      this.imprint.draw();
+      this.addToMap(this.imprint);
     }
     let self = this;
     requestAnimationFrame(function () {
