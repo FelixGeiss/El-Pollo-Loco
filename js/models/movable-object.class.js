@@ -8,35 +8,10 @@ class MovableObject extends DrawableObject {
    * @type {boolean}
    */
   enemyIsDead = false;
-
-  /**
-   * The index of the current image in an animation sequence.
-   * @type {number}
-   */
   currentImage = 0;
-
-  /**
-   * The base movement speed of the object.
-   * @type {number}
-   */
   speed = 0.15;
-
-  /**
-   * The vertical velocity of the object.
-   * @type {number}
-   */
   speedY = 0;
-
-  /**
-   * The rate at which vertical velocity decreases (gravity).
-   * @type {number}
-   */
   acceleration = 2.5;
-
-  /**
-   * The energy (health) of the object. If it reaches 0, the object is considered "dead."
-   * @type {number}
-   */
   energy = 100;
 
   /**
@@ -44,17 +19,7 @@ class MovableObject extends DrawableObject {
    * @type {number}
    */
   lastHit = 0;
-
-  /**
-   * Reference to the setInterval used for movement. Not always used by all subclasses.
-   * @type {number|undefined}
-   */
   moveInterval;
-
-  /**
-   * Applies gravity to the object at a set interval. The object will move down if it is above the ground
-   * or if there is an upward velocity remaining.
-   */
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {

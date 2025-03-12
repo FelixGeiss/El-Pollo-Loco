@@ -8,7 +8,7 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh; 
-    background-image: url("img/desert-background.png");
+    background-image: url("../img/desert-background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

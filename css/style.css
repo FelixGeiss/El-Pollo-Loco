@@ -27,7 +27,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("img/desert-background.png");
+  background-image: url("../img/desert-background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -3,16 +3,7 @@
  * It can be thrown in a chosen direction, rotates while in the air, and splashes upon hitting the ground.
  */
 class Throwableobject extends MovableObject {
-  /**
-   * Indicates whether the bottle is broken.
-   * @type {boolean}
-   */
   bottleIsBroken = false;
-
-  /**
-   * A reference to the game world, if available.
-   * @type {object|null}
-   */
   world;
 
   /**
