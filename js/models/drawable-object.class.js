@@ -11,7 +11,10 @@ class DrawableObject {
     bottom: 0,
     left: 0,
     right: 0,
+    
   };
+
+
 
   loadImages(arr) {
     arr.forEach((path) => {
@@ -34,7 +37,9 @@ class DrawableObject {
       this instanceof ChickenSmall ||
       this instanceof CollectiblBottel ||
       this instanceof CollectiblCoin ||
-      this instanceof SalsaStore 
+      this instanceof SalsaStore ||
+      this instanceof InstructionIcon||
+      this instanceof Imprint
 
     ) {
       ctx.beginPath();

@@ -101,6 +101,7 @@ class World {
       this.collisonManager.checkCollisionBottleCollectib();
       this.collisonManager.checkCollisionCoinCollectib();
       this.collisonManager.checkCollisionSalsaStore();
+      this.collisonManager.checkCollisionButtonToMouse();
     }, 1000 / 60);
   }
 

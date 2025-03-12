@@ -24,7 +24,10 @@ class InstructionIcon extends DrawableObject {
     canvas.addEventListener("touchend", this.onRelease.bind(this));
 
     window.addEventListener("resize", this.updatePosition.bind(this));
+
   }
+
+
 
   /**
    * Updates the position of the instruction icon based on the canvas size.

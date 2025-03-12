@@ -14,6 +14,7 @@ class Imprint {
     this.fontFamily = "Arial";
     this.color = "#ffde59";
     this.setupEvents();
+
   }
 
   /**
@@ -42,7 +43,9 @@ class Imprint {
    */
   setupEvents() {
     this.canvas.addEventListener("click", (event) => this.handleClick(event));
-    this.canvas.addEventListener("touchend", (event) => this.handleTouch(event));
+    this.canvas.addEventListener("touchend", (event) =>
+      this.handleTouch(event)
+    );
   }
 
   /**
