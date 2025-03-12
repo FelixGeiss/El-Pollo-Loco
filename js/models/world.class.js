@@ -287,7 +287,6 @@ class World {
       this.flipImage(mo);
     }
     mo.draw(this.ctx);
-    mo.drawBorder(this.ctx);
     if (mo.otherDirektion) {
       mo.x = mo.x * -1;
       this.ctx.restore();
