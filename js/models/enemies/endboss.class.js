@@ -218,6 +218,7 @@ class Endboss extends MovableObject {
    */
   handleAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
+  
   }
 
   /**
@@ -252,7 +253,7 @@ class Endboss extends MovableObject {
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
-    this.energy = 100;
+    this.energy = 300;
     this.frameIndexDead = 0;
     this.hurtSpeedIncreased = false;
     this.animate();

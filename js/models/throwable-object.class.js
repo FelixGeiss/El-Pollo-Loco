@@ -55,20 +55,24 @@ class Throwableobject extends MovableObject {
   trow(otherDirektion) {
     this.speedY = 30;
     this.applyGravity();
-
     this.throwInterval = setInterval(() => {
-      if (this.y < 370) {
-        if (otherDirektion) {
-          this.x -= 5;
-        } else {
-          this.x += 5;
-        }
-      } else {
-        clearInterval(this.throwInterval);
-        this.animate();
-      }
+      this.updateThrowMovement(otherDirektion);
     }, 25);
   }
+  
+  updateThrowMovement(otherDirektion) {
+    if (this.y < 370) {
+      if (otherDirektion) {
+        this.x -= 5;
+      } else {
+        this.x += 5;
+      }
+    } else {
+      clearInterval(this.throwInterval);
+      this.animate();
+    }
+  }
+  
 
   /**
    * Handles the rotation animation while the bottle is in the air, and stops when it lands.

@@ -5,7 +5,7 @@
 class Character extends MovableObject {
   height = 280;
   y = 150;
-  x = 9690;
+  x = 100;
   currentImage = 0;
   speed = 10;
   longIdle = false;

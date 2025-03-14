@@ -29,6 +29,7 @@ class World {
   instructionIcon = new InstructionIcon();
   buttonHome = new HomeIcon();
   playGame = new PlayGameIcon();
+  restartGameIcon = new RestartGameIcon();
   startscreen = new Startscreen();
   gameOver = new GameOver();
   youWon = new YouWon();
@@ -85,6 +86,7 @@ class World {
     this.attack.world = this;
     this.instructionIcon.world = this;
     this.imprint.world = this;
+    this.restartGameIcon.world = this;
   }
 
   /**
@@ -223,9 +225,14 @@ class World {
     }
     if (this.character.energy <= 0 && this.startGame) {
       this.drawGameOver();
+      this.addToMap(this.restartGameIcon);
     }
     if (this.enbossIsDead) {
       this.addToMap(this.youWon);
+      this.addToMap(this.restartGameIcon);
+      this.resetManager.stopAllIntervals()
+
+
     }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
