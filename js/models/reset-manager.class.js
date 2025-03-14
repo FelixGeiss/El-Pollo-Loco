@@ -25,11 +25,6 @@ class GameResetManager {
     this.resetStatusBars();
     this.resetCounts();
     this.resetStore();
-  
-    
-    
-    console.log(this.world.level);
-    
   }
 
   /**

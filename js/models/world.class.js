@@ -266,7 +266,8 @@ class World {
    * Draws mobile movement controls if the game is running on a small screen.
    */
   drawMobileMovement() {
-    if (this.startGame && window.innerWidth < 900) {
+    if (this.startGame && window.innerWidth < 900 || 
+      this.startGame && window.innerWidth < 1060 && window.innerHeight < 1369) {
       this.addToMap(this.moveRaight);
       this.addToMap(this.moveLeft);
       this.addToMap(this.jump);

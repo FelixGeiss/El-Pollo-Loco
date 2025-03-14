@@ -59,7 +59,6 @@ class Imprint extends DrawableObject {
       !this.world.startGame
     ) {
       window.location.href = "imprint.html";
-      console.log("Click executed");
     }
   }
 

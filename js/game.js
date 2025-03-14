@@ -135,9 +135,9 @@ function checkOrientation() {
   const popup = document.getElementById('popup');
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  if (screenWidth < screenHeight && screenWidth < 768) {
+  if (screenWidth < screenHeight && screenWidth < 600 ) {
     popup.style.display = 'flex';
-  } else {
+  } else if(popup.style.display === "flex") {
     popup.style.display = 'none';
   }
 }
