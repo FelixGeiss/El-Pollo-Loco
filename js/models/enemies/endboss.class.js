@@ -4,8 +4,6 @@
  * attacking, hurt, and dead) as well as its movement and animation intervals.
  */
 class Endboss extends MovableObject {
-
-  // Dimensions and movement properties
   height = 400;
   width = 250;
   speed = 1;
@@ -17,8 +15,6 @@ class Endboss extends MovableObject {
    * @type {boolean}
    */
   isAttack = false;
-
-  // Position and energy properties
   y = 55;
   energy = 300;
   movementInterval = null;
@@ -34,8 +30,6 @@ class Endboss extends MovableObject {
    * @type {number|null}
    */
   moveInterval = null;
-
-  // Image arrays for different states
   /**
    * Array of image paths for the alert state.
    * @type {string[]}
@@ -182,7 +176,7 @@ class Endboss extends MovableObject {
     } else if (this.isHurt()) {
       this.handleHurtAnimation();
     } else {
-      this.hurtSpeedIncreased = false; // Reset when not hurt
+      this.hurtSpeedIncreased = false;
       if (this.isAttack) {
         this.handleAttackAnimation();
       } else if (this.itsMove) {
@@ -210,11 +204,11 @@ class Endboss extends MovableObject {
    */
   handleHurtAnimation() {
     if (!this.hurtSpeedIncreased) {
-      this.speed += 2; // Increase speed only once
+      this.speed += 2;
       this.speedResetTimeout = setTimeout(() => {
         this.resetSpeed();
       }, 5000);
-      this.hurtSpeedIncreased = true; // Set flag
+      this.hurtSpeedIncreased = true;
     }
     this.playAnimation(this.IMAGES_HURT);
   }

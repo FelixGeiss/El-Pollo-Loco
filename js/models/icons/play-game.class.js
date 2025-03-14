@@ -17,8 +17,6 @@ class PlayGameIcon extends DrawableObject {
     this.updatePosition();
     this.width = 50;
     this.height = 50;
-
-    // Event listeners for clicks, touches, and window resize
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -47,11 +45,9 @@ class PlayGameIcon extends DrawableObject {
     let mouseX, mouseY;
 
     if (event.touches && event.touches.length > 0) {
-      // Touch event
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
     } else {
-      // Mouse click event
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }

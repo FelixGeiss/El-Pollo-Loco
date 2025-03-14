@@ -14,8 +14,6 @@ class Attack extends DrawableObject {
       this.updatePosition();
       this.width = 50;
       this.height = 50;
-  
-      // Only touch events remain, click events removed
       canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
       canvas.addEventListener("touchend", this.onRelease.bind(this));
   

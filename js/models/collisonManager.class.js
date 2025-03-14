@@ -21,10 +21,8 @@ class CollisonManager {
    */
   trackMousePosition(event) {
     const rect = this.world.canvas.getBoundingClientRect();
-    // Calculate scaling factors
     const scaleX = this.world.canvas.width / rect.width;
     const scaleY = this.world.canvas.height / rect.height;
-    // Scale mouse position
     this.mouseX = (event.clientX - rect.left) * scaleX;
     this.mouseY = (event.clientY - rect.top) * scaleY;
   }

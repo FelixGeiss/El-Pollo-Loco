@@ -57,7 +57,6 @@ class Throwableobject extends MovableObject {
     this.applyGravity();
 
     this.throwInterval = setInterval(() => {
-      // Move horizontally if bottle is above ground.
       if (this.y < 370) {
         if (otherDirektion) {
           this.x -= 5;
@@ -65,7 +64,6 @@ class Throwableobject extends MovableObject {
           this.x += 5;
         }
       } else {
-        // Bottle has hit the ground. Stop movement interval and re-animate.
         clearInterval(this.throwInterval);
         this.animate();
       }
@@ -78,7 +76,7 @@ class Throwableobject extends MovableObject {
    */
   animate() {
     if (this.animateInterval) {
-      return; // Animation already running
+      return;
     }
 
     this.animateInterval = setInterval(() => {
