@@ -1,40 +1,46 @@
 /**
- * Represents the Endboss enemy in the game, extending the MovableObject class.
- * This class handles different states of the Endboss such as walking, alert,
- * attacking, hurt, and dead, as well as its movement and animation intervals.
+ * Represents the Endboss in the game, which extends from MovableObject.
+ * This class controls the different states of the Endboss (walking, alerted,
+ * attacking, hurt, and dead) as well as its movement and animation intervals.
  */
 class Endboss extends MovableObject {
 
+  // Dimensions and movement properties
   height = 400;
   width = 250;
   speed = 1;
+  itsMove = false;
+  speedResetTimeout = null;
 
   /**
    * Indicates whether the Endboss is currently attacking.
    * @type {boolean}
    */
   isAttack = false;
+
+  // Position and energy properties
   y = 55;
-  energy = 100;
+  energy = 300;
   movementInterval = null;
 
   /**
-   * Reference to the setInterval used for animation.
+   * Reference to the setInterval used for animations.
    * @type {number|null}
    */
   animationInterval = null;
 
   /**
-   * Reference to the setInterval used for moving the Endboss when attacking.
+   * Reference to the setInterval used for movement while attacking.
    * @type {number|null}
    */
   moveInterval = null;
 
+  // Image arrays for different states
   /**
-   * An array of image paths for the alert state.
+   * Array of image paths for the alert state.
    * @type {string[]}
    */
-  IMGES_ALERT = [
+  IMAGES_ALERT = [
     "img/4_enemie_boss_chicken/2_alert/G5.png",
     "img/4_enemie_boss_chicken/2_alert/G6.png",
     "img/4_enemie_boss_chicken/2_alert/G7.png",
@@ -46,7 +52,7 @@ class Endboss extends MovableObject {
   ];
 
   /**
-   * An array of image paths for the attack state.
+   * Array of image paths for the attack state.
    * @type {string[]}
    */
   IMAGES_ATTACK = [
@@ -61,7 +67,7 @@ class Endboss extends MovableObject {
   ];
 
   /**
-   * An array of image paths for the walking state.
+   * Array of image paths for the walking state.
    * @type {string[]}
    */
   IMAGES_WALKING = [
@@ -72,7 +78,7 @@ class Endboss extends MovableObject {
   ];
 
   /**
-   * An array of image paths for the hurt state.
+   * Array of image paths for the hurt state.
    * @type {string[]}
    */
   IMAGES_HURT = [
@@ -82,7 +88,7 @@ class Endboss extends MovableObject {
   ];
 
   /**
-   * An array of image paths for the dead state.
+   * Array of image paths for the dead state.
    * @type {string[]}
    */
   IMAGES_DEAD = [
@@ -92,13 +98,13 @@ class Endboss extends MovableObject {
   ];
 
   /**
-   * Constructs the Endboss, loads its images, sets up position and offsets,
-   * and starts its initial animation.
+   * Creates an instance of Endboss.
+   * Loads images, sets the initial position and offsets, and starts the animation.
    */
   constructor() {
     super();
-    this.loadImage(this.IMGES_ALERT[0]);
-    this.loadImages(this.IMGES_ALERT);
+    this.loadImage(this.IMAGES_ALERT[0]);
+    this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ATTACK);
@@ -111,10 +117,11 @@ class Endboss extends MovableObject {
     this.moveInterval = null;
     this.frameIndexDead = 0;
     this.animate();
+    this.hurtSpeedIncreased = false;
   }
 
   /**
-   * Begins the movement and animation intervals.
+   * Starts the movement and animation intervals.
    */
   animate() {
     this.clearIntervals();
@@ -123,7 +130,7 @@ class Endboss extends MovableObject {
   }
 
   /**
-   * Clears existing movement and animation intervals.
+   * Clears any existing movement and animation intervals.
    */
   clearIntervals() {
     if (this.movementInterval) clearInterval(this.movementInterval);
@@ -131,15 +138,17 @@ class Endboss extends MovableObject {
   }
 
   /**
-   * Starts the interval that handles movement logic.
+   * Starts the interval that controls the movement logic.
    */
   startMovementInterval() {
     this.movementInterval = setInterval(() => this.handleMovement(), 1000 / 60);
   }
 
   /**
-   * Handles movement logic, moving the Endboss left if not attacking
-   * and removing the interval if the Endboss is dead.
+   * Controls the movement logic:
+   * - Moves the Endboss to the left if it is attacking.
+   * - Stops the interval if the Endboss is dead.
+   * - Moves left if not attacking and the itsMove flag is true.
    */
   handleMovement() {
     if (this.isAttack) {
@@ -151,37 +160,41 @@ class Endboss extends MovableObject {
       return;
     }
 
-    if (!this.isAttack && this.energy < 100) {
+    if (!this.isAttack && this.itsMove) {
       this.moveLeft();
     }
   }
 
   /**
-   * Starts the interval that handles animation logic.
+   * Starts the interval that controls the animation logic.
    */
   startAnimationInterval() {
     this.animationInterval = setInterval(() => this.handleAnimation(), 150);
   }
 
   /**
-   * Manages the animation state based on whether the Endboss is dead, hurt, attacking, etc.
+   * Determines the current state and plays the corresponding animation:
+   * - Dead, Hurt, Attack, Walking, or Alert.
    */
   handleAnimation() {
     if (this.isDead()) {
       this.handleDeadAnimation();
     } else if (this.isHurt()) {
       this.handleHurtAnimation();
-    } else if (this.isAttack) {
-      this.handleAttackAnimation();
-    } else if (this.energy < 100) {
-      this.handleWalkingAnimation();
     } else {
-      this.handleAlertAnimation();
+      this.hurtSpeedIncreased = false; // Reset when not hurt
+      if (this.isAttack) {
+        this.handleAttackAnimation();
+      } else if (this.itsMove) {
+        this.handleWalkingAnimation();
+      } else {
+        this.handleAlertAnimation();
+      }
     }
   }
 
   /**
-   * Plays the death animation and increments the frame index until the animation is finished.
+   * Plays the death animation and increments the frame index until the animation completes.
    */
   handleDeadAnimation() {
     this.playAnimation([this.IMAGES_DEAD[this.frameIndexDead]]);
@@ -192,11 +205,18 @@ class Endboss extends MovableObject {
   }
 
   /**
-   * Plays the hurt animation and moves the Endboss slightly to the right.
+   * Plays the hurt animation and slightly moves the Endboss to the right.
+   * Increases the speed only once during the hurt state.
    */
   handleHurtAnimation() {
+    if (!this.hurtSpeedIncreased) {
+      this.speed += 2; // Increase speed only once
+      this.speedResetTimeout = setTimeout(() => {
+        this.resetSpeed();
+      }, 5000);
+      this.hurtSpeedIncreased = true; // Set flag
+    }
     this.playAnimation(this.IMAGES_HURT);
-    this.x = this.x + 20;
   }
 
   /**
@@ -217,31 +237,39 @@ class Endboss extends MovableObject {
    * Plays the alert animation.
    */
   handleAlertAnimation() {
-    this.playAnimation(this.IMGES_ALERT);
+    this.playAnimation(this.IMAGES_ALERT);
   }
 
   /**
-   * Resets the Endboss to its default state and restarts movement and animation intervals.
+   * Resets the Endboss's speed to its default value.
+   */
+  resetSpeed() {
+    this.speed = 1;
+  }
+
+  /**
+   * Resets the Endboss to its initial state and restarts movement and animation intervals.
    */
   resetEnemy() {
     if (this.movementInterval) clearInterval(this.movementInterval);
     if (this.animationInterval) clearInterval(this.animationInterval);
     if (this.moveInterval) clearInterval(this.moveInterval);
-
+    this.itsMove = false;
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
     this.energy = 100;
     this.frameIndexDead = 0;
-
+    this.hurtSpeedIncreased = false;
     this.animate();
   }
 
   /**
-   * Moves the Endboss left if it is attacking and not already in a move interval.
+   * Moves the Endboss to the left during an attack.
+   * Starts a movement interval if one is not already active.
    */
   moveEnemie() {
-    if (!this.enemyIsDead && this.isAttack && !this.moveInterval) {
+    if (!this.isDead() && this.isAttack && !this.moveInterval) {
       this.moveInterval = setInterval(() => {
         this.moveLeft();
       }, 1000 / 60);

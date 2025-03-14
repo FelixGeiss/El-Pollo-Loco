@@ -15,10 +15,10 @@ class World {
   bottleCount = 0;
   CoinCount = 0;
   throwTimeout = false;
-  enbossIsDead = false;
 
   /**
    * Handles all game audio, including sound effects and background music.
+   * @type {AudioManager}
    */
   audioManager = new AudioManager();
   resetManager;
@@ -61,9 +61,8 @@ class World {
     this.initializeManager();
   }
 
-
   /**
-   * Initializes managers for resetting the game and checking collisions.
+   * Initializes managers for game reset and collision checking.
    */
   initializeManager() {
     this.resetManager = new GameResetManager(this);
@@ -89,7 +88,7 @@ class World {
   }
 
   /**
-   * Sets up collision checks and other repeated logic at 60 frames per second.
+   * Runs the main game loop, continuously checking for collisions and other game interactions.
    */
   run() {
     setInterval(() => {
@@ -102,7 +101,7 @@ class World {
       this.collisonManager.checkCollisionCoinCollectib();
       this.collisonManager.checkCollisionSalsaStore();
       this.collisonManager.checkCollisionButtonToMouse();
-    }, 1000 / 60);
+    }, 1);
   }
 
   /**
@@ -152,7 +151,7 @@ class World {
 
   /**
    * Checks if the player can throw a bottle by verifying key input, inventory, and timeout.
-   * @returns {boolean}
+   * @returns {boolean} True if a bottle can be thrown, otherwise false.
    */
   canThrowBottle() {
     return this.keyboard.D && this.bottleCount > 0 && !this.throwTimeout;
@@ -170,20 +169,34 @@ class World {
     this.setThrowTimeout();
   }
 
+  /**
+   * Calculates the X position from which a bottle should be thrown based on the character's direction.
+   * @returns {number} The calculated X position.
+   */
   calculateXPosition() {
     return this.character.otherDirektion ? this.character.x - 50 : this.character.x + 100;
   }
 
+  /**
+   * Creates a new bottle at the specified X position and adds it to the list of throwable objects.
+   * @param {number} xPosition - The X position for the new bottle.
+   */
   createBottle(xPosition) {
     const bottle = new Throwableobject(xPosition, this.character.y + 100, this.character.otherDirektion);
     this.throwableObjects.push(bottle);
   }
 
+  /**
+   * Decrements the bottle count and updates the corresponding status bar.
+   */
   updateBottleCount() {
     this.bottleCount--;
     this.statusBarBottle.setPercentage(this.bottleCount);
   }
 
+  /**
+   * Sets a timeout to prevent immediate successive bottle throws.
+   */
   setThrowTimeout() {
     this.throwTimeout = true;
     setTimeout(() => {
@@ -193,7 +206,7 @@ class World {
   }
 
   /**
-   * Recurring draw loop for all game objects, manages camera translation and fixed UI elements.
+   * The recurring draw loop for all game objects, managing camera translation and fixed UI elements.
    */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -211,9 +224,7 @@ class World {
     if (this.character.energy <= 0 && this.startGame) {
       this.drawGameOver();
     }
-
     if (this.enbossIsDead) {
-      
       this.addToMap(this.youWon);
     }
     this.addToMap(this.SoundsMuteIcon);
@@ -234,6 +245,9 @@ class World {
     }
   }
 
+  /**
+   * Draws the game level, including the background, collectibles, enemies, and the character.
+   */
   drawLevel() {
     return (
       this.ctx.translate(this.camera_x, 0),
@@ -248,8 +262,11 @@ class World {
     );
   }
 
+  /**
+   * Draws mobile movement controls if the game is running on a small screen.
+   */
   drawMobileMovement() {
-    if (this.startGame && window.innerWidth < 768) {
+    if (this.startGame && window.innerWidth < 900) {
       this.addToMap(this.moveRaight);
       this.addToMap(this.moveLeft);
       this.addToMap(this.jump);
@@ -258,6 +275,9 @@ class World {
     }
   }
 
+  /**
+   * Draws the status bars for game elements like health, bottles, and coins.
+   */
   drawStatusbar() {
     return (
       this.addToMap(this.statusBar),
@@ -266,22 +286,36 @@ class World {
     );
   }
 
+  /**
+   * Draws the start screen objects.
+   */
   drawStartObject() {
     this.addToMap(this.startscreen);
     this.addToMap(this.playGame);
     this.showStartscreen = true;
   }
 
+  /**
+   * Draws the game over screen.
+   */
   drawGameOver() {
     this.addToMap(this.gameOver);
   }
 
+  /**
+   * Adds multiple objects to the map.
+   * @param {Array} objects - An array of objects to add.
+   */
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
     });
   }
 
+  /**
+   * Adds a drawable object to the map, handling image flipping if necessary.
+   * @param {DrawableObject} mo - The drawable object.
+   */
   addToMap(mo) {
     if (mo.otherDirektion) {
       this.flipImage(mo);
@@ -293,6 +327,10 @@ class World {
     }
   }
 
+  /**
+   * Flips the image of a drawable object horizontally.
+   * @param {DrawableObject} mo - The drawable object.
+   */
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -300,6 +338,9 @@ class World {
     mo.x = mo.x * -1;
   }
 
+  /**
+   * Starts the background sound if music is not muted.
+   */
   startBackroundsound() {
     let storedMuteStatus = localStorage.getItem("MusikMute");
     if (storedMuteStatus === null) {

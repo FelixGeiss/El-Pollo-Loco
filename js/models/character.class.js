@@ -5,14 +5,14 @@
 class Character extends MovableObject {
   height = 280;
   y = 150;
-  x = 100;
+  x = 9690;
   currentImage = 0;
   speed = 10;
   longIdle = false;
   timeoutLongIdle = null;
 
   /**
-   * Determines if the character is facing the opposite direction (left).
+   * Indicates if the character is facing the opposite direction (left).
    * @type {boolean}
    */
   otherDirektion = false;
@@ -113,7 +113,7 @@ class Character extends MovableObject {
   world;
 
   /**
-   * Constructs the Character, loading images, applying gravity, and initiating animation loops.
+   * Constructs the Character, loads images, applies gravity, and starts the animation loops.
    */
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
@@ -157,7 +157,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Initiates movement and animation intervals, updating the character's position and state.
+   * Starts the movement and animation intervals, updating the character's position and state.
    */
   animate() {
     this.moveIntervall = setInterval(() => this.handleMovement(), 1000 / 60);
@@ -165,10 +165,10 @@ class Character extends MovableObject {
   }
 
   /**
-   * Handles the character's movement each frame, detecting direction input and collisions.
+   * Handles the character's movement on each frame, detecting directional input and collisions.
    */
   handleMovement() {
-    let oldX = this.x;
+    const oldX = this.x;
 
     if (this.world.startGame && this.energy > 0) {
       this.handleDirection();
@@ -194,17 +194,20 @@ class Character extends MovableObject {
   }
 
   /**
-   * Allows the character to jump if the UP or SPACE keys are pressed and the character is on the ground.
+   * Allows the character to jump if the UP or SPACE key is pressed and the character is on the ground.
    */
   handleJump() {
-    if ((this.world.keyboard.UP && !this.isAboveGround()) || (this.world.keyboard.SPACE && !this.isAboveGround())) {
+    if (
+      (this.world.keyboard.UP && !this.isAboveGround()) ||
+      (this.world.keyboard.SPACE && !this.isAboveGround())
+    ) {
       this.jump();
       this.world.audioManager.jumpSound.play();
     }
   }
 
   /**
-   * Checks collisions with enemies. If a collision is detected, reverts the character's x-position.
+   * Checks for collisions with enemies and reverts the character's x-position if a collision is detected.
    * @param {number} oldX - The character's x-position before movement.
    */
   handleCollision(oldX) {
@@ -216,7 +219,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Controls the character's animation state each frame based on conditions like death, hurt, jumping, or idle.
+   * Controls the character's animation state on each frame based on conditions like death, hurt, jumping, or idle.
    */
   handleAnimation() {
     let frameIndex = 0;
@@ -232,7 +235,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Plays the dead animation frame by frame, then stops character updates once it completes.
+   * Plays the dead animation frame-by-frame, then stops character updates once the sequence is complete.
    * @param {number} frameIndex - The current frame index in the dead animation sequence.
    */
   handleDeadAnimation(frameIndex) {
@@ -246,7 +249,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Plays the hurt animation frames, stopping the long idle timer and snoring sound.
+   * Plays the hurt animation frames, stops the long idle timer, and stops the snoring sound.
    */
   handleHurtAnimation() {
     this.playAnimation(this.IMAGES_HURT);
@@ -255,7 +258,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Plays the jumping animation frames, stopping the long idle timer and snoring sound.
+   * Plays the jumping animation frames, stops the long idle timer, and stops the snoring sound.
    */
   handleJumpingAnimation() {
     this.playAnimation(this.IMAGES_JUMPING);
@@ -264,7 +267,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Decides whether to play the walking animation, long idle animation with snoring, or default idle,
+   * Determines whether to play the walking animation, long idle (snoring) animation, or default idle animation
    * based on keyboard input and the long idle timer.
    */
   handleIdleAnimation() {
@@ -284,7 +287,7 @@ class Character extends MovableObject {
 
   /**
    * Resets the character to its default state for a new game or after certain conditions,
-   * restoring position, energy, and state values.
+   * restoring position, energy, and other state values.
    */
   resetCharacter() {
     this.x = 100;
