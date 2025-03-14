@@ -7,6 +7,10 @@ class SoundsMuteIcon extends DrawableObject {
    * @type {string}
    */
   mute = "img/Mute/2.png";
+  /**
+   * The image path for the non-muted icon.
+   * @type {string}
+   */
   nonMute = "img/Mute/1.png";
 
   /**
@@ -38,7 +42,7 @@ class SoundsMuteIcon extends DrawableObject {
 
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
-    canvas.addEventListener("resize", this.updatePosition.bind(this));
+    window.addEventListener("resize", this.updatePosition.bind(this));
   }
 
   /**
@@ -50,7 +54,7 @@ class SoundsMuteIcon extends DrawableObject {
   }
 
   /**
-   * Mutes or unmutes all game sound effects managed by the world's audio manager.
+   * Applies the mute setting to all game sound effects managed by the world's audio manager.
    */
   muteSound() {
     if (this.world) {
@@ -67,13 +71,13 @@ class SoundsMuteIcon extends DrawableObject {
   }
 
   /**
-   * Handles click and touch events on the icon. Checks if the user interaction is within the icon's bounds.
-   * If so, toggles the sound mute state.
-   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   * Calculates the mouse or touch coordinates relative to the canvas.
+   *
+   * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   * @returns {{mouseX: number, mouseY: number}} An object containing the calculated x and y coordinates.
    */
-  onClick(event) {
+  getMouseCoordinates(event) {
     event.preventDefault();
-
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
@@ -87,12 +91,36 @@ class SoundsMuteIcon extends DrawableObject {
       mouseY = (event.clientY - rect.top) * scaleY;
     }
 
+    return { mouseX, mouseY };
+  }
+
+  /**
+   * Checks if the provided coordinates are within the bounds of the sound mute icon.
+   * If they are, toggles the sound mute state.
+   *
+   * @param {number} mouseX - The x coordinate relative to the canvas.
+   * @param {number} mouseY - The y coordinate relative to the canvas.
+   */
+  handleClick(mouseX, mouseY) {
     if (
-      mouseX >= this.x && mouseX <= this.x + this.width &&
-      mouseY >= this.y && mouseY <= this.y + this.height
+      mouseX >= this.x &&
+      mouseX <= this.x + this.width &&
+      mouseY >= this.y &&
+      mouseY <= this.y + this.height
     ) {
       this.toggleSound();
     }
+  }
+
+  /**
+   * Handles click and touch events on the icon.
+   * Calculates the coordinates and processes the toggle sound action if conditions are met.
+   *
+   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   */
+  onClick(event) {
+    const { mouseX, mouseY } = this.getMouseCoordinates(event);
+    this.handleClick(mouseX, mouseY);
   }
 
   /**

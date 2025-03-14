@@ -16,7 +16,9 @@ class Imprint extends DrawableObject {
     this.height = 100;
 
     canvas.addEventListener("click", this.onClick.bind(this));
-    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
+    canvas.addEventListener("touchstart", this.onClick.bind(this), {
+      passive: false,
+    });
     canvas.addEventListener("mouseup", this.onRelease.bind(this));
     canvas.addEventListener("touchend", this.onRelease.bind(this));
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -31,18 +33,17 @@ class Imprint extends DrawableObject {
   }
 
   /**
-   * Handles click and touchstart events. If the user interacts within the icon's
-   * boundaries and the game has not started, navigates to "imprint.html".
-   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   * Calculates the mouse or touch coordinates relative to the canvas.
+   *
+   * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   * @returns {{mouseX: number, mouseY: number}} An object containing the calculated x and y coordinates.
    */
-  onClick(event) {
+  getMouseCoordinates(event) {
     event.preventDefault();
-
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
     let mouseX, mouseY;
-
     if (event.touches && event.touches.length > 0) {
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
@@ -50,7 +51,17 @@ class Imprint extends DrawableObject {
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }
+    return { mouseX, mouseY };
+  }
 
+  /**
+   * Checks if the provided coordinates are within the bounds of the imprint icon.
+   * If they are and the game has not started, navigates to "imprint.html".
+   *
+   * @param {number} mouseX - The x coordinate relative to the canvas.
+   * @param {number} mouseY - The y coordinate relative to the canvas.
+   */
+  handleClick(mouseX, mouseY) {
     if (
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
@@ -63,7 +74,19 @@ class Imprint extends DrawableObject {
   }
 
   /**
+   * Handles click and touchstart events.
+   * Calculates the coordinates and processes the navigation if conditions are met.
+   *
+   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   */
+  onClick(event) {
+    const { mouseX, mouseY } = this.getMouseCoordinates(event);
+    this.handleClick(mouseX, mouseY);
+  }
+
+  /**
    * Handles mouseup and touchend events, preventing default behavior.
+   *
    * @param {MouseEvent | TouchEvent} event - The user interaction event.
    */
   onRelease(event) {

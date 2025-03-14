@@ -11,7 +11,6 @@ class HomeIcon extends DrawableObject {
     super();
 
     this.loadImage("img/home.png");
-
     this.updatePosition();
     this.width = 50;
     this.height = 50;
@@ -32,19 +31,17 @@ class HomeIcon extends DrawableObject {
   }
 
   /**
-   * Handles both click and touch events to determine if the home icon was pressed.
-   * If pressed and the start screen is not currently shown, it stops and resets the game.
+   * Calculates the mouse or touch coordinates relative to the canvas.
+   *
    * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   * @returns {{mouseX: number, mouseY: number}} An object containing the calculated x and y coordinates.
    */
-  onClick(event) {
+  getMouseCoordinates(event) {
     event.preventDefault();
-
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-
     let mouseX, mouseY;
-
     if (event.touches && event.touches.length > 0) {
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
@@ -52,7 +49,18 @@ class HomeIcon extends DrawableObject {
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }
+    return { mouseX, mouseY };
+  }
 
+  /**
+   * Checks if the provided coordinates are within the bounds of the home icon button.
+   * If the click/touch is within bounds and the start screen is not currently shown,
+   * it stops and resets the game.
+   *
+   * @param {number} mouseX - The x coordinate relative to the canvas.
+   * @param {number} mouseY - The y coordinate relative to the canvas.
+   */
+  handleClick(mouseX, mouseY) {
     if (
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
@@ -65,5 +73,17 @@ class HomeIcon extends DrawableObject {
       this.world.stopAllIntervals();
       this.world.resetManager.resetGame();
     }
+  }
+
+  /**
+   * Handles both click and touch events to determine if the home icon was pressed.
+   * It calculates the mouse or touch coordinates and then checks if the click occurred
+   * within the button's bounds.
+   *
+   * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   */
+  onClick(event) {
+    const { mouseX, mouseY } = this.getMouseCoordinates(event);
+    this.handleClick(mouseX, mouseY);
   }
 }

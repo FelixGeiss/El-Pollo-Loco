@@ -17,6 +17,7 @@ class PlayGameIcon extends DrawableObject {
     this.updatePosition();
     this.width = 50;
     this.height = 50;
+
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -31,17 +32,16 @@ class PlayGameIcon extends DrawableObject {
   }
 
   /**
-   * Handles click or touch events. If the user interaction is within the icon's bounds,
-   * and the game is not currently started and the start screen is showing, it toggles the game state.
-   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   * Calculates the mouse or touch coordinates relative to the canvas.
+   *
+   * @param {MouseEvent | TouchEvent} event - The event triggered by user interaction.
+   * @returns {{mouseX: number, mouseY: number}} An object containing the calculated x and y coordinates.
    */
-  onClick(event) {
+  getMouseCoordinates(event) {
     event.preventDefault();
-
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-
     let mouseX, mouseY;
 
     if (event.touches && event.touches.length > 0) {
@@ -52,6 +52,18 @@ class PlayGameIcon extends DrawableObject {
       mouseY = (event.clientY - rect.top) * scaleY;
     }
 
+    return { mouseX, mouseY };
+  }
+
+  /**
+   * Checks if the provided coordinates are within the bounds of the PlayGameIcon.
+   * If they are, and if the game is not started and the start screen is showing,
+   * toggles the game state.
+   *
+   * @param {number} mouseX - The x coordinate relative to the canvas.
+   * @param {number} mouseY - The y coordinate relative to the canvas.
+   */
+  handleClick(mouseX, mouseY) {
     if (
       mouseX >= this.x &&
       mouseX <= this.x + this.width &&
@@ -64,13 +76,24 @@ class PlayGameIcon extends DrawableObject {
   }
 
   /**
+   * Handles click or touch events.
+   * Calculates the coordinates and processes the game toggle action if conditions are met.
+   *
+   * @param {MouseEvent | TouchEvent} event - The user interaction event.
+   */
+  onClick(event) {
+    const { mouseX, mouseY } = this.getMouseCoordinates(event);
+    this.handleClick(mouseX, mouseY);
+  }
+
+  /**
    * Toggles the game from the start screen state to the playing state,
    * initiating all necessary intervals and hiding the start screen.
    */
   toggleGame() {
     this.world.startGame = true;
     this.world.startAllIntervals();
-    this.world.showStartscreen = false; 
+    this.world.showStartscreen = false;
     this.world.level.resetCollectibles();
   }
 }

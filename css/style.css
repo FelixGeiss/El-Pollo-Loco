@@ -163,6 +163,7 @@ canvas {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   margin: 20px;
+
 }
 .backIcon{
   width: 50px;
@@ -174,6 +175,8 @@ canvas {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
+ 
+ 
 }
 
 
@@ -208,4 +211,10 @@ canvas {
   h1{
     display: none;
   }
+}
+
+@media (max-width: 500px){
+ .imprint{
+  margin-top: 50px ;
+ }  
 }
