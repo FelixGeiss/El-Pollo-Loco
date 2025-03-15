@@ -86,7 +86,7 @@ class World {
    * Manages all game audio, including sound effects and background music.
    * @type {AudioManager}
    */
- 
+
   resetManager;
   collisonManager;
   imprint = new Imprint();
@@ -118,41 +118,50 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.draw();
     this.setWorld();
     this.run();
     this.pushInterval();
     this.stopAllIntervals();
     this.initializeManager();
+    this.drawibilManager.draw();
   }
 
   /**
-   * Initializes managers for game reset and collision detection.
+   * Initializes managers for game reset, collision detection, audio, and drawing.
    */
   initializeManager() {
     this.resetManager = new GameResetManager(this);
-    this.collisonManager = new CollisonManager(this); 
+    this.collisonManager = new CollisonManager(this);
     this.audioManager = new AudioManager(this);
+    this.drawibilManager = new DrawibilManager(this);
   }
 
   /**
-   * Assigns this World instance to various game objects so they can access global properties.
-   */
-  setWorld() {
-    this.character.world = this;
-    this.SoundsMuteIcon.world = this;
-    this.musicMuteIcon.world = this;
-    this.playGame.world = this;
-    this.buttonHome.world = this;
-    this.moveRaight.world = this;
-    this.moveLeft.world = this;
-    this.jump.world = this;
-    this.buy.world = this;
-    this.attack.world = this;
-    this.instructionIcon.world = this;
-    this.imprint.world = this;
-    this.restartGameIcon.world = this;
-  }
+ * Assigns this World instance to various game objects so they can access global properties.
+ */
+setWorld() {
+  this.character.world = this;
+  this.SoundsMuteIcon.world = this;
+  this.musicMuteIcon.world = this;
+  this.playGame.world = this;
+  this.buttonHome.world = this;
+  this.instructionIcon.world = this;
+  this.imprint.world = this;
+  this.restartGameIcon.world = this;
+  this.setWorldMobileIcon();
+}
+
+/**
+ * Assigns this World instance to mobile-specific game objects so they can access global properties.
+ */
+setWorldMobileIcon() {
+  this.buy.world = this;
+  this.attack.world = this;
+  this.jump.world = this;
+  this.moveRaight.world = this;
+  this.moveLeft.world = this;
+}
+
 
   /**
    * Runs the main game loop, continuously checking for collisions and other game interactions.
@@ -235,7 +244,9 @@ class World {
    * @returns {number} The calculated X position.
    */
   calculateXPosition() {
-    return this.character.otherDirektion ? this.character.x - 50 : this.character.x + 100;
+    return this.character.otherDirektion
+      ? this.character.x - 50
+      : this.character.x + 100;
   }
 
   /**
@@ -243,7 +254,11 @@ class World {
    * @param {number} xPosition - The X position for the new bottle.
    */
   createBottle(xPosition) {
-    const bottle = new Throwableobject(xPosition, this.character.y + 100, this.character.otherDirektion);
+    const bottle = new Throwableobject(
+      xPosition,
+      this.character.y + 100,
+      this.character.otherDirektion
+    );
     this.throwableObjects.push(bottle);
   }
 
@@ -265,136 +280,4 @@ class World {
       this.audioManager.throwSound.play();
     }, 500);
   }
-
-  /**
-   * The recurring draw loop for all game objects, managing camera translation and fixed UI elements.
-   */
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    if (!this.startGame) {
-      this.drawStartObject();
-      this.addToMap(this.instructionIcon);
-    }
-    if (this.startGame) {
-      this.drawLevel();
-      this.ctx.translate(-this.camera_x, 0);
-      this.drawStatusbar();
-    }
-    if (this.character.energy <= 0 && this.startGame) {
-      this.drawGameOver();
-      this.addToMap(this.restartGameIcon);
-    }
-    if (this.enbossIsDead) {
-      this.addToMap(this.youWon);
-      this.addToMap(this.restartGameIcon);
-      this.resetManager.stopAllIntervals();
-    }
-    this.addToMap(this.SoundsMuteIcon);
-    this.addToMap(this.musicMuteIcon);
-    this.drawMobileMovement();
-    this.ctx.translate(this.camera_x, 0);
-    this.ctx.translate(-this.camera_x, 0);
-
-    if (!this.startGame) {
-      this.addToMap(this.imprint);
-    }
-
-    requestAnimationFrame(() => this.draw());
-    if (this.startGame) {
-      this.audioManager.startBackroundsound();
-      this.addToMap(this.buttonHome);
-    }
-  }
-
-  /**
-   * Draws the game level, including background, collectibles, enemies, and the character.
-   */
-  drawLevel() {
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backroundObjeckt);
-    this.addObjectsToMap(this.level.collectiblBottel);
-    this.addObjectsToMap(this.level.collectiblCoin);
-    this.addToMap(this.salsaStore);
-    this.addToMap(this.character);
-    this.addObjectsToMap(this.level.clouds);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.throwableObjects);
-  }
-
-  /**
-   * Draws mobile movement controls if the game runs on einem kleinen Bildschirm.
-   */
-  drawMobileMovement() {
-    if (
-      (this.startGame && window.innerWidth < 900) ||
-      (this.startGame && window.innerWidth < 1060 && window.innerHeight < 1369)
-    ) {
-      this.addToMap(this.moveRaight);
-      this.addToMap(this.moveLeft);
-      this.addToMap(this.jump);
-      this.addToMap(this.buy);
-      this.addToMap(this.attack);
-    }
-  }
-
-  /**
-   * Draws status bars for health, bottles, and coins.
-   */
-  drawStatusbar() {
-    this.addToMap(this.statusBar);
-    this.addToMap(this.statusBarBottle);
-    this.addToMap(this.statusBarCoin);
-  }
-
-  /**
-   * Draws the start screen objects.
-   */
-  drawStartObject() {
-    this.addToMap(this.startscreen);
-    this.addToMap(this.playGame);
-    this.showStartscreen = true;
-  }
-
-  /**
-   * Draws the game over screen.
-   */
-  drawGameOver() {
-    this.addToMap(this.gameOver);
-  }
-
-  /**
-   * Adds multiple drawable objects to the map.
-   * @param {Array} objects - Array of drawable objects.
-   */
-  addObjectsToMap(objects) {
-    objects.forEach((o) => this.addToMap(o));
-  }
-
-  /**
-   * Adds a drawable object to the map, handling image flipping if necessary.
-   * @param {DrawableObject} mo - The drawable object.
-   */
-  addToMap(mo) {
-    if (mo.otherDirektion) {
-      this.flipImage(mo);
-    }
-    mo.draw(this.ctx);
-    if (mo.otherDirektion) {
-      mo.x *= -1;
-      this.ctx.restore();
-    }
-  }
-
-  /**
-   * Flips the image of a drawable object horizontally.
-   * @param {DrawableObject} mo - The drawable object.
-   */
-  flipImage(mo) {
-    this.ctx.save();
-    this.ctx.translate(mo.width, 0);
-    this.ctx.scale(-1, 1);
-    mo.x *= -1;
-  }
-
 }
