@@ -42,7 +42,6 @@ class RestartGameIcon extends DrawableObject {
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
     let mouseX, mouseY;
-
     if (event.touches && event.touches.length > 0) {
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
@@ -50,7 +49,6 @@ class RestartGameIcon extends DrawableObject {
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }
-
     return { mouseX, mouseY };
   }
 
@@ -68,11 +66,8 @@ class RestartGameIcon extends DrawableObject {
       mouseX <= this.x + this.width &&
       mouseY >= this.y &&
       mouseY <= this.y + this.height;
-
-    // Restart if the boss is dead or if the character's energy is 0 and the game is running.
     const restartCondition =
       this.world.enbossIsDead || (this.world.character.energy <= 0 && this.world.startGame);
-
     if (isWithinBounds && restartCondition) {
       this.toggleGame();
     }

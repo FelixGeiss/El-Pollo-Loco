@@ -1,9 +1,21 @@
 /**
  * Represents a throwable salsa bottle in the game, extending the MovableObject class.
  * It can be thrown in a chosen direction, rotates while in the air, and splashes upon hitting the ground.
+ *
+ * @class Throwableobject
+ * @extends MovableObject
  */
 class Throwableobject extends MovableObject {
+  /**
+   * Indicates whether the bottle has broken (splash animation completed).
+   * @type {boolean}
+   */
   bottleIsBroken = false;
+
+  /**
+   * Reference to the game world.
+   * @type {object}
+   */
   world;
 
   /**
@@ -32,6 +44,8 @@ class Throwableobject extends MovableObject {
 
   /**
    * Constructs a new Throwableobject, loads rotation and splash images, and initiates its throwing and animation behavior.
+   *
+   * @constructor
    * @param {number} x - The initial x position of the bottle.
    * @param {number} y - The initial y position of the bottle.
    * @param {boolean} otherDirektion - If true, the bottle is thrown to the left; otherwise, to the right.
@@ -49,7 +63,9 @@ class Throwableobject extends MovableObject {
   }
 
   /**
-   * Initiates the throwing behavior by setting vertical speed and moving the bottle horizontally until it hits the ground.
+   * Initiates the throwing behavior by setting vertical speed and applying gravity,
+   * then continuously updates the bottle's movement until it hits the ground.
+   *
    * @param {boolean} otherDirektion - Determines the horizontal direction of the throw.
    */
   trow(otherDirektion) {
@@ -60,6 +76,12 @@ class Throwableobject extends MovableObject {
     }, 25);
   }
   
+  /**
+   * Updates the bottle's horizontal movement based on the throw direction.
+   * Stops the throwing interval and restarts animation when the bottle hits the ground.
+   *
+   * @param {boolean} otherDirektion - Determines the horizontal direction of the throw.
+   */
   updateThrowMovement(otherDirektion) {
     if (this.y < 370) {
       if (otherDirektion) {
@@ -73,10 +95,9 @@ class Throwableobject extends MovableObject {
     }
   }
   
-
   /**
-   * Handles the rotation animation while the bottle is in the air, and stops when it lands.
-   * Once it lands, triggers the splash animation.
+   * Handles the rotation animation while the bottle is in the air.
+   * Once the bottle lands, triggers the splash animation.
    */
   animate() {
     if (this.animateInterval) {
@@ -96,11 +117,10 @@ class Throwableobject extends MovableObject {
 
   /**
    * Plays the splash animation after the bottle hits the ground.
-   * Once the final frame of the splash animation is reached, marks the bottle as broken.
+   * Once the final frame is reached, marks the bottle as broken.
    */
   animateSplash() {
     let frameIndex = 0;
-
     let splashInterval = setInterval(() => {
       this.playAnimation(this.IMAGES_SPLASH);
       frameIndex++;

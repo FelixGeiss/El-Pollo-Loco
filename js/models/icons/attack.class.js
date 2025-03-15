@@ -9,7 +9,6 @@ class Attack extends DrawableObject {
    */
   constructor() {
     super();
-
     this.loadImage("img/movement/attack.png");
     this.updatePosition();
     this.width = 50;

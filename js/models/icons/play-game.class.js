@@ -43,7 +43,6 @@ class PlayGameIcon extends DrawableObject {
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
     let mouseX, mouseY;
-
     if (event.touches && event.touches.length > 0) {
       mouseX = (event.touches[0].clientX - rect.left) * scaleX;
       mouseY = (event.touches[0].clientY - rect.top) * scaleY;
@@ -51,7 +50,6 @@ class PlayGameIcon extends DrawableObject {
       mouseX = (event.clientX - rect.left) * scaleX;
       mouseY = (event.clientY - rect.top) * scaleY;
     }
-
     return { mouseX, mouseY };
   }
 

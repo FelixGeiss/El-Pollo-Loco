@@ -117,12 +117,9 @@ class MusicsMuteIcon extends DrawableObject {
     this.isMuted = !this.isMuted;
     const newImage = this.isMuted ? this.mute : this.nonMute;
     this.loadImage(newImage);
-
     localStorage.setItem("MusikMute", this.isMuted.toString());
-
     if (this.world && this.world.audioManager.backgroundSound) {
       this.world.audioManager.backgroundSound.muted = this.isMuted;
-
       if (this.isMuted) {
         this.world.audioManager.backgroundSound.pause();
       } else {

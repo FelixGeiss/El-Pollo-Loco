@@ -1,14 +1,51 @@
 /**
  * Represents the main character in the game, extending the MovableObject class.
  * Manages animations, movement, collisions, and idle states (including a long idle with snoring).
+ *
+ * @class Character
+ * @extends MovableObject
  */
 class Character extends MovableObject {
+  /**
+   * The height of the character.
+   * @type {number}
+   */
   height = 280;
+
+  /**
+   * The y-coordinate of the character.
+   * @type {number}
+   */
   y = 150;
+
+  /**
+   * The x-coordinate of the character.
+   * @type {number}
+   */
   x = 100;
+
+  /**
+   * The current image index for animations.
+   * @type {number}
+   */
   currentImage = 0;
+
+  /**
+   * The movement speed of the character.
+   * @type {number}
+   */
   speed = 10;
+
+  /**
+   * Indicates whether the character is in a long idle state.
+   * @type {boolean}
+   */
   longIdle = false;
+
+  /**
+   * Timeout reference for triggering the long idle state.
+   * @type {number|null}
+   */
   timeoutLongIdle = null;
 
   /**
@@ -16,7 +53,17 @@ class Character extends MovableObject {
    * @type {boolean}
    */
   otherDirektion = false;
+
+  /**
+   * Reference to the interval handling character animations.
+   * @type {number}
+   */
   characterInterval;
+
+  /**
+   * Reference to the interval handling character movement.
+   * @type {number}
+   */
   moveIntervall;
 
   /**
@@ -137,9 +184,7 @@ class Character extends MovableObject {
    */
   startTimer() {
     if (this.timeoutLongIdle) return;
-
     this.longIdle = false;
-
     this.timeoutLongIdle = setTimeout(() => {
       this.longIdle = true;
     }, 15000);
@@ -169,13 +214,11 @@ class Character extends MovableObject {
    */
   handleMovement() {
     const oldX = this.x;
-
     if (this.world.startGame && this.energy > 0) {
       this.handleDirection();
       this.handleJump();
       this.handleCollision(oldX);
     }
-
     this.world.camera_x = -this.x + 100;
   }
 
@@ -208,6 +251,7 @@ class Character extends MovableObject {
 
   /**
    * Checks for collisions with enemies and reverts the character's x-position if a collision is detected.
+   *
    * @param {number} oldX - The character's x-position before movement.
    */
   handleCollision(oldX) {
@@ -236,6 +280,7 @@ class Character extends MovableObject {
 
   /**
    * Plays the dead animation frame-by-frame, then stops character updates once the sequence is complete.
+   *
    * @param {number} frameIndex - The current frame index in the dead animation sequence.
    */
   handleDeadAnimation(frameIndex) {

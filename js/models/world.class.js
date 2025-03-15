@@ -1,26 +1,92 @@
 /**
  * Manages the entire game world, including character, level, audio, collisions, and rendering.
+ *
+ * @class World
  */
 class World {
+  /**
+   * The main character of the game.
+   * @type {Character}
+   */
   character = new Character();
+
+  /**
+   * The level configuration for the game.
+   * @type {Level}
+   */
   level = level1;
+
+  /**
+   * The HTML canvas element used for rendering.
+   * @type {HTMLCanvasElement}
+   */
   canvas;
+
+  /**
+   * The 2D drawing context of the canvas.
+   * @type {CanvasRenderingContext2D}
+   */
   ctx;
+
+  /**
+   * Object tracking keyboard input states.
+   * @type {Object}
+   */
   keyboard;
+
+  /**
+   * Horizontal camera offset for scrolling effects.
+   * @type {number}
+   */
   camera_x = 0;
+
+  /**
+   * Flag indicating if the game has started.
+   * @type {boolean}
+   */
   startGame = false;
+
+  /**
+   * Array of interval IDs used for game loops and animations.
+   * @type {number[]}
+   */
   Intervals = [];
+
+  /**
+   * Flag to determine if the start screen should be displayed.
+   * @type {boolean}
+   */
   showStartscreen = true;
+
+  /**
+   * Array containing objects that the character can throw.
+   * @type {Array<Throwableobject>}
+   */
   throwableObjects = [];
+
+  /**
+   * The current count of bottles available to throw.
+   * @type {number}
+   */
   bottleCount = 0;
+
+  /**
+   * The current count of coins collected.
+   * @type {number}
+   */
   CoinCount = 0;
+
+  /**
+   * Flag to prevent immediate successive bottle throws.
+   * @type {boolean}
+   */
   throwTimeout = false;
 
   /**
-   * Handles all game audio, including sound effects and background music.
+   * Manages all game audio, including sound effects and background music.
    * @type {AudioManager}
    */
-  audioManager = new AudioManager();
+ 
   resetManager;
   collisonManager;
   imprint = new Imprint();
@@ -33,13 +99,11 @@ class World {
   startscreen = new Startscreen();
   gameOver = new GameOver();
   youWon = new YouWon();
-
   moveRaight = new MoveRaight();
   moveLeft = new MoveLeft();
   jump = new Jump();
   buy = new Buy();
   attack = new Attack();
-
   salsaStore = new SalsaStore();
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
@@ -63,15 +127,16 @@ class World {
   }
 
   /**
-   * Initializes managers for game reset and collision checking.
+   * Initializes managers for game reset and collision detection.
    */
   initializeManager() {
     this.resetManager = new GameResetManager(this);
-    this.collisonManager = new CollisonManager(this);
+    this.collisonManager = new CollisonManager(this); 
+    this.audioManager = new AudioManager(this);
   }
 
   /**
-   * Assigns this World instance to various objects so they can reference it.
+   * Assigns this World instance to various game objects so they can access global properties.
    */
   setWorld() {
     this.character.world = this;
@@ -107,7 +172,7 @@ class World {
   }
 
   /**
-   * Collects enemy movement intervals so they can be controlled later.
+   * Collects enemy movement intervals so they can be managed later.
    */
   pushInterval() {
     this.level.enemies.forEach((enemy) => {
@@ -126,16 +191,12 @@ class World {
         enemy.moveEnemie();
         this.Intervals.push(enemy.moveInterval);
       });
-      if (this.startGame) {
-        this.level.clouds.forEach((cloud) => {
-          this.Intervals.push(cloud.animationInterval);
-        });
-      }
-      if (this.startGame) {
-        this.level.collectiblCoin.forEach((coin) => {
-          this.Intervals.push(coin.animationInterval);
-        });
-      }
+      this.level.clouds.forEach((cloud) => {
+        this.Intervals.push(cloud.animationInterval);
+      });
+      this.level.collectiblCoin.forEach((coin) => {
+        this.Intervals.push(coin.animationInterval);
+      });
       this.Intervals.push(this.character.moveIntervall);
       this.Intervals.push(this.character.characterInterval);
     }
@@ -145,15 +206,13 @@ class World {
    * Stops all intervals currently stored in the Intervals array.
    */
   stopAllIntervals() {
-    this.Intervals.forEach((intervalId) => {
-      clearInterval(intervalId);
-    });
+    this.Intervals.forEach((intervalId) => clearInterval(intervalId));
     this.Intervals = [];
   }
 
   /**
    * Checks if the player can throw a bottle by verifying key input, inventory, and timeout.
-   * @returns {boolean} True if a bottle can be thrown, otherwise false.
+   * @returns {boolean} True if a bottle can be thrown; otherwise, false.
    */
   canThrowBottle() {
     return this.keyboard.D && this.bottleCount > 0 && !this.throwTimeout;
@@ -172,7 +231,7 @@ class World {
   }
 
   /**
-   * Calculates the X position from which a bottle should be thrown based on the character's direction.
+   * Calculates the X position for throwing a bottle based on the character's direction.
    * @returns {number} The calculated X position.
    */
   calculateXPosition() {
@@ -180,7 +239,7 @@ class World {
   }
 
   /**
-   * Creates a new bottle at the specified X position and adds it to the list of throwable objects.
+   * Creates a new bottle at the specified X position and adds it to the throwable objects.
    * @param {number} xPosition - The X position for the new bottle.
    */
   createBottle(xPosition) {
@@ -212,14 +271,13 @@ class World {
    */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     if (!this.startGame) {
       this.drawStartObject();
       this.addToMap(this.instructionIcon);
     }
     if (this.startGame) {
       this.drawLevel();
-    }
-    if (this.startGame) {
       this.ctx.translate(-this.camera_x, 0);
       this.drawStatusbar();
     }
@@ -230,51 +288,48 @@ class World {
     if (this.enbossIsDead) {
       this.addToMap(this.youWon);
       this.addToMap(this.restartGameIcon);
-      this.resetManager.stopAllIntervals()
-
-
+      this.resetManager.stopAllIntervals();
     }
     this.addToMap(this.SoundsMuteIcon);
     this.addToMap(this.musicMuteIcon);
     this.drawMobileMovement();
     this.ctx.translate(this.camera_x, 0);
     this.ctx.translate(-this.camera_x, 0);
+
     if (!this.startGame) {
       this.addToMap(this.imprint);
     }
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
+
+    requestAnimationFrame(() => this.draw());
     if (this.startGame) {
-      this.startBackroundsound();
+      this.audioManager.startBackroundsound();
       this.addToMap(this.buttonHome);
     }
   }
 
   /**
-   * Draws the game level, including the background, collectibles, enemies, and the character.
+   * Draws the game level, including background, collectibles, enemies, and the character.
    */
   drawLevel() {
-    return (
-      this.ctx.translate(this.camera_x, 0),
-      this.addObjectsToMap(this.level.backroundObjeckt),
-      this.addObjectsToMap(this.level.collectiblBottel),
-      this.addObjectsToMap(this.level.collectiblCoin),
-      this.addToMap(this.salsaStore),
-      this.addToMap(this.character),
-      this.addObjectsToMap(this.level.clouds),
-      this.addObjectsToMap(this.level.enemies),
-      this.addObjectsToMap(this.throwableObjects)
-    );
+    this.ctx.translate(this.camera_x, 0);
+    this.addObjectsToMap(this.level.backroundObjeckt);
+    this.addObjectsToMap(this.level.collectiblBottel);
+    this.addObjectsToMap(this.level.collectiblCoin);
+    this.addToMap(this.salsaStore);
+    this.addToMap(this.character);
+    this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.throwableObjects);
   }
 
   /**
-   * Draws mobile movement controls if the game is running on a small screen.
+   * Draws mobile movement controls if the game runs on einem kleinen Bildschirm.
    */
   drawMobileMovement() {
-    if (this.startGame && window.innerWidth < 900 || 
-      this.startGame && window.innerWidth < 1060 && window.innerHeight < 1369) {
+    if (
+      (this.startGame && window.innerWidth < 900) ||
+      (this.startGame && window.innerWidth < 1060 && window.innerHeight < 1369)
+    ) {
       this.addToMap(this.moveRaight);
       this.addToMap(this.moveLeft);
       this.addToMap(this.jump);
@@ -284,14 +339,12 @@ class World {
   }
 
   /**
-   * Draws the status bars for game elements like health, bottles, and coins.
+   * Draws status bars for health, bottles, and coins.
    */
   drawStatusbar() {
-    return (
-      this.addToMap(this.statusBar),
-      this.addToMap(this.statusBarBottle),
-      this.addToMap(this.statusBarCoin)
-    );
+    this.addToMap(this.statusBar);
+    this.addToMap(this.statusBarBottle);
+    this.addToMap(this.statusBarCoin);
   }
 
   /**
@@ -311,13 +364,11 @@ class World {
   }
 
   /**
-   * Adds multiple objects to the map.
-   * @param {Array} objects - An array of objects to add.
+   * Adds multiple drawable objects to the map.
+   * @param {Array} objects - Array of drawable objects.
    */
   addObjectsToMap(objects) {
-    objects.forEach((o) => {
-      this.addToMap(o);
-    });
+    objects.forEach((o) => this.addToMap(o));
   }
 
   /**
@@ -330,7 +381,7 @@ class World {
     }
     mo.draw(this.ctx);
     if (mo.otherDirektion) {
-      mo.x = mo.x * -1;
+      mo.x *= -1;
       this.ctx.restore();
     }
   }
@@ -343,20 +394,7 @@ class World {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
     this.ctx.scale(-1, 1);
-    mo.x = mo.x * -1;
+    mo.x *= -1;
   }
 
-  /**
-   * Starts the background sound if music is not muted.
-   */
-  startBackroundsound() {
-    let storedMuteStatus = localStorage.getItem("MusikMute");
-    if (storedMuteStatus === null) {
-      localStorage.setItem("MusikMute", "false");
-      storedMuteStatus = "false";
-    }
-    if (storedMuteStatus === "false") {
-      this.audioManager.backgroundSound.play();
-    }
-  }
 }

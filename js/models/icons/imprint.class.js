@@ -9,12 +9,10 @@ class Imprint extends DrawableObject {
    */
   constructor() {
     super();
-
     this.loadImage("img/imprint.png");
     this.updatePosition();
     this.width = 100;
     this.height = 100;
-
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), {
       passive: false,

@@ -2,11 +2,22 @@
  * Manages resetting the game by stopping ongoing intervals,
  * resetting the character, enemies, clouds, collectible items, and status bars,
  * as well as clearing certain arrays and counters.
+ *
+ * @class GameResetManager
  */
 class GameResetManager {
+  /**
+   * The game world instance that holds game elements.
+   * @type {Object}
+   */
   world;
 
-
+  /**
+   * Creates a new GameResetManager instance.
+   *
+   * @constructor
+   * @param {Object} world - The game world containing all game elements.
+   */
   constructor(world) {
     this.world = world;
   }
@@ -30,7 +41,7 @@ class GameResetManager {
   /**
    * Resets the store to its default state.
    */
-  resetStore(){
+  resetStore() {
     this.world.salsaStore.reset();
   }
 
@@ -44,8 +55,9 @@ class GameResetManager {
 
   /**
    * Calls a specified reset method on each element of an array, if it exists.
+   *
    * @param {Array} array - The array of elements to reset.
-   * @param {string} resetMethod - The name of the method to call on each element.
+   * @param {string} resetMethod - The name of the reset method to call on each element.
    */
   resetArrayElements(array, resetMethod) {
     if (array && array.length > 0) {

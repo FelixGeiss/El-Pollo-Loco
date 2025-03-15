@@ -111,18 +111,15 @@ class CollisonManager {
    */
   checkCollisionEndbos() {
     let endboss = this.world.level.enemies.find((enemy) => enemy instanceof Endboss);
-
     if (endboss) {
       if (this.world.character.isColliding(endboss)) {
         endboss.isAttack = true;
       } else {
         endboss.isAttack = false;
       }
-
       if (endboss.energy <= 0) {
         this.world.enbossIsDead = true;
       }
-
       if (this.world.character.x > 9590) {
         endboss.itsMove = true;
       }
@@ -138,7 +135,6 @@ class CollisonManager {
       if (bottle.bottleIsBroken) {
         this.world.audioManager.throwSound.stop();
         this.world.audioManager.bottleBrokenSound.play();
-
         const index = this.world.throwableObjects.indexOf(bottle);
         if (index !== -1) {
           this.world.throwableObjects.splice(index, 1);
@@ -191,7 +187,6 @@ class CollisonManager {
   checkCollisionSalsaStore() {
     const now = Date.now();
     if (this.world.lastPurchaseTime && now - this.world.lastPurchaseTime < 500) return;
-
     if (
       this.world.keyboard.DOWN &&
       this.world.CoinCount > 0 &&
@@ -297,8 +292,6 @@ checkIconsHoverState(icons) {
   for (const icon of icons) {
     if (!icon || this.shouldSkipIcon(icon)) continue;
     if (!this.hasValidPosition(icon)) continue;
-
-    // Only consider restartGameIcon hovered if all specified conditions are met.
     if (icon === this.world.restartGameIcon) {
       if (!(this.world.character.energy <= 0 &&
             this.world.startGame ||
@@ -306,7 +299,6 @@ checkIconsHoverState(icons) {
         continue;
       }
     }
-
     if (this.isMouseOverIcon(icon)) return true;
   }
   return false;

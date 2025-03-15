@@ -14,7 +14,6 @@ class HomeIcon extends DrawableObject {
     this.updatePosition();
     this.width = 50;
     this.height = 50;
-
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), {
       passive: false,

@@ -1,5 +1,6 @@
 class AudioManager {
-    constructor() {
+    constructor(world) {
+      this.world = world;
       this.jumpSound = new PlayAudio("audio/jumppp11.ogg", false, 1);
       this.coinSound = new PlayAudio("audio/coin.mp3", false, 1);
       this.snoreSound = new PlayAudio("audio/big-snore.mp3", true, 1);
@@ -11,4 +12,20 @@ class AudioManager {
       this.throwSound = new PlayAudio("audio/throw.mp3", false, 1, false);
       this.backgroundSound = new PlayAudio("audio/level-ix-211054.mp3", true, 0.8, true);
     }
+    
+  /**
+   * Starts the background sound if music is not muted.
+   */
+
+    startBackroundsound() {
+      let storedMuteStatus = localStorage.getItem("MusikMute");
+      if (storedMuteStatus === null) {
+        localStorage.setItem("MusikMute", "false");
+        storedMuteStatus = "false";
+      }
+      if (storedMuteStatus === "false") {
+        this.world.audioManager.backgroundSound.play();
+      }
+    }
+
 }

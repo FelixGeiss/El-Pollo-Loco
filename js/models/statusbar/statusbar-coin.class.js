@@ -46,9 +46,7 @@ class StatusBarCoin extends DrawableObject {
     } else if (percentage > 5) {
       percentage = 5;
     }
-
     this.percentage = percentage;
-
     const path = this.IMAGES[this.percentage];
     this.img = this.imageCache[path];
   }

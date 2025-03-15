@@ -1,24 +1,66 @@
 /**
  * Represents a level in the game, containing enemies, clouds, background objects,
  * and collectible items such as bottles and coins.
+ *
+ * @class Level
  */
 class Level {
-
+  /**
+   * Array of enemies in the level.
+   * @type {Array<Enemy>}
+   */
   enemies;
+
+  /**
+   * Array of clouds in the level.
+   * @type {Array<Cloud>}
+   */
   clouds;
+
+  /**
+   * Array of background objects in the level.
+   * @type {Array<BackgroundObjekt>}
+   */
   backroundObjeckt;
+
+  /**
+   * Array of collectible bottles in the level.
+   * @type {Array<CollectiblBottel>}
+   */
   collectiblBottel;
+
+  /**
+   * Array of collectible coins in the level.
+   * @type {Array<CollectiblCoin>}
+   */
   collectiblCoin;
+
+  /**
+   * The x-coordinate representing the end of the level.
+   * @type {number}
+   */
   level_end_x = 13590;
+
+  /**
+   * The initial state of collectible bottles.
+   * @type {Array<CollectiblBottel>}
+   */
   initialCollectiblesBottles;
+
+  /**
+   * The initial state of collectible coins.
+   * @type {Array<CollectiblCoin>}
+   */
   initialCollectiblesCoins;
 
   /**
-   * Creates a new Level instance, initializes arrays for enemies, clouds,
-   * background objects, and collectible items, and then calls repetBackround() 
-   * to populate the background.
+   * Creates a new Level instance, initializing arrays for enemies, clouds,
+   * background objects, and collectible items. It also stores the initial state
+   * of collectibles and populates the background.
+   *
+   * @constructor
    * @param {Array<Enemy>} enemies - The enemies present in the level.
-   * @param {Array<Clout>} clouds - The clouds present in the level.
+   * @param {Array<Cloud>} clouds - The clouds present in the level.
    * @param {Array<BackgroundObjekt>} backroundObjeckt - The background objects in the level.
    * @param {Array<CollectiblBottel>} collectiblBottel - The collectible bottles in the level.
    * @param {Array<CollectiblCoin>} collectiblCoin - The collectible coins in the level.
@@ -36,7 +78,7 @@ class Level {
 
   /**
    * Resets the collectible items (bottles and coins) to their initial state,
-   * restoring positions and statuses if needed.
+   * restoring positions and statuses as needed.
    */
   resetCollectibles() {
     this.collectiblBottel = [...this.initialCollectiblesBottles];
@@ -46,8 +88,8 @@ class Level {
   }
 
   /**
-   * Populates the background with repeated images to create a scrolling effect,
-   * alternating between two variants of each background layer.
+   * Populates the background with repeated images to create a scrolling effect.
+   * It alternates between two variants for each background layer.
    */
   repetBackround() {
     for (let index = 0; index < 20; index++) {
