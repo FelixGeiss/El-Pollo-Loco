@@ -57,6 +57,8 @@ class DrawibilManager {
       if (this.world.character.energy <= 0 && this.world.startGame) {
         this.drawGameOver();
         this.addToMap(this.world.restartGameIcon);
+        this.world.audioManager.backgroundSound.stop();
+        this.world.resetManager.stopAllIntervals();
       }
     }
     
@@ -68,6 +70,7 @@ class DrawibilManager {
         this.addToMap(this.world.youWon);
         this.addToMap(this.world.restartGameIcon);
         this.world.resetManager.stopAllIntervals();
+        this.world.audioManager.backgroundSound.stop()
       }
     }
     

@@ -36,6 +36,8 @@ class GameResetManager {
     this.resetStatusBars();
     this.resetCounts();
     this.resetStore();
+    this.world.level.resetCollectibles();
+    this.world.audioManager.backgroundSound.stop()
   }
 
   /**

@@ -92,6 +92,5 @@ class PlayGameIcon extends DrawableObject {
     this.world.startGame = true;
     this.world.startAllIntervals();
     this.world.showStartscreen = false;
-    this.world.level.resetCollectibles();
   }
 }

@@ -5,7 +5,7 @@
  */
 class Endboss extends MovableObject {
   height = 400;
-  width = 250;
+  width = 200;
   speed = 1;
   itsMove = false;
   speedResetTimeout = null;
@@ -16,7 +16,7 @@ class Endboss extends MovableObject {
    */
   isAttack = false;
   y = 55;
-  energy = 300;
+  energy = 250;
   movementInterval = null;
 
   /**
@@ -253,7 +253,7 @@ class Endboss extends MovableObject {
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
-    this.energy = 300;
+    this.energy = 200;
     this.frameIndexDead = 0;
     this.hurtSpeedIncreased = false;
     this.animate();

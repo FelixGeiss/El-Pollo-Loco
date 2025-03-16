@@ -54,7 +54,7 @@ class CollisonManager {
       this.world.character.y +
         this.world.character.height -
         this.world.character.offset.bottom <
-      enemy.y + enemy.offset.top + enemy.height / 1 &&
+      enemy.y + enemy.offset.top + enemy.height / 2 &&
       enemy.height < 400
     );
   }

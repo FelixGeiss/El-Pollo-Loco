@@ -164,10 +164,10 @@ class Character extends MovableObject {
    */
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
-    this.offset.top = 115;
+    this.offset.top = 130;
     this.offset.bottom = 10;
-    this.offset.left = 19;
-    this.offset.right = 20;
+    this.offset.left = 30;
+    this.offset.right = 30;
 
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
