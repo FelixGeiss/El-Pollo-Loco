@@ -12,8 +12,8 @@ class HomeIcon extends DrawableObject {
 
     this.loadImage("img/home.png");
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), {
       passive: false,
@@ -25,7 +25,7 @@ class HomeIcon extends DrawableObject {
    * Updates the position of the home icon based on the current canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.7;
+    this.x = canvas.width * 0.68;
     this.y = canvas.height * 0.05;
   }
 

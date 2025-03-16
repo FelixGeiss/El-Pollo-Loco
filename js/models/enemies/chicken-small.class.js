@@ -38,8 +38,8 @@ class ChickenSmall extends MovableObject {
     this.animate();
     this.offset.top = 15;
     this.offset.bottom = 15;
-    this.offset.left = 20;
-    this.offset.right = 20;
+    this.offset.left = 15;
+    this.offset.right = 15;
   }
 
   /**

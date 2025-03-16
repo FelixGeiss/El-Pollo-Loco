@@ -30,8 +30,8 @@ class MusicsMuteIcon extends DrawableObject {
 
     this.loadImage(this.nonMute);
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
 
     const storedMuteStatus = localStorage.getItem("MusikMute");
     if (storedMuteStatus === "true") {
@@ -53,7 +53,7 @@ class MusicsMuteIcon extends DrawableObject {
    * Updates the position of the mute icon based on the current canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.8;
+    this.x = canvas.width * 0.79;
     this.y = canvas.height * 0.05;
   }
 

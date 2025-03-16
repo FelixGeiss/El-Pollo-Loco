@@ -12,8 +12,8 @@ class Buy extends DrawableObject {
 
     this.loadImage("img/movement/arrow-down.png");
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
 
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
     canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
@@ -24,8 +24,8 @@ class Buy extends DrawableObject {
    * Updates the position of the Buy button based on the canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.05;
-    this.y = canvas.height * 0.85;
+    this.x = canvas.width * 0.03;
+    this.y = canvas.height * 0.8;
   }
 
   /**

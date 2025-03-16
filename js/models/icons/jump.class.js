@@ -11,8 +11,8 @@ class Jump extends DrawableObject {
     super();
     this.loadImage("img/movement/arrow-up.png");
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
     canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -22,8 +22,8 @@ class Jump extends DrawableObject {
    * Updates the position of the Jump button based on the canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.05;
-    this.y = canvas.height * 0.70;
+    this.x = canvas.width * 0.03;
+    this.y = canvas.height * 0.60;
   }
 
   /**

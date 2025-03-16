@@ -11,8 +11,8 @@ class MoveRaight extends DrawableObject {
     super();
     this.loadImage("img/movement/arrow-right.png");
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
     canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -23,7 +23,7 @@ class MoveRaight extends DrawableObject {
    */
   updatePosition() {
     this.x = canvas.width * 0.90;
-    this.y = canvas.height * 0.85;
+    this.y = canvas.height * 0.84;
   }
 
   /**

@@ -11,8 +11,8 @@ class Imprint extends DrawableObject {
     super();
     this.loadImage("img/imprint.png");
     this.updatePosition();
-    this.width = 100;
-    this.height = 100;
+    this.width = 150;
+    this.height = 150;
     canvas.addEventListener("click", this.onClick.bind(this));
     canvas.addEventListener("touchstart", this.onClick.bind(this), {
       passive: false,
@@ -26,8 +26,8 @@ class Imprint extends DrawableObject {
    * Updates the position of the imprint icon based on the current canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.45;
-    this.y = canvas.height * 0.83;
+    this.x = canvas.width * 0.40;
+    this.y = canvas.height * 0.78;
   }
 
   /**

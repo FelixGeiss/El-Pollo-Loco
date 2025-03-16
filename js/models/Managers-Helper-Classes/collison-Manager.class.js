@@ -12,7 +12,10 @@ class CollisonManager {
    */
   constructor(world) {
     this.world = world;
-    this.world.canvas.addEventListener("mousemove", this.trackMousePosition.bind(this));
+    this.world.canvas.addEventListener(
+      "mousemove",
+      this.trackMousePosition.bind(this)
+    );
   }
 
   /**
@@ -54,8 +57,7 @@ class CollisonManager {
       this.world.character.y +
         this.world.character.height -
         this.world.character.offset.bottom <
-      enemy.y + enemy.offset.top + enemy.height / 2 &&
-      enemy.height < 400
+        enemy.y + enemy.offset.top + enemy.height / 3 && enemy.height < 400
     );
   }
 
@@ -64,6 +66,7 @@ class CollisonManager {
    * @param {Object} enemy - The enemy object.
    */
   handleEnemyCollision(enemy) {
+    enemy.enemyIsDead = true;
     enemy.hit();
     this.world.audioManager.chickenHitSound.play();
   }
@@ -110,7 +113,9 @@ class CollisonManager {
    * Sets the endboss to attack mode if colliding, and checks if the endboss is dead.
    */
   checkCollisionEndbos() {
-    let endboss = this.world.level.enemies.find((enemy) => enemy instanceof Endboss);
+    let endboss = this.world.level.enemies.find(
+      (enemy) => enemy instanceof Endboss
+    );
     if (endboss) {
       if (this.world.character.isColliding(endboss)) {
         endboss.isAttack = true;
@@ -149,11 +154,15 @@ class CollisonManager {
    */
   checkCollisionBottleCollectib() {
     this.world.level.collectiblBottel.forEach((collectiblBottl) => {
-      if (this.world.character.isColliding(collectiblBottl) && this.world.bottleCount < 5) {
+      if (
+        this.world.character.isColliding(collectiblBottl) &&
+        this.world.bottleCount < 5
+      ) {
         this.world.bottleCount++;
         this.world.audioManager.bottleCollectSound.play();
         this.world.statusBarBottle.setPercentage(this.world.bottleCount);
-        const index = this.world.level.collectiblBottel.indexOf(collectiblBottl);
+        const index =
+          this.world.level.collectiblBottel.indexOf(collectiblBottl);
         if (index !== -1) {
           this.world.level.collectiblBottel.splice(index, 1);
         }
@@ -167,7 +176,10 @@ class CollisonManager {
    */
   checkCollisionCoinCollectib() {
     this.world.level.collectiblCoin.forEach((collectiblCoin) => {
-      if (this.world.character.isColliding(collectiblCoin) && this.world.CoinCount < 5) {
+      if (
+        this.world.character.isColliding(collectiblCoin) &&
+        this.world.CoinCount < 5
+      ) {
         this.world.CoinCount++;
         this.world.audioManager.coinSound.play();
         this.world.statusBarCoin.setPercentage(this.world.CoinCount);
@@ -186,7 +198,8 @@ class CollisonManager {
    */
   checkCollisionSalsaStore() {
     const now = Date.now();
-    if (this.world.lastPurchaseTime && now - this.world.lastPurchaseTime < 500) return;
+    if (this.world.lastPurchaseTime && now - this.world.lastPurchaseTime < 500)
+      return;
     if (
       this.world.keyboard.DOWN &&
       this.world.CoinCount > 0 &&
@@ -213,103 +226,105 @@ class CollisonManager {
   }
 
   /**
- * Checks if the mouse is hovering over any UI icons on the canvas and updates the cursor style accordingly.
- */
-checkCollisionButtonToMouse() {
-  const icons = this.getRelevantIcons();
-  const isHovering = this.checkIconsHoverState(icons);
-  this.updateCursor(isHovering);
-}
-
-/**
- * Returns an array of icons to be checked for hover state.
- * @returns {Array<DrawableObject>} Icons that should respond to mouse hover.
- */
-getRelevantIcons() {
-  return [
-    this.world.instructionIcon,
-    this.world.musicMuteIcon,
-    this.world.playGame,
-    this.world.SoundsMuteIcon,
-    this.world.imprint,
-    this.world.restartGameIcon
-  ];
-}
-
-/**
- * Determines whether to skip checking a particular icon based on the current game state.
- * @param {DrawableObject} icon - The icon to evaluate.
- * @returns {boolean} True if the icon should be skipped, otherwise false.
- */
-shouldSkipIcon(icon) {
-  if (this.world.startGame) {
-    return [this.world.imprint, this.world.instructionIcon].includes(icon);
+   * Checks if the mouse is hovering over any UI icons on the canvas and updates the cursor style accordingly.
+   */
+  checkCollisionButtonToMouse() {
+    const icons = this.getRelevantIcons();
+    const isHovering = this.checkIconsHoverState(icons);
+    this.updateCursor(isHovering);
   }
-  const allowed = [
-    this.world.imprint,
-    this.world.instructionIcon,
-    this.world.SoundsMuteIcon,
-    this.world.playGame,
-    this.world.musicMuteIcon,
-  ];
-  return !allowed.includes(icon);
-}
 
-/**
- * Checks if an icon has valid x/y properties for collision detection.
- * @param {DrawableObject} icon - The icon to check.
- * @returns {boolean} True if the icon has valid position properties, otherwise false.
- */
-hasValidPosition(icon) {
-  return typeof icon.x !== 'undefined' && typeof icon.y !== 'undefined';
-}
+  /**
+   * Returns an array of icons to be checked for hover state.
+   * @returns {Array<DrawableObject>} Icons that should respond to mouse hover.
+   */
+  getRelevantIcons() {
+    return [
+      this.world.instructionIcon,
+      this.world.musicMuteIcon,
+      this.world.playGame,
+      this.world.SoundsMuteIcon,
+      this.world.imprint,
+      this.world.restartGameIcon,
+    ];
+  }
 
-/**
- * Determines if the mouse coordinates are currently over the icon's bounds.
- * @param {DrawableObject} icon - The icon to check.
- * @returns {boolean} True if the mouse is over the icon, otherwise false.
- */
-isMouseOverIcon(icon) {
-  return (
-    this.mouseX >= icon.x &&
-    this.mouseX <= icon.x + icon.width &&
-    this.mouseY >= icon.y &&
-    this.mouseY <= icon.y + icon.height
-  );
-}
-
-/**
- * Iterates through icons to check if the mouse is hovering over any of them.
- * Special handling is applied for the restartGameIcon, which only returns a hover state if:
- *   - this.world.character.energy <= 0
- *   - this.world.startGame is true
- *   - this.world.enbossIsDead is true
- *
- * @param {Array<DrawableObject>} icons - The array of icons to evaluate.
- * @returns {boolean} True if the mouse is hovering over any icon, otherwise false.
- */
-checkIconsHoverState(icons) {
-  for (const icon of icons) {
-    if (!icon || this.shouldSkipIcon(icon)) continue;
-    if (!this.hasValidPosition(icon)) continue;
-    if (icon === this.world.restartGameIcon) {
-      if (!(this.world.character.energy <= 0 &&
-            this.world.startGame ||
-            this.world.enbossIsDead)) {
-        continue;
-      }
+  /**
+   * Determines whether to skip checking a particular icon based on the current game state.
+   * @param {DrawableObject} icon - The icon to evaluate.
+   * @returns {boolean} True if the icon should be skipped, otherwise false.
+   */
+  shouldSkipIcon(icon) {
+    if (this.world.startGame) {
+      return [this.world.imprint, this.world.instructionIcon].includes(icon);
     }
-    if (this.isMouseOverIcon(icon)) return true;
+    const allowed = [
+      this.world.imprint,
+      this.world.instructionIcon,
+      this.world.SoundsMuteIcon,
+      this.world.playGame,
+      this.world.musicMuteIcon,
+    ];
+    return !allowed.includes(icon);
   }
-  return false;
-}
 
-/**
- * Updates the canvas cursor style based on whether the mouse is hovering over a relevant icon.
- * @param {boolean} isHovering - True if the mouse is hovering over an icon, otherwise false.
- */
-updateCursor(isHovering) {
-  this.world.canvas.style.cursor = isHovering ? "pointer" : "default";
-}
+  /**
+   * Checks if an icon has valid x/y properties for collision detection.
+   * @param {DrawableObject} icon - The icon to check.
+   * @returns {boolean} True if the icon has valid position properties, otherwise false.
+   */
+  hasValidPosition(icon) {
+    return typeof icon.x !== "undefined" && typeof icon.y !== "undefined";
+  }
 
+  /**
+   * Determines if the mouse coordinates are currently over the icon's bounds.
+   * @param {DrawableObject} icon - The icon to check.
+   * @returns {boolean} True if the mouse is over the icon, otherwise false.
+   */
+  isMouseOverIcon(icon) {
+    return (
+      this.mouseX >= icon.x &&
+      this.mouseX <= icon.x + icon.width &&
+      this.mouseY >= icon.y &&
+      this.mouseY <= icon.y + icon.height
+    );
+  }
+
+  /**
+   * Iterates through icons to check if the mouse is hovering over any of them.
+   * Special handling is applied for the restartGameIcon, which only returns a hover state if:
+   *   - this.world.character.energy <= 0
+   *   - this.world.startGame is true
+   *   - this.world.enbossIsDead is true
+   *
+   * @param {Array<DrawableObject>} icons - The array of icons to evaluate.
+   * @returns {boolean} True if the mouse is hovering over any icon, otherwise false.
+   */
+  checkIconsHoverState(icons) {
+    for (const icon of icons) {
+      if (!icon || this.shouldSkipIcon(icon)) continue;
+      if (!this.hasValidPosition(icon)) continue;
+      if (icon === this.world.restartGameIcon) {
+        if (
+          !(
+            (this.world.character.energy <= 0 && this.world.startGame) ||
+            this.world.enbossIsDead
+          )
+        ) {
+          continue;
+        }
+      }
+      if (this.isMouseOverIcon(icon)) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Updates the canvas cursor style based on whether the mouse is hovering over a relevant icon.
+   * @param {boolean} isHovering - True if the mouse is hovering over an icon, otherwise false.
+   */
+  updateCursor(isHovering) {
+    this.world.canvas.style.cursor = isHovering ? "pointer" : "default";
+  }
 }

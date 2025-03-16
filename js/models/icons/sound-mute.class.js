@@ -28,8 +28,8 @@ class SoundsMuteIcon extends DrawableObject {
     super();
     this.loadImage(this.nonMute);
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
     const storedSoundStatus = localStorage.getItem("soundMuted");
     if (storedSoundStatus === "true") {
       this.isMuted = true;
@@ -51,7 +51,7 @@ class SoundsMuteIcon extends DrawableObject {
    * Updates the position of the sound mute icon based on the current canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.9;
+    this.x = canvas.width * 0.90;
     this.y = canvas.height * 0.05;
   }
 

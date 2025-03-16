@@ -11,8 +11,8 @@ class MoveLeft extends DrawableObject {
     super();
     this.loadImage("img/movement/arrow-left.png");
     this.updatePosition();
-    this.width = 50;
-    this.height = 50;
+    this.width = 70;
+    this.height = 70;
     canvas.addEventListener("touchstart", this.onTouchStart.bind(this), { passive: false });
     canvas.addEventListener("touchend", this.onTouchEnd.bind(this));
     window.addEventListener("resize", this.updatePosition.bind(this));
@@ -22,8 +22,8 @@ class MoveLeft extends DrawableObject {
    * Updates the position of the MoveLeft button based on the canvas size.
    */
   updatePosition() {
-    this.x = canvas.width * 0.70;
-    this.y = canvas.height * 0.85;
+    this.x = canvas.width * 0.60;
+    this.y = canvas.height * 0.84;
   }
 
   /**

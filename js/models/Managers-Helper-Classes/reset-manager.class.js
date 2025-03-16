@@ -38,6 +38,7 @@ class GameResetManager {
     this.resetStore();
     this.world.level.resetCollectibles();
     this.world.audioManager.backgroundSound.stop()
+   
   }
 
   /**
@@ -53,6 +54,7 @@ class GameResetManager {
   resetCharacter() {
     this.world.character.resetCharacter();
     this.world.audioManager.snoreSound.stop();
+     this.world.character.stopTimer();
   }
 
   /**

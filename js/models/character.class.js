@@ -194,11 +194,10 @@ class Character extends MovableObject {
    * Stops the long idle timer and resets its state.
    */
   stopTimer() {
-    if (this.timeoutLongIdle) {
-      clearTimeout(this.timeoutLongIdle);
-      this.timeoutLongIdle = null;
-      this.longIdle = false;
-    }
+    clearTimeout(this.timeoutLongIdle);
+    this.timeoutLongIdle = null;
+    this.longIdle = false;
+    this.world.audioManager.snoreSound.stop();
   }
 
   /**

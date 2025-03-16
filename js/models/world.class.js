@@ -137,37 +137,36 @@ class World {
   }
 
   /**
- * Assigns this World instance to various game objects so they can access global properties.
- */
-setWorld() {
-  this.character.world = this;
-  this.SoundsMuteIcon.world = this;
-  this.musicMuteIcon.world = this;
-  this.playGame.world = this;
-  this.buttonHome.world = this;
-  this.instructionIcon.world = this;
-  this.imprint.world = this;
-  this.restartGameIcon.world = this;
-  this.setWorldMobileIcon();
-}
+   * Assigns this World instance to various game objects so they can access global properties.
+   */
+  setWorld() {
+    this.character.world = this;
+    this.SoundsMuteIcon.world = this;
+    this.musicMuteIcon.world = this;
+    this.playGame.world = this;
+    this.buttonHome.world = this;
+    this.instructionIcon.world = this;
+    this.imprint.world = this;
+    this.restartGameIcon.world = this;
+    this.setWorldMobileIcon();
+  }
 
-/**
- * Assigns this World instance to mobile-specific game objects so they can access global properties.
- */
-setWorldMobileIcon() {
-  this.buy.world = this;
-  this.attack.world = this;
-  this.jump.world = this;
-  this.moveRaight.world = this;
-  this.moveLeft.world = this;
-}
-
+  /**
+   * Assigns this World instance to mobile-specific game objects so they can access global properties.
+   */
+  setWorldMobileIcon() {
+    this.buy.world = this;
+    this.attack.world = this;
+    this.jump.world = this;
+    this.moveRaight.world = this;
+    this.moveLeft.world = this;
+  }
 
   /**
    * Runs the main game loop, continuously checking for collisions and other game interactions.
    */
   run() {
-    setInterval(() => {
+    const loop = () => {
       this.collisonManager.checkCollision();
       this.collisonManager.checkThrowobjekt();
       this.collisonManager.checkCollisionBottle();
@@ -177,7 +176,11 @@ setWorldMobileIcon() {
       this.collisonManager.checkCollisionCoinCollectib();
       this.collisonManager.checkCollisionSalsaStore();
       this.collisonManager.checkCollisionButtonToMouse();
-    }, 1);
+
+      requestAnimationFrame(loop);
+    };
+
+    requestAnimationFrame(loop);
   }
 
   /**
@@ -275,9 +278,9 @@ setWorldMobileIcon() {
    */
   setThrowTimeout() {
     this.throwTimeout = true;
+    this.audioManager.throwSound.play();
     setTimeout(() => {
       this.throwTimeout = false;
-      this.audioManager.throwSound.play();
-    }, 500);
+    }, 1500);
   }
 }
