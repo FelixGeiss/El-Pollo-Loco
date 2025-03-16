@@ -23,7 +23,7 @@ class Jump extends DrawableObject {
    */
   updatePosition() {
     this.x = canvas.width * 0.03;
-    this.y = canvas.height * 0.60;
+    this.y = canvas.height * 0.65;
   }
 
   /**

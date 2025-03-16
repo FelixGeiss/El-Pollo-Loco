@@ -25,7 +25,7 @@ class Buy extends DrawableObject {
    */
   updatePosition() {
     this.x = canvas.width * 0.03;
-    this.y = canvas.height * 0.8;
+    this.y = canvas.height * 0.84;
   }
 
   /**
