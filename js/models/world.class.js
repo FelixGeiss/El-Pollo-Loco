@@ -108,6 +108,7 @@ class World {
   statusBar = new StatusBar();
   statusBarBottle = new StatusBarBottle();
   statusBarCoin = new StatusBarCoin();
+  statusBarEndboss = new StatusBarEndboss();
 
   /**
    * Creates a new World instance, sets up rendering, event loops, intervals, and managers.
@@ -166,7 +167,7 @@ class World {
    * Runs the main game loop, continuously checking for collisions and other game interactions.
    */
   run() {
-    const loop = () => {
+    setInterval(() => {
       this.collisonManager.checkCollision();
       this.collisonManager.checkThrowobjekt();
       this.collisonManager.checkCollisionBottle();
@@ -176,11 +177,7 @@ class World {
       this.collisonManager.checkCollisionCoinCollectib();
       this.collisonManager.checkCollisionSalsaStore();
       this.collisonManager.checkCollisionButtonToMouse();
-
-      requestAnimationFrame(loop);
-    };
-
-    requestAnimationFrame(loop);
+    }, 1000 / 60);
   }
 
   /**

@@ -16,9 +16,11 @@ class RestartGameIcon extends DrawableObject {
     this.updatePosition();
     this.width = 80;
     this.height = 80;
-    
+
     canvas.addEventListener("click", this.onClick.bind(this));
-    canvas.addEventListener("touchstart", this.onClick.bind(this), { passive: false });
+    canvas.addEventListener("touchstart", this.onClick.bind(this), {
+      passive: false,
+    });
     window.addEventListener("resize", this.updatePosition.bind(this));
   }
 
@@ -67,7 +69,8 @@ class RestartGameIcon extends DrawableObject {
       mouseY >= this.y &&
       mouseY <= this.y + this.height;
     const restartCondition =
-      this.world.enbossIsDead || (this.world.character.energy <= 0 && this.world.startGame);
+      this.world.enbossIsDead ||
+      (this.world.character.energy <= 0 && this.world.startGame);
     if (isWithinBounds && restartCondition) {
       this.toggleGame();
     }
@@ -84,14 +87,30 @@ class RestartGameIcon extends DrawableObject {
     this.handleClick(mouseX, mouseY);
   }
 
-  /**
-   * Toggles the game by restarting it, initiating all necessary intervals,
-   * and resetting the boss status.
-   */
-  toggleGame() {
-    this.world.startGame = true;
-    this.world.resetManager.resetGame();
-    this.world.startAllIntervals();
-    this.world.enbossIsDead = false;
+
+/**
+ * Starts the game and initializes all required game components.
+ *
+ * This method performs the following actions:
+ * - Sets the game state to "started" (startGame = true).
+ * - Resets the game via the ResetManager.
+ * - Starts all intervals required by the game.
+ * - Resets the end boss state (enbossIsDead = false).
+ * - Plays the background sound if it is not muted; otherwise, unmutes it.
+ *
+ * @function toggleGame
+ * @returns {void}
+ */
+toggleGame() {
+  this.world.startGame = true;
+  this.world.resetManager.resetGame();
+  this.world.startAllIntervals();
+  this.world.enbossIsDead = false;
+  if (!this.world.audioManager.backgroundSound.muted) {
+    this.world.audioManager.backgroundSound.play();
+  } else {
+    this.world.audioManager.backgroundSound.muted = false;
   }
+}
+
 }

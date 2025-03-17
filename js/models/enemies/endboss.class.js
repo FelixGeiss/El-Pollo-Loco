@@ -16,7 +16,7 @@ class Endboss extends MovableObject {
    */
   isAttack = false;
   y = 55;
-  energy = 250;
+  energy = 100;
   movementInterval = null;
 
   /**
@@ -122,6 +122,9 @@ class Endboss extends MovableObject {
     this.startMovementInterval();
     this.startAnimationInterval();
   }
+  updatePrecent(){
+
+  }
 
   /**
    * Clears any existing movement and animation intervals.
@@ -218,6 +221,7 @@ class Endboss extends MovableObject {
    */
   handleAttackAnimation() {
     this.playAnimation(this.IMAGES_ATTACK);
+    clearInterval(this.moveInterval);
   
   }
 
@@ -253,7 +257,7 @@ class Endboss extends MovableObject {
     this.isAttack = false;
     this.y = 55;
     this.x = 10150;
-    this.energy = 200;
+    this.energy = 100;
     this.frameIndexDead = 0;
     this.hurtSpeedIncreased = false;
     this.animate();

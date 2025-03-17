@@ -57,8 +57,9 @@ class DrawibilManager {
       if (this.world.character.energy <= 0 && this.world.startGame) {
         this.drawGameOver();
         this.addToMap(this.world.restartGameIcon);
-        this.world.audioManager.backgroundSound.stop();
         this.world.resetManager.stopAllIntervals();
+        this.world.audioManager.backgroundSound.muted = true;
+        this.world.audioManager.backgroundSound.stop();
       }
     }
     
@@ -70,7 +71,9 @@ class DrawibilManager {
         this.addToMap(this.world.youWon);
         this.addToMap(this.world.restartGameIcon);
         this.world.resetManager.stopAllIntervals();
-        this.world.audioManager.backgroundSound.stop()
+        this.world.audioManager.backgroundSound.muted = true;
+        this.world.audioManager.backgroundSound.stop();
+       
       }
     }
     
@@ -137,6 +140,8 @@ class DrawibilManager {
       this.addToMap(this.world.statusBar);
       this.addToMap(this.world.statusBarBottle);
       this.addToMap(this.world.statusBarCoin);
+      this.addToMap(this.world.statusBarEndboss);
+      
     }
   
     /**

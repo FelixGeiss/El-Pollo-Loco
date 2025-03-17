@@ -5,6 +5,7 @@ class CollisonManager {
   world;
   mouseX = 0;
   mouseY = 0;
+  
 
   /**
    * Creates a CollisonManager instance.
@@ -91,22 +92,38 @@ class CollisonManager {
     }
   }
 
-  /**
-   * Checks collisions between thrown bottles and enemies.
-   * If a bottle collides with an enemy, the enemy is hit and the bottle breaks.
-   */
-  checkCollisionBottle() {
-    this.world.throwableObjects.forEach((bottle) => {
-      this.world.level.enemies.forEach((enemy) => {
-        if (!enemy.enemyIsDead && bottle.isColliding(enemy)) {
-          enemy.hit();
-          this.world.audioManager.chickenHitSound.play();
-          bottle.bottleIsBroken = true;
-          this.world.audioManager.throwSound.stop();
+/**
+ * Checks for collisions between thrown bottles and enemies.
+ *
+ * This method iterates over all throwable objects (bottles) and, for each bottle,
+ * checks if it is colliding with any enemy in the current level. If a collision is
+ * detected and the enemy is not already dead:
+ * - The enemy is hit.
+ * - The "chicken hit" sound effect is played.
+ * - The bottle is marked as broken.
+ * - The throwing sound is stopped.
+ * Additionally, if the enemy's height equals 400, the end boss's status bar is updated
+ * to reflect the enemy's current energy.
+ *
+ * @function checkCollisionBottle
+ * @returns {void}
+ */
+checkCollisionBottle() {
+  this.world.throwableObjects.forEach((bottle) => {
+    this.world.level.enemies.forEach((enemy) => {
+      if (!enemy.enemyIsDead && bottle.isColliding(enemy)) {
+        enemy.hit();
+        this.world.audioManager.chickenHitSound.play();
+        bottle.bottleIsBroken = true;
+        this.world.audioManager.throwSound.stop();
+        if (enemy.height == 400) {
+          this.world.statusBarEndboss.setPercentage(enemy.energy);
         }
-      });
+      }
     });
-  }
+  });
+}
+
 
   /**
    * Checks collisions with the endboss.

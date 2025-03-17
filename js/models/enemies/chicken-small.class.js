@@ -51,7 +51,10 @@ class ChickenSmall extends MovableObject {
     this.moveEnemie();
 
     setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
+      if (this.energy > 0) {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
+
       if (!this.isAboveGround() && !this.enemyIsDead) {
         this.jump();
       }

@@ -78,6 +78,7 @@ class GameResetManager {
    */
   resetStatusBars() {
     this.world.statusBar.setPercentage(100);
+    this.world.statusBarEndboss.setPercentage(100);
     this.world.statusBarBottle.setPercentage(0);
     this.world.statusBarCoin.setPercentage(0);
   }
