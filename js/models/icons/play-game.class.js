@@ -92,5 +92,10 @@ class PlayGameIcon extends DrawableObject {
     this.world.startGame = true;
     this.world.startAllIntervals();
     this.world.showStartscreen = false;
+    if (!this.world.audioManager.backgroundSound.muted) {
+      this.world.audioManager.backgroundSound.play();
+    } else {
+      this.world.audioManager.backgroundSound.muted = false;
+    }
   }
 }
