@@ -71,6 +71,7 @@ class HomeIcon extends DrawableObject {
       this.world.enbossIsDead = false;
       this.world.stopAllIntervals();
       this.world.resetManager.resetGame();
+      this.world.audioManager.backgroundSound.muted = true;
       
     }
   }
